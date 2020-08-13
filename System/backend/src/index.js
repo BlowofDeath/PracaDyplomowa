@@ -21,7 +21,7 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  await db.sync({ alter: true }).then(() => {
+  await db.sync({ force: true }).then(() => {
     console.log(`Database & tables created!`);
   });
 
