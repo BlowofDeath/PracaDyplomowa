@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import db from "../database/sqliteDB";
 
-const PracticeAdvertisement = db.define("practice_advertisements", {
+const PracticeAdvertisement = db.define("PracticeAdvertisement", {
   name: Sequelize.STRING,
   city: Sequelize.STRING,
   adress: Sequelize.STRING,

@@ -3,7 +3,7 @@ import db from "../database/sqliteDB";
 import PracticeAdvertisement from "./PracticeAdvertisement";
 import PracticeAgreement from "./PracticeAgreement";
 
-const Company = db.define("companies", {
+const Company = db.define("Company", {
   name: Sequelize.STRING,
   city: Sequelize.STRING,
   adress: Sequelize.STRING,
