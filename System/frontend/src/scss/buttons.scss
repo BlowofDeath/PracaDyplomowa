@@ -1,0 +1,17 @@
+@import "variables.scss";
+
+.btn-custom {
+  background-color: $theme-color-one;
+  border-radius: 0;
+  padding: 8px;
+
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: $theme-color-two;
+
+  text-shadow: 2px 2px 4px #13293d;
+}

@@ -1,0 +1,47 @@
+@import "../../scss/variables.scss";
+
+.login-box {
+  min-height: 446px;
+
+  background: $theme-color-one;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 1px 1px 5px #13293d;
+
+  form {
+    margin-top: 62px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    div {
+      label {
+        color: $theme-color-almost-white;
+        text-shadow: $theme-color-text-shadow;
+      }
+    }
+
+    div:last-child {
+      div {
+        button {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+
+  h2 {
+    font-family: "Quicksand";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 45px;
+
+    color: $theme-color-almost-white;
+
+    text-shadow: $theme-color-text-shadow;
+  }
+}
+
+.logo {
+  margin-top: 22px;
+  margin-left: 31px;
+}
