@@ -3,23 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.11",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "babel-plugin-react-css-modules": "^5.2.6",
     "clsx": "^1.1.1",
+    "concurrently": "^6.0.0",
+    "graphql": "^15.5.0",
     "notistack": "^1.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.15.4",
     "react-merge-refs": "^1.1.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "recoil": "^0.1.2"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "dev": "concurrently \"yarn start\" \"cd ../backend && yarn start \""
   },
   "eslintConfig": {
     "extends": "react-app"

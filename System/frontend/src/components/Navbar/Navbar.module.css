@@ -35,9 +35,6 @@
 }
 
 .container a:active {
-  background: linear-gradient(
-    to bottom,
-    var(--theme-color-one) 60%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
+  text-shadow: 4px 4px 4px var(--theme-color-one);
+  color: var(--theme-color-four);
 }
