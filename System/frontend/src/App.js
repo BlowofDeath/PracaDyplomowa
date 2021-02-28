@@ -1,11 +1,18 @@
 import React from "react";
-import { Container } from "react-bootstrap";
-import LoginPage from "./components/LoginPage"
-import StudentHome from "./components/StudentHome"
-import "./scss/style.scss"
+
+import Announcement from "@components/Announcement";
+import Agreement from "@components/Agreement";
+import Diary from "@components/Diary";
+import Navbar from "@components/Navbar";
+import "./styles/globals.css";
 
 const App = () => {
-  return <Container fluid><StudentHome /></Container> ;
-}
+  return (
+    <>
+      <Navbar />
+      <Agreement />
+    </>
+  );
+};
 
 export default App;

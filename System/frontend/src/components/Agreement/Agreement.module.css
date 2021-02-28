@@ -1,0 +1,16 @@
+.container span {
+  display: block;
+}
+
+.container button {
+  margin-top: 50px;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.alignCenter svg {
+  margin-left: 4px;
+}
