@@ -11,10 +11,14 @@ const Select = ({
   label,
   className,
   options,
+  labelOnTop,
+  bright,
 }) => {
   return (
-    <div className={clsx(css.container, className)}>
-      {label && <label>{label}</label>}
+    <div
+      className={clsx(css.container, className, labelOnTop && css.labelOnTop)}
+    >
+      {label && <label className={clsx(bright && css.bright)}>{label}</label>}
       <select
         id={id}
         name={name}

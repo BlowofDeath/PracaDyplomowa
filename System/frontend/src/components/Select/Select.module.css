@@ -1,4 +1,28 @@
+.container {
+  display: grid;
+  grid-template-columns: 120px 240px;
+  align-items: center;
+}
+
+.labelOnTop label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.labelOnTop {
+  display: block;
+}
+
 .container label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  color: var(--theme-color-three);
+}
+
+.container .bright {
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
@@ -6,10 +30,4 @@
   line-height: 21px;
   color: var(--theme-color-two);
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
-}
-
-.container {
-  display: grid;
-  grid-template-columns: 150px 240px;
-  align-items: center;
 }

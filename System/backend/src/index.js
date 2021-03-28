@@ -9,6 +9,8 @@ import resolvers from "./resolvers";
 import db from "./database/sqliteDB";
 const app = express();
 import Student from "./models/Student";
+import { verifyJWT } from "./utility/jwtTool";
+import util from "util";
 
 async function startServer() {
   await db
@@ -21,9 +23,9 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  await db.sync({ force: true }).then(() => {
-    console.log(`Database & tables created!`);
-  });
+  // await db.sync({ force: true }).then(() => {
+  //   console.log(`Database & tables created!`);
+  // });
 
   //This create or alter table
   //   await db.sync({ alter: true }).then(async () => {
@@ -52,7 +54,15 @@ async function startServer() {
     // formatError: (err) => {
     //   return err.message;
     // },
-    context: ({ req }) => {},
+    context: ({ req }) => {
+      const token = req.headers?.authorization || "";
+      const authObject = token && verifyJWT(token);
+
+      // console.log(
+      //   util.inspect(verifyJWT(token), { showHidden: false, depth: null })
+      // );
+      return authObject;
+    },
   });
 
   server.applyMiddleware({ app });

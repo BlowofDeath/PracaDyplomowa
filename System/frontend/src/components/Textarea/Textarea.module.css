@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: 120px 240px;
+  grid-template-columns: 150px 240px;
   align-items: center;
 }
 
@@ -30,4 +30,10 @@
   line-height: 21px;
   color: var(--theme-color-two);
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.container textarea {
+  resize: none;
+  min-width: 300px;
+  height: 100px;
 }

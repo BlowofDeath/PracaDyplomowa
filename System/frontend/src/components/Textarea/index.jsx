@@ -1,17 +1,17 @@
 import React from "react";
-import css from "./Input.module.css";
+import css from "./Textarea.module.css";
 import clsx from "clsx";
 
-const Input = ({
-  type,
+const Textarea = ({
   id,
   name,
   onChange,
   inputRef,
   value,
+  placeholder,
+  labelOnTop,
   label,
   className,
-  labelOnTop,
   bright,
 }) => {
   return (
@@ -19,16 +19,15 @@ const Input = ({
       className={clsx(css.container, className, labelOnTop && css.labelOnTop)}
     >
       {label && <label className={clsx(bright && css.bright)}>{label}</label>}
-      <input
-        type={type}
+      <textarea
         id={id}
         name={name}
         onChange={onChange}
         ref={inputRef}
-        value={value}
-      />
+        placeholder={placeholder}
+      ></textarea>
     </div>
   );
 };
 
-export default Input;
+export default Textarea;

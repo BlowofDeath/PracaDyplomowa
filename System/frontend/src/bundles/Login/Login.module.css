@@ -31,3 +31,10 @@
 .logIn {
   margin-top: 40px;
 }
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
