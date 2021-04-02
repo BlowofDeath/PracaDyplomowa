@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-.container a {
+.container .menu a {
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
@@ -30,11 +30,19 @@
   border-radius: 20px;
 }
 
-.container a:hover {
+.container .menu a:hover {
   text-shadow: 4px 4px 4px var(--theme-color-one);
 }
 
-.container a:active {
+.container .menu a:active {
   text-shadow: 4px 4px 4px var(--theme-color-one);
   color: var(--theme-color-four);
+}
+
+.logo > svg {
+  vertical-align: middle;
+}
+
+.container .menu .user {
+  padding: 12px 12px 12px 0;
 }

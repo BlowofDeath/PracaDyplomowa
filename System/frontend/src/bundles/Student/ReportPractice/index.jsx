@@ -3,11 +3,11 @@ import Input from "@components/Input";
 import Textarea from "@components/Textarea";
 import Container from "@components/Container";
 import css from "./ReportPractice.module.css";
+import Page from "@components/Page";
 
 const ReportPractice = () => {
   return (
-    <>
-      <h1>Zgłoś praktykę</h1>
+    <Page title="Zgłoś praktykę">
       <Container>
         <div>
           <div className={css.content}>
@@ -27,7 +27,7 @@ const ReportPractice = () => {
           </div>
         </div>
       </Container>
-    </>
+    </Page>
   );
 };
 

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, gql } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
 import css from "./Login.module.css";
 import Input from "@components/Input";
@@ -18,13 +19,16 @@ const USER_TYPES = {
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
-  const [, setToken] = useLocalStorage("token");
-  const [, setUserType] = useLocalStorage("userType");
-  const [showGraphErrors] = useSnackGraphql();
+  const [token, setToken] = useLocalStorage("token");
+  const [userType, setUserType] = useLocalStorage("userType");
+  const [showGraphqlErrors] = useSnackGraphql();
   const [
     loginStudent,
     { loading: loginStudentLoading, error: loginStudentError },
   ] = useMutation(LOGIN_STUDENT);
+  let history = useHistory();
+
+  if (token && userType) history.push("/");
 
   const onSubmit = (data) => {
     switch (data.type) {
@@ -32,14 +36,15 @@ const Login = () => {
         loginStudent({
           variables: { email: data.email, password: data.password },
         })
-          .then(({ data }) => {
+          .then(async ({ data }) => {
             const { loginStudent } = data;
             if (loginStudent?.token) {
-              setToken(loginStudent.token);
-              setUserType(USER_TYPES.student);
+              await setToken(loginStudent.token);
+              await setUserType(USER_TYPES.student);
+              history.push("/");
             }
           })
-          .catch(showGraphErrors);
+          .catch(showGraphqlErrors);
         break;
       case USER_TYPES.practiceSuperviser:
         console.log("opiekun praktyk");

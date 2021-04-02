@@ -141,7 +141,12 @@ button:focus {
   --theme-color-three: #13293d;
   --theme-color-four: #f9a03f;
   --theme-color-five: #bb4430;
+  --black: #000000;
 
   --theme-color-almost-white: #e8eef2;
   --theme-color-text-shadow: 2px 3px 7px rgba(0, 0, 0, 0.25);
+}
+
+a {
+  text-decoration: none;
 }
