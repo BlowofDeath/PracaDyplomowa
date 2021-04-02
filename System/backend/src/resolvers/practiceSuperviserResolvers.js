@@ -1,32 +1,28 @@
-import Student from "../models/Student";
+import PracticeSuperviser from "../models/PracticeSuperviser";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { signJWT } from "../utility/jwtTool";
 import lang from "../language";
 
-const studentResolvers = {
+const practiceSuperviserResolvers = {
   Query: {
     test: async (_, args, context) => {
       return "It is work!!";
     },
-    meStudent: async (_, args, context) => {
+    mePracticeSuperviser: async (_, args, context) => {
       const id = 1; //id z token auth
-      const me = await Student.findOne({ id });
+      const me = await PracticeSuperviser.findOne({ id });
       return me;
-    },
-    student: async (_, { id }, context) => {
-      const student = await Student.findOne({ id });
-      return student;
     },
   },
   Mutation: {
-    createStudent: async (
+    createPracticeSuperviser: async (
       _,
-      { index_number, email, first_name, last_name, password },
+      { email, first_name, last_name, password },
       context
     ) => {
-      const exist = await Student.findOne({ where: { email } });
+      const exist = await PracticeSuperviser.findOne({ where: { email } });
       if (exist) throw new Error(lang.userExist);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       if (!validator.isLength(password, { min: 8, max: undefined }))
@@ -38,28 +34,29 @@ const studentResolvers = {
 
       password = bcrypt.hashSync(password, 10);
 
-      const student = await Student.create({
-        index_number,
+      const practiceSuperviser = await PracticeSuperviser.create({
         email,
         first_name,
         last_name,
         password,
       });
-      const token = signJWT({ student: student.id });
-      return { token, student };
+      const token = signJWT({ practiceSuperviser: practiceSuperviser.id });
+      return { token, practiceSuperviser };
     },
-    loginStudent: async (_, { email, password }, context) => {
+    loginPracticeSuperviser: async (_, { email, password }, context) => {
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
-      const student = await Student.findOne({ where: { email } });
-      if (!student) throw new Error(lang.userNotFound);
-      const resoult = bcrypt.compareSync(password, student.password);
+      const practiceSuperviser = await practiceSuperviser.findOne({
+        where: { email },
+      });
+      if (!practiceSuperviser) throw new Error(lang.userNotFound);
+      const resoult = bcrypt.compareSync(password, practiceSuperviser.password);
       if (!resoult) throw new UserInputError(lang.passwordIncorrect);
 
-      const token = signJWT({ student: student.id });
+      const token = signJWT({ practiceSuperviser: practiceSuperviser.id });
 
-      return { token, student };
+      return { token, practiceSuperviser };
     },
   },
 };
 
-export default studentResolvers;
+export default practiceSuperviserResolvers;

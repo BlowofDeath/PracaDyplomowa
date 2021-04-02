@@ -6,6 +6,7 @@ import {
   Link,
   useRouteMatch,
   useParams,
+  useHistory,
 } from "react-router-dom";
 
 import css from "./Navbar.module.css";
@@ -14,6 +15,7 @@ import { ActionMenu, useMenu } from "@components/ActionMenu";
 
 const Navbar = () => {
   const [anchorEl, openMenu, closeMenu] = useMenu();
+  const history = useHistory();
   return (
     <div className={css.container}>
       <div>
@@ -33,7 +35,14 @@ const Navbar = () => {
         </a>
         <ActionMenu ref={anchorEl} closeMenu={closeMenu}>
           <ActionMenu.Item onClick={closeMenu}>Profil</ActionMenu.Item>
-          <ActionMenu.Item onClick={closeMenu}>Wyloguj</ActionMenu.Item>
+          <ActionMenu.Item
+            onClick={() => {
+              closeMenu();
+              history.push("/logout");
+            }}
+          >
+            Wyloguj
+          </ActionMenu.Item>
         </ActionMenu>
       </div>
     </div>

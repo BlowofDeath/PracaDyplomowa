@@ -11,19 +11,29 @@ import Logout from "./Logout";
 
 const Application = () => {
   const [token] = useLocalStorage("token");
+  const [userType] = useLocalStorage("userType");
 
   return (
     <BrowserRouter>
       <Switch>
         <Login path="/login" />
-        <Layout>
-          <PrivateRoute path="/" userTypeExpected="student">
-            <Student />
-          </PrivateRoute>
-        </Layout>
-        <Route exact path="/logout">
+        <Route path="/logout">
           <Logout />
         </Route>
+
+        <PrivateRoute path="/" userTypeExpected="student">
+          <Layout>
+            <Student />
+          </Layout>
+        </PrivateRoute>
+
+        <PrivateRoute path="/" userTypeExpected="practice-superviser">
+          <Layout>"practice-superviser"</Layout>
+        </PrivateRoute>
+
+        <PrivateRoute path="/" userTypeExpected="company">
+          <Layout>"company"</Layout>
+        </PrivateRoute>
       </Switch>
     </BrowserRouter>
   );

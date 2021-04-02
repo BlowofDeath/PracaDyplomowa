@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, AuthenticationError } from "apollo-server-express";
 import bcrypt from "bcrypt";
 import express from "express";
 import path from "path";
@@ -56,11 +56,13 @@ async function startServer() {
     // },
     context: ({ req }) => {
       const token = req.headers?.authorization || "";
-      const authObject = token && verifyJWT(token);
+      let authObject;
+      try {
+        authObject = token && verifyJWT(token);
+      } catch (err) {
+        throw new AuthenticationError("JWT incorrect");
+      }
 
-      // console.log(
-      //   util.inspect(verifyJWT(token), { showHidden: false, depth: null })
-      // );
       return authObject;
     },
   });

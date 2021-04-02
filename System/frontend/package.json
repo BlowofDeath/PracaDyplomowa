@@ -28,7 +28,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "dev": "concurrently \"yarn start\" \"cd ../backend && yarn start \""
+    "dev": "concurrently \"yarn start\" \"cd ../backend && yarn dev \""
   },
   "eslintConfig": {
     "extends": "react-app"
