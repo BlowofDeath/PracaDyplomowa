@@ -1,0 +1,21 @@
+.container span {
+  display: block;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.alignCenter svg {
+  margin-left: 4px;
+}
+
+.fileName {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 19px;
+  color: #000000;
+}

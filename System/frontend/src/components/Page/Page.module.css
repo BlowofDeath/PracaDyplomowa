@@ -1,0 +1,13 @@
+.container {
+  margin: 60px 80px;
+}
+
+.title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  line-height: 42px;
+  color: var(--black);
+  padding: 20px 0;
+}
