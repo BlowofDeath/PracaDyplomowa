@@ -1,7 +1,5 @@
 import Sequelize from "sequelize";
 import db from "../database/sqliteDB";
-import PracticeAdvertisement from "./PracticeAdvertisement";
-import PracticeAgreement from "./PracticeAgreement";
 
 const Company = db.define("Company", {
   name: Sequelize.STRING,
@@ -12,8 +10,5 @@ const Company = db.define("Company", {
   last_name: Sequelize.STRING,
   password: Sequelize.STRING,
 });
-
-Company.hasMany(PracticeAdvertisement);
-PracticeAdvertisement.belongsTo(Company);
 
 export default Company;
