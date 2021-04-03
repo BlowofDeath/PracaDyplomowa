@@ -6,34 +6,34 @@ import Student from "@bundles/Student";
 import "../styles/globals.css";
 import useLocalStorage from "@hooks/useLocalStorage";
 import PrivateRoute from "../routes/PrivateRoute";
+import ProtectedRoute from "../routes/ProtectedRoute";
 import Layout from "@components/Layout";
 import Logout from "./Logout";
+import USER_TYPES from "@config/userTypes";
 
 const Application = () => {
-  const [token] = useLocalStorage("token");
-  const [userType] = useLocalStorage("userType");
-
   return (
     <BrowserRouter>
       <Switch>
-        <Login path="/login" />
+        <Route path="/login">
+          <Login />
+        </Route>
+
         <Route path="/logout">
           <Logout />
         </Route>
 
-        <PrivateRoute path="/" userTypeExpected="student">
+        <ProtectedRoute path="/">
           <Layout>
-            <Student />
+            <PrivateRoute userType={USER_TYPES.student}>
+              <Student />
+            </PrivateRoute>
+            <PrivateRoute userType={USER_TYPES.practiceSuperviser}>
+              "Ps"
+            </PrivateRoute>
+            <PrivateRoute userType={USER_TYPES.company}>"Company"</PrivateRoute>
           </Layout>
-        </PrivateRoute>
-
-        <PrivateRoute path="/" userTypeExpected="practice-superviser">
-          <Layout>"practice-superviser"</Layout>
-        </PrivateRoute>
-
-        <PrivateRoute path="/" userTypeExpected="company">
-          <Layout>"company"</Layout>
-        </PrivateRoute>
+        </ProtectedRoute>
       </Switch>
     </BrowserRouter>
   );

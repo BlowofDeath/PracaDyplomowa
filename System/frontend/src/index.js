@@ -21,6 +21,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       );
       if (extensions.code === "UNAUTHENTICATED") {
+        console.log("remove token");
         localStorage.removeItem("token");
         localStorage.removeItem("userType");
       }

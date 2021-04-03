@@ -11,4 +11,15 @@ export const LOGIN_STUDENT = gql`
   }
 `;
 
-export default { LOGIN_STUDENT };
+export const LOGIN_PRACTICE_SUPERVISER = gql`
+  mutation loginPracticeSuperviser($email: String!, $password: String!) {
+    loginPracticeSuperviser(email: $email, password: $password) {
+      token
+      practiceSuperviser {
+        email
+      }
+    }
+  }
+`;
+
+export default { LOGIN_STUDENT, LOGIN_PRACTICE_SUPERVISER };
