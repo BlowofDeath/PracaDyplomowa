@@ -8,8 +8,8 @@ import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import db from "./database/sqliteDB";
 const app = express();
-import Student from "./models/Student";
 import { verifyJWT } from "./utility/jwtTool";
+import models from "./models";
 import util from "util";
 
 async function startServer() {
@@ -63,7 +63,7 @@ async function startServer() {
         throw new AuthenticationError("JWT incorrect");
       }
 
-      return authObject;
+      return { models, authObject };
     },
   });
 

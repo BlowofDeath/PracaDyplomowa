@@ -9,12 +9,11 @@ const practiceSuperviserType = gql`
     email: String!
     first_name: String!
     last_name: String!
-    password: String!
   }
 
   type PracticeSuperviserAuth {
-    practiceSuperviser: PracticeSuperviser!
     token: String!
+    practiceSuperviser: PracticeSuperviser!
   }
 
   type Mutation {

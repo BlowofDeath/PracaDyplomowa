@@ -1,4 +1,3 @@
-import PracticeSuperviser from "../models/PracticeSuperviser";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
@@ -20,9 +19,11 @@ const practiceSuperviserResolvers = {
     createPracticeSuperviser: async (
       _,
       { email, first_name, last_name, password },
-      context
+      { models }
     ) => {
+      const { PracticeSuperviser } = models;
       const exist = await PracticeSuperviser.findOne({ where: { email } });
+
       if (exist) throw new Error(lang.userExist);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       if (!validator.isLength(password, { min: 8, max: undefined }))
@@ -41,11 +42,14 @@ const practiceSuperviserResolvers = {
         password,
       });
       const token = signJWT({ practiceSuperviser: practiceSuperviser.id });
+      if (!token) throw new Error("JWT error");
+
       return { token, practiceSuperviser };
     },
-    loginPracticeSuperviser: async (_, { email, password }, context) => {
+    loginPracticeSuperviser: async (_, { email, password }, { models }) => {
+      const { PracticeSuperviser } = models;
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
-      const practiceSuperviser = await practiceSuperviser.findOne({
+      const practiceSuperviser = await PracticeSuperviser.findOne({
         where: { email },
       });
       if (!practiceSuperviser) throw new Error(lang.userNotFound);

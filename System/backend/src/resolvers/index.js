@@ -1,10 +1,10 @@
-import { composeResolvers } from "@graphql-tools/resolvers-composition";
+import { mergeResolvers } from "@graphql-tools/merge";
 import studentResolvers from "./studentResolvers";
 import practiceSuperviserResolvers from "./practiceSuperviserResolvers";
 
-const composedResolvers = composeResolvers(
+const mergedResolvers = mergeResolvers([
   studentResolvers,
-  practiceSuperviserResolvers
-);
+  practiceSuperviserResolvers,
+]);
 
-export default composedResolvers;
+export default mergedResolvers;

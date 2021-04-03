@@ -1,4 +1,3 @@
-import Student from "../models/Student";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
@@ -10,12 +9,14 @@ const studentResolvers = {
     test: async (_, args, context) => {
       return "It is work!!";
     },
-    meStudent: async (_, args, context) => {
+    meStudent: async (_, args, { models }) => {
+      const { Student } = models;
       const id = 1; //id z token auth
       const me = await Student.findOne({ id });
       return me;
     },
-    student: async (_, { id }, context) => {
+    student: async (_, { id }, { models }) => {
+      const { Student } = models;
       const student = await Student.findOne({ id });
       return student;
     },
@@ -24,8 +25,9 @@ const studentResolvers = {
     createStudent: async (
       _,
       { index_number, email, first_name, last_name, password },
-      context
+      { models }
     ) => {
+      const { Student } = models;
       const exist = await Student.findOne({ where: { email } });
       if (exist) throw new Error(lang.userExist);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
@@ -48,7 +50,8 @@ const studentResolvers = {
       const token = signJWT({ student: student.id });
       return { token, student };
     },
-    loginStudent: async (_, { email, password }, context) => {
+    loginStudent: async (_, { email, password }, { models }) => {
+      const { Student } = models;
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       const student = await Student.findOne({ where: { email } });
       if (!student) throw new Error(lang.userNotFound);
