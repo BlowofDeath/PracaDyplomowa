@@ -7,6 +7,7 @@ import "../styles/globals.css";
 import useLocalStorage from "@hooks/useLocalStorage";
 import PrivateRoute from "../routes/PrivateRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import PracticeSuperviser from "./PracticeSuperviser";
 import Layout from "@components/Layout";
 import Logout from "./Logout";
 import USER_TYPES from "@config/userTypes";
@@ -29,7 +30,7 @@ const Application = () => {
               <Student />
             </PrivateRoute>
             <PrivateRoute userType={USER_TYPES.practiceSuperviser}>
-              "Ps"
+              <PracticeSuperviser />
             </PrivateRoute>
             <PrivateRoute userType={USER_TYPES.company}>"Company"</PrivateRoute>
           </Layout>

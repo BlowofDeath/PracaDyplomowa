@@ -1,17 +1,19 @@
 import React from "react";
-import Modal from "@material-ui/core/Modal";
+import ReactDOM from "react-dom";
+import css from "./Modal.module.css";
 
-const Modal = ({ openModal, setOpenModal }) => {
+const CustomModal = ({ open, setOpenModal, children }) => {
   return (
-    <Modal
-      open={openModal}
-      onClose={() => setOpenModal(false)}
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-    >
-      Test
-    </Modal>
+    open &&
+    ReactDOM.createPortal(
+      <div className={css.backdrop} onClick={() => setOpenModal(false)}>
+        <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
+      </div>,
+      document.body
+    )
   );
 };
 
-export default Modal;
+export default CustomModal;

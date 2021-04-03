@@ -1,3 +1,7 @@
+.container {
+  margin-bottom: 40px;
+}
+
 .container span {
   display: block;
 }

@@ -13,6 +13,28 @@ const practiceAnnouncementResolvers = {
       return announcements;
     },
   },
+  Mutation: {
+    createPracticeAnnouncement: async (
+      _,
+      { header, slots, description, technologies, from, to },
+      { models, authObject }
+    ) => {
+      if (!authObject)
+        throw new AuthenticationError(lang.noAccessToCreateAnnouncement);
+      const { PracticeAnnouncement } = models;
+      const practiceAnnouncementr = await PracticeAnnouncement.create({
+        header,
+        slots,
+        description: description ?? "",
+        technologies,
+        from,
+        to,
+        accepted: false,
+      });
+
+      return practiceAnnouncementr;
+    },
+  },
 };
 
 export default practiceAnnouncementResolvers;

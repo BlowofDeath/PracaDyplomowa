@@ -17,6 +17,17 @@ const practiceAnnouncementType = gql`
     to: Date!
     accepted: Boolean!
   }
+
+  type Mutation {
+    createPracticeAnnouncement(
+      header: String!
+      slots: Int!
+      description: String
+      technologies: String!
+      from: Date!
+      to: Date!
+    ): PracticeAnnouncement
+  }
 `;
 
 export default practiceAnnouncementType;

@@ -6,6 +6,7 @@ const Errors = {
   firstNameValidation: "First name must have at least 3 characters",
   lastNameValidation: "Last name must have at least 3 characters",
   passwordIncorrect: "Password incorrect",
+  noAccessToCreateAnnouncement: "You have no access to create announcement",
 };
 
 export default Errors;

@@ -111,6 +111,7 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 8px;
+  height: 40px;
 }
 
 button[preset="bright"] {

@@ -9,26 +9,24 @@ import {
   useParams,
 } from "react-router-dom";
 
-import ReportPractice from "./ReportPractice";
 import AnnouncementPage from "./AnnouncementPage";
-import AgreementPage from "./AgreementPage";
 
-const Student = () => {
+const PracticeSuperviser = () => {
   return (
     <>
       <Switch>
         <Route exact path="/">
           <AnnouncementPage />
         </Route>
-        <Route exact path="/reportpractice">
+        {/* <Route exact path="/reportpractice">
           <ReportPractice />
-        </Route>
-        <Route exact path="/agreement">
+        </Route> */}
+        {/* <Route exact path="/agreement">
           <AgreementPage />
-        </Route>
+        </Route> */}
       </Switch>
     </>
   );
 };
 
-export default Student;
+export default PracticeSuperviser;

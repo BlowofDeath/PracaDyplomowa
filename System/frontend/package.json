@@ -32,7 +32,9 @@
     "dev": "concurrently \"yarn start\" \"cd ../backend && yarn dev \""
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+        "react-app"
+    ]
   },
   "browserslist": {
     "production": [
