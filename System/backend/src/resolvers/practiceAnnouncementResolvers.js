@@ -22,6 +22,12 @@ const practiceAnnouncementResolvers = {
       if (!authObject)
         throw new AuthenticationError(lang.noAccessToCreateAnnouncement);
       const { PracticeAnnouncement } = models;
+      if (!header) throw new UserInputError(lang.headerRequired);
+      if (!slots) throw new UserInputError(lang.slotsRequired);
+      if (!technologies) throw new UserInputError(lang.technologiesRequired);
+      if (!from) throw new UserInputError(lang.fromRequired);
+      if (!to) throw new UserInputError(lang.toRequired);
+
       const practiceAnnouncementr = await PracticeAnnouncement.create({
         header,
         slots,
@@ -29,7 +35,7 @@ const practiceAnnouncementResolvers = {
         technologies,
         from,
         to,
-        accepted: false,
+        accepted: authObject.practiceSuperviser ? true : false,
       });
 
       return practiceAnnouncementr;

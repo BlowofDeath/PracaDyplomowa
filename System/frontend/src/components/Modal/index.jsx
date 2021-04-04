@@ -2,8 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import css from "./Modal.module.css";
 import CloseIcon from "@material-ui/icons/Close";
+import LoadingSpinner from "@components/LoadingSpinner";
 
-const CustomModal = ({ open, setOpenModal, children, header, buttons }) => {
+const CustomModal = ({
+  open,
+  setOpenModal,
+  children,
+  header,
+  buttons,
+  isLoading,
+}) => {
   return (
     open &&
     ReactDOM.createPortal(
@@ -17,6 +25,7 @@ const CustomModal = ({ open, setOpenModal, children, header, buttons }) => {
           )}
           <div className={css.content}>{children}</div>
           <div className={css.footer}>
+            <div>{isLoading && <LoadingSpinner />}</div>
             <div>{buttons}</div>
           </div>
         </div>

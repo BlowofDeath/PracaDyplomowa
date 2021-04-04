@@ -17,9 +17,9 @@
   background-color: white;
   position: relative;
   max-width: 640px;
-  height: 70%;
   margin: auto;
   border-radius: 24px;
+  padding-bottom: 60px;
 }
 
 .content {
@@ -59,7 +59,7 @@
   bottom: 0;
   padding: 24px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
 }
 

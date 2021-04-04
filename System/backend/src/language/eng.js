@@ -7,6 +7,11 @@ const Errors = {
   lastNameValidation: "Last name must have at least 3 characters",
   passwordIncorrect: "Password incorrect",
   noAccessToCreateAnnouncement: "You have no access to create announcement",
+  headerRequired: "Header is required",
+  slotsRequired: "Slots are required",
+  technologiesRequired: "Technologies are required",
+  fromRequired: "From date is required",
+  toRequired: "To date is required",
 };
 
 export default Errors;

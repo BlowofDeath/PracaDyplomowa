@@ -13,6 +13,7 @@ const Input = ({
   className,
   labelOnTop,
   bright,
+  placeholder,
 }) => {
   return (
     <div
@@ -20,6 +21,7 @@ const Input = ({
     >
       {label && <label className={clsx(bright && css.bright)}>{label}</label>}
       <input
+        placeholder={placeholder}
         type={type}
         id={id}
         name={name}
