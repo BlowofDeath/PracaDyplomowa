@@ -104,7 +104,7 @@ button {
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
-  line-height: 19px;
+  line-height: 20px;
   color: var(--theme-color-two);
   text-shadow: 2px 2px 4px var(--theme-color-three);
   outline: none;
@@ -122,8 +122,9 @@ button[preset="bright"] {
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
+  font-size: 16px;
+  line-height: 20px;
+  height: 40px;
 }
 
 button:hover {

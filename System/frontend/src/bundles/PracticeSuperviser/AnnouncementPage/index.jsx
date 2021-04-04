@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ANNOUNCEMENTS } from "./queries";
 import Page from "@components/Page";
 import LoadingSpinner from "@components/LoadingSpinner";
 import Announcement from "@components/Announcement";
+import AddAnnouncementModal from "@components/AddAnnouncementModal";
 
 const AnnouncementPage = () => {
   const { loading, error, data } = useQuery(ANNOUNCEMENTS);
+  const [openModal, setOpenModal] = useState(false);
 
   console.log(data);
   if (loading) return <LoadingSpinner />;
   if (error) return "error";
   return (
-    <Page title="Ogłoszenia praktyk" button={<button>Dodaj ogłoszenie</button>}>
-      {data.practiceAnnouncements.map((announcement, index) => {
-        return <Announcement key={index} {...announcement} />;
-      })}
-    </Page>
+    <>
+      <Page
+        title="Ogłoszenia praktyk"
+        button={
+          <button onClick={() => setOpenModal(true)}>Dodaj ogłoszenie</button>
+        }
+      >
+        {data.practiceAnnouncements.map((announcement, index) => {
+          return <Announcement key={index} {...announcement} />;
+        })}
+      </Page>
+      {openModal && (
+        <AddAnnouncementModal open={openModal} setOpenModal={setOpenModal} />
+      )}
+    </>
   );
 };
 
