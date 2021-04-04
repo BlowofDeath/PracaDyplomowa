@@ -63,6 +63,8 @@ const Login = () => {
       case USER_TYPES.company:
         console.log("firma");
         break;
+      default:
+        break;
     }
   };
   return (

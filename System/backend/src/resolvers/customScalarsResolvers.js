@@ -12,9 +12,9 @@ const customScalarsResolvers = {
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.INT) {
-        return parseInt(ast.value, 10); // Convert hard-coded AST string to integer and then to Date
+        return new Date(parseInt(ast.value, 10)); // Convert hard-coded AST string to integer and then to Date
       }
-      return parseInt(ast.value); // Invalid hard-coded value (not an integer)
+      return new Date(ast.value).getTime(); // Invalid hard-coded value (not an integer)
     },
   }),
 };
