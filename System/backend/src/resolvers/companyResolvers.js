@@ -4,25 +4,28 @@ import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { signJWT } from "../utility/jwtTool";
 import lang from "../language";
 
-const studentResolvers = {
+const companyResolvers = {
   Query: {
-    meStudent: async (_, args, { models, authObject }) => {
-      const { Student } = models;
-
-      if (authObject.student) {
-        return await Student.findOne({ where: { id: authObject.student } });
+    test: async (_, args, context) => {
+      return "It is work!!";
+    },
+    meCompany: async (_, args, { models, authObject }) => {
+      const { Company } = models;
+      if (authObject.company) {
+        return await Company.findOne({ where: { id: authObject.company } });
       }
       return null;
     },
   },
   Mutation: {
-    createStudent: async (
+    createCompany: async (
       _,
-      { index_number, email, first_name, last_name, password },
+      { email, first_name, last_name, password },
       { models }
     ) => {
-      const { Student } = models;
-      const exist = await Student.findOne({ where: { email } });
+      const { Company } = models;
+      const exist = await Company.findOne({ where: { email } });
+
       if (exist) throw new Error(lang.userExist);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       if (!validator.isLength(password, { min: 8, max: undefined }))
@@ -34,29 +37,32 @@ const studentResolvers = {
 
       password = bcrypt.hashSync(password, 10);
 
-      const student = await Student.create({
-        index_number,
+      const company = await Company.create({
         email,
         first_name,
         last_name,
         password,
       });
-      const token = signJWT({ student: student.id });
-      return { token, student };
+      const token = signJWT({ company: company.id });
+      if (!token) throw new Error("JWT error");
+
+      return { token, company };
     },
-    loginStudent: async (_, { email, password }, { models }) => {
-      const { Student } = models;
+    loginCompany: async (_, { email, password }, { models }) => {
+      const { Company } = models;
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
-      const student = await Student.findOne({ where: { email } });
-      if (!student) throw new Error(lang.userNotFound);
-      const resoult = bcrypt.compareSync(password, student.password);
+      const company = await Company.findOne({
+        where: { email },
+      });
+      if (!company) throw new Error(lang.userNotFound);
+      const resoult = bcrypt.compareSync(password, company.password);
       if (!resoult) throw new UserInputError(lang.passwordIncorrect);
 
-      const token = signJWT({ student: student.id });
+      const token = signJWT({ company: company.id });
 
-      return { token, student };
+      return { token, company };
     },
   },
 };
 
-export default studentResolvers;
+export default companyResolvers;

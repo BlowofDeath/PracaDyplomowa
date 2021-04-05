@@ -8,13 +8,22 @@ import {
   useParams,
   useHistory,
 } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 import css from "./Navbar.module.css";
 import Logo from "@assets/Logo.jsx";
 import { ActionMenu, useMenu } from "@components/ActionMenu";
+import {
+  practiceSuperviserAtom,
+  companyAtom,
+  studentAtom,
+} from "../../config/userRecoilAtoms";
 
 const Navbar = () => {
   const [anchorEl, openMenu, closeMenu] = useMenu();
+  const [practiceSuperviser] = useRecoilState(practiceSuperviserAtom);
+  const [company] = useRecoilState(companyAtom);
+  const [student] = useRecoilState(studentAtom);
   const history = useHistory();
   return (
     <div className={css.container}>
@@ -31,7 +40,9 @@ const Navbar = () => {
       </div>
       <div className={css.menu}>
         <a onClick={openMenu} className={css.user}>
-          example@gmail.com
+          {practiceSuperviser && practiceSuperviser.email}
+          {company && company.email}
+          {student && student.email}
         </a>
         <ActionMenu ref={anchorEl} closeMenu={closeMenu}>
           <ActionMenu.Item onClick={closeMenu}>Profil</ActionMenu.Item>

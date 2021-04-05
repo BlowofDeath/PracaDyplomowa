@@ -8,6 +8,7 @@ import useLocalStorage from "@hooks/useLocalStorage";
 import PrivateRoute from "../routes/PrivateRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import PracticeSuperviser from "./PracticeSuperviser";
+import Company from "./Company";
 import Layout from "@components/Layout";
 import Logout from "./Logout";
 import USER_TYPES from "@config/userTypes";
@@ -32,7 +33,9 @@ const Application = () => {
             <PrivateRoute userType={USER_TYPES.practiceSuperviser}>
               <PracticeSuperviser />
             </PrivateRoute>
-            <PrivateRoute userType={USER_TYPES.company}>"Company"</PrivateRoute>
+            <PrivateRoute userType={USER_TYPES.company}>
+              <Company />
+            </PrivateRoute>
           </Layout>
         </ProtectedRoute>
       </Switch>

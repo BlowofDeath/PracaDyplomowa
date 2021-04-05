@@ -2,20 +2,34 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { Redirect, useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 import css from "./Login.module.css";
 import Input from "@components/Input";
 import Select from "@components/Select";
 import Logo from "@assets/Logo";
-import { LOGIN_STUDENT, LOGIN_PRACTICE_SUPERVISER } from "./queries.js";
+import {
+  LOGIN_STUDENT,
+  LOGIN_PRACTICE_SUPERVISER,
+  LOGIN_COMPANY,
+} from "./queries.js";
 import useAuth from "@hooks/useAuth";
 import useSnackGraphql from "@hooks/useSnackGraphql";
 import USER_TYPES from "@config/userTypes";
+import {
+  studentAtom,
+  companyAtom,
+  practiceSuperviserAtom,
+} from "@config/userRecoilAtoms";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const { token, setToken, userType, setUserType } = useAuth();
   const [showGraphqlErrors] = useSnackGraphql();
+  const [, setStudent] = useRecoilState(studentAtom);
+  const [, setCompany] = useRecoilState(companyAtom);
+  const [, setPracticeSupervisor] = useRecoilState(practiceSuperviserAtom);
+
   const [
     loginStudent,
     { loading: loginStudentLoading, error: loginStudentError },
@@ -27,6 +41,10 @@ const Login = () => {
       error: loginPracticeSuperviserError,
     },
   ] = useMutation(LOGIN_PRACTICE_SUPERVISER);
+  const [
+    loginCompany,
+    { loading: loginCompanyLoading, error: loginCompanyError },
+  ] = useMutation(LOGIN_COMPANY);
 
   if (token && userType) return <Redirect to="/" />;
 
@@ -39,9 +57,9 @@ const Login = () => {
           .then(async ({ data }) => {
             const { loginStudent } = data;
             if (loginStudent?.token) {
-              console.log(loginStudent);
               await setToken(loginStudent.token);
               await setUserType(USER_TYPES.student);
+              setStudent(loginStudent.student);
             }
           })
           .catch(showGraphqlErrors);
@@ -53,15 +71,26 @@ const Login = () => {
           .then(async ({ data }) => {
             const { loginPracticeSuperviser } = data;
             if (loginPracticeSuperviser?.token) {
-              console.log(loginPracticeSuperviser.token);
               await setToken(loginPracticeSuperviser.token);
               await setUserType(USER_TYPES.practiceSuperviser);
+              setPracticeSupervisor(loginPracticeSuperviser.practiceSuperviser);
             }
           })
           .catch(showGraphqlErrors);
         break;
       case USER_TYPES.company:
-        console.log("firma");
+        loginCompany({
+          variables: { email: data.email, password: data.password },
+        })
+          .then(async ({ data }) => {
+            const { loginCompany } = data;
+            if (loginCompany?.token) {
+              await setToken(loginCompany.token);
+              await setUserType(USER_TYPES.company);
+              setCompany(loginCompany.company);
+            }
+          })
+          .catch(showGraphqlErrors);
         break;
       default:
         break;

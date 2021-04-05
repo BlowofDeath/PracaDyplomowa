@@ -7,9 +7,14 @@ const practiceAnnouncementResolvers = {
     testAnnouncement: async (_, args, context) => {
       return "It is work!!";
     },
-    practiceAnnouncements: async (_, args, { models }) => {
+    practiceAnnouncements: async (_, args, { models, authObject }) => {
       const { PracticeAnnouncement } = models;
-      const announcements = await PracticeAnnouncement.findAll();
+      if (authObject && authObject.practiceSuperviser) {
+        return await PracticeAnnouncement.findAll();
+      }
+      const announcements = await PracticeAnnouncement.findAll({
+        where: { accepted: true },
+      });
       return announcements;
     },
   },

@@ -9,10 +9,15 @@ const practiceSuperviserResolvers = {
     test: async (_, args, context) => {
       return "It is work!!";
     },
-    mePracticeSuperviser: async (_, args, context) => {
-      const id = 1; //id z token auth
-      const me = await PracticeSuperviser.findOne({ id });
-      return me;
+    mePracticeSuperviser: async (_, args, { models, authObject }) => {
+      const { PracticeSuperviser } = models;
+      if (authObject.practiceSuperviser) {
+        return await PracticeSuperviser.findOne({
+          where: { id: authObject.practiceSuperviser },
+        });
+      }
+
+      return null;
     },
   },
   Mutation: {

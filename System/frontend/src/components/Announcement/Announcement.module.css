@@ -9,3 +9,7 @@
 .container button {
   margin-top: 50px;
 }
+
+.buttons > button {
+  margin-right: 8px;
+}

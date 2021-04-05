@@ -3,8 +3,7 @@ import { gql } from "apollo-server-express";
 const studentType = gql`
   type Query {
     test: String
-    meStudent: Student!
-    student(id: ID!): Student
+    meStudent: Student
   }
 
   type Student {

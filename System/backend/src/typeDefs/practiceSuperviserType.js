@@ -2,10 +2,11 @@ import { gql } from "apollo-server-express";
 
 const practiceSuperviserType = gql`
   type Query {
-    mePracticeSuperviser: PracticeSuperviser!
+    mePracticeSuperviser: PracticeSuperviser
   }
 
   type PracticeSuperviser {
+    id: ID!
     email: String!
     first_name: String!
     last_name: String!

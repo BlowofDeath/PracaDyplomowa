@@ -1,17 +1,30 @@
-import React from "react";
-import { gql, useQuery } from "@apollo/client";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { Switch, Route } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 import AnnouncementPage from "./AnnouncementPage";
+import { practiceSuperviserAtom } from "@config/userRecoilAtoms";
+import { GET_PRACTICE_SUPERVISER } from "./queries.js";
 
 const PracticeSuperviser = () => {
+  const [practiceSuperviser, setPracticeSuperviser] = useRecoilState(
+    practiceSuperviserAtom
+  );
+  const [getPracticeSuperviser, { data }] = useLazyQuery(
+    GET_PRACTICE_SUPERVISER
+  );
+
+  useEffect(() => {
+    if (!practiceSuperviser) {
+      getPracticeSuperviser();
+    }
+  }, [practiceSuperviser, getPracticeSuperviser]);
+
+  useEffect(() => {
+    if (data) setPracticeSuperviser(data.mePracticeSuperviser);
+  }, [data, setPracticeSuperviser]);
+
   return (
     <>
       <Switch>

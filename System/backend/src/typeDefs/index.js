@@ -3,11 +3,13 @@ import { mergeTypeDefs } from "@graphql-tools/merge";
 import studentType from "./studentType";
 import practiceSuperviserType from "./practiceSuperviserType";
 import practiceAnnouncementType from "./practiceAnnouncementType";
+import companyType from "./companyType";
 import customScalarType from "./customScalarType";
 
 const types = [
   studentType,
   practiceSuperviserType,
+  companyType,
   practiceAnnouncementType,
   customScalarType,
 ];

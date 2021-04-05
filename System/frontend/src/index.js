@@ -10,6 +10,7 @@ import {
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { SnackbarProvider } from "notistack";
+import { RecoilRoot } from "recoil";
 import jwt from "jsonwebtoken";
 
 import Application from "@bundles";
@@ -53,13 +54,15 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <SnackbarProvider maxSnack={3}>
-    <React.StrictMode>
-      <ApolloProvider client={client}>
-        <Application />
-      </ApolloProvider>
-    </React.StrictMode>
-  </SnackbarProvider>,
+  <RecoilRoot>
+    <SnackbarProvider maxSnack={3}>
+      <React.StrictMode>
+        <ApolloProvider client={client}>
+          <Application />
+        </ApolloProvider>
+      </React.StrictMode>
+    </SnackbarProvider>
+  </RecoilRoot>,
 
   document.getElementById("root")
 );

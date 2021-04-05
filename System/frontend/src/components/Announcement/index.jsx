@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import dayjs from "dayjs";
+
 import css from "./Announcement.module.css";
 import Container from "@components/Container";
-import dayjs from "dayjs";
+import useAuth from "@hooks/useAuth";
+import USER_TYPES from "@config/userTypes";
+import ConfirmModal from "@components/ConfirmModal";
 
 const Announcement = ({
   header,
@@ -10,7 +14,10 @@ const Announcement = ({
   to,
   technologies,
   description,
+  accepted,
 }) => {
+  const { userType } = useAuth();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   return (
     <Container className={css.container}>
       <h2>{header}</h2>
@@ -22,7 +29,26 @@ const Announcement = ({
       </span>
       <span>Technologie: {technologies}</span>
       <p>{description}</p>
-      <button>Złóż podanie</button>
+      <div className={css.buttons}>
+        {userType === USER_TYPES.student && <button>Złóż podanie</button>}
+        {userType === USER_TYPES.practiceSuperviser && accepted === false && (
+          <button>Zatwierdź</button>
+        )}
+        {userType === USER_TYPES.practiceSuperviser && (
+          <button preset="red" onClick={() => setOpenDeleteModal(true)}>
+            Usuń
+          </button>
+        )}
+      </div>
+      {openDeleteModal && (
+        <ConfirmModal
+          open={openDeleteModal}
+          setOpenModal={setOpenDeleteModal}
+          onDecline={() => setOpenDeleteModal(false)}
+        >
+          Czy na pewno chcesz usunąć te ogłoszenie?
+        </ConfirmModal>
+      )}
     </Container>
   );
 };
