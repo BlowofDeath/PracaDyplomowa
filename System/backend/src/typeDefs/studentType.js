@@ -7,6 +7,7 @@ const studentType = gql`
   }
 
   type Student {
+    id: ID!
     index_number: Int!
     email: String!
     first_name: String!

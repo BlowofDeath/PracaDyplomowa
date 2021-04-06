@@ -45,6 +45,30 @@ const practiceAnnouncementResolvers = {
 
       return practiceAnnouncementr;
     },
+    deletePracticeAnnouncement: async (_, { id }, { models, authObject }) => {
+      const { PracticeAnnouncement } = models;
+      if (authObject && authObject.practiceSuperviser) {
+        return await PracticeAnnouncement.destroy({ where: { id } });
+      } else {
+        throw new AuthenticationError(lang.noPermission);
+      }
+    },
+    confirmPracticeAnnouncement: async (_, { id }, { models, authObject }) => {
+      const { PracticeAnnouncement } = models;
+      if (authObject && authObject.practiceSuperviser) {
+        const practiceAnnouncement = await PracticeAnnouncement.findOne({
+          where: { id },
+        });
+        if (practiceAnnouncement) {
+          practiceAnnouncement.accepted = true;
+          return await practiceAnnouncement.save();
+        } else {
+          throw new UserInputError(lang.objectNotFound);
+        }
+      } else {
+        throw new AuthenticationError(lang.noPermission);
+      }
+    },
   },
 };
 

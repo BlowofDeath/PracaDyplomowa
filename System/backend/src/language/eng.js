@@ -12,6 +12,8 @@ const Errors = {
   technologiesRequired: "Technologies are required",
   fromRequired: "From date is required",
   toRequired: "To date is required",
+  noPermission: "You don't have permissions to do this action",
+  objectNotFound: "Object not found",
 };
 
 export default Errors;

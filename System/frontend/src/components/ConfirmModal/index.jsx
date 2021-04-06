@@ -16,7 +16,7 @@ const ConfirmModal = (props) => {
         </>
       }
     >
-      <p>{children}</p>
+      <p className={css.text}>{children}</p>
     </Modal>
   );
 };

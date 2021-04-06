@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 
 import { ANNOUNCEMENTS } from "./queries";
@@ -13,6 +13,11 @@ const AnnouncementPage = () => {
   const { loading, error, data } = useQuery(ANNOUNCEMENTS);
   const [openModal, setOpenModal] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    if (data) setAnnouncements(data.practiceAnnouncements);
+  }, [data]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return "error";
@@ -35,11 +40,25 @@ const AnnouncementPage = () => {
             <Tabs.Tab label="Oczekujące" />
           </Tabs>
         </div>
-        {data.practiceAnnouncements.map((announcement, index) => {
+        {announcements.map((announcement, index) => {
           if (tabValue === 0 && announcement.accepted)
-            return <Announcement key={index} {...announcement} />;
+            return (
+              <Announcement
+                key={index}
+                {...announcement}
+                announcements={announcements}
+                setAnnouncements={setAnnouncements}
+              />
+            );
           if (tabValue === 1 && !announcement.accepted)
-            return <Announcement key={index} {...announcement} />;
+            return (
+              <Announcement
+                key={index}
+                {...announcement}
+                announcements={announcements}
+                setAnnouncements={setAnnouncements}
+              />
+            );
           else return null;
         })}
       </Page>

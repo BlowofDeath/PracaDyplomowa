@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
+import { useMutation } from "@apollo/client";
+import { useSnackbar } from "notistack";
 
 import css from "./Announcement.module.css";
 import Container from "@components/Container";
 import useAuth from "@hooks/useAuth";
 import USER_TYPES from "@config/userTypes";
 import ConfirmModal from "@components/ConfirmModal";
+import {
+  DELETE_PRACTICE_ANNOUNCEMENT,
+  CONFIRM_PRACTICE_ANNOUNCEMENT,
+} from "./queries";
 
 const Announcement = ({
+  id,
   header,
   slots,
   from,
@@ -15,16 +22,58 @@ const Announcement = ({
   technologies,
   description,
   accepted,
+  announcements,
+  setAnnouncements,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [confirmPracticeAnnouncement] = useMutation(
+    CONFIRM_PRACTICE_ANNOUNCEMENT
+  );
+  const [deletePracticeAnnouncement] = useMutation(
+    DELETE_PRACTICE_ANNOUNCEMENT
+  );
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDelete = async () => {
+    const deleted = await deletePracticeAnnouncement({ variables: { id } });
+    if (deleted) {
+      enqueueSnackbar("Usunięto pomyślnie", { variant: "success" });
+      setOpenDeleteModal(false);
+      setAnnouncements(
+        announcements.filter((announcement) => announcement.id !== id)
+      );
+    } else {
+      enqueueSnackbar("Wystąpił problem", { variant: "error" });
+    }
+  };
+
+  const handleConfirm = () => {
+    confirmPracticeAnnouncement({ variables: { id } }).then((data) => {
+      if (data) {
+        enqueueSnackbar("Zatwierdzono pomyślnie", { variant: "success" });
+        setOpenDeleteModal(false);
+        setAnnouncements(
+          announcements.map((announcement) => {
+            if (announcement.id === id)
+              return { ...announcement, accepted: true };
+            else return announcement;
+          })
+        );
+      }
+    });
+  };
+
+  console.log(announcements);
+
   return (
     <Container className={css.container}>
       <h2>{header}</h2>
       {/* <span>Nazwa firmy: Example z.o.o</span> */}
       <span>Miejsca: {slots}</span>
       <span>
-        Od: {dayjs(from).format("DD/MM/YYYY")} do:{" "}
+        Od: {dayjs(from).format("DD/MM/YYYY")} do:
         {dayjs(to).format("DD/MM/YYYY")}
       </span>
       <span>Technologie: {technologies}</span>
@@ -32,7 +81,7 @@ const Announcement = ({
       <div className={css.buttons}>
         {userType === USER_TYPES.student && <button>Złóż podanie</button>}
         {userType === USER_TYPES.practiceSuperviser && accepted === false && (
-          <button>Zatwierdź</button>
+          <button onClick={handleConfirm}>Zatwierdź</button>
         )}
         {userType === USER_TYPES.practiceSuperviser && (
           <button preset="red" onClick={() => setOpenDeleteModal(true)}>
@@ -45,8 +94,11 @@ const Announcement = ({
           open={openDeleteModal}
           setOpenModal={setOpenDeleteModal}
           onDecline={() => setOpenDeleteModal(false)}
+          onConfirm={handleDelete}
         >
           Czy na pewno chcesz usunąć te ogłoszenie?
+          <br />
+          Tej operacji nie da się cofnąć.
         </ConfirmModal>
       )}
     </Container>

@@ -9,6 +9,7 @@ const practiceAnnouncementType = gql`
   }
 
   type PracticeAnnouncement {
+    id: ID!
     header: String!
     slots: String!
     description: String!
@@ -27,6 +28,8 @@ const practiceAnnouncementType = gql`
       from: Date!
       to: Date!
     ): PracticeAnnouncement
+    deletePracticeAnnouncement(id: ID!): Boolean
+    confirmPracticeAnnouncement(id: ID!): PracticeAnnouncement
   }
 `;
 
