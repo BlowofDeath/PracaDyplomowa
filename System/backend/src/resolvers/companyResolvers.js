@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { signJWT } from "../utility/jwtTool";
 import lang from "../language";
+import getRandomColor from "../utility/getRandomColor";
+import capitalize from "../utility/capitalize";
 
 const companyResolvers = {
   Query: {
@@ -39,9 +41,10 @@ const companyResolvers = {
 
       const company = await Company.create({
         email,
-        first_name,
-        last_name,
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
         password,
+        color: getRandomColor(),
       });
       const token = signJWT({ company: company.id });
       if (!token) throw new Error("JWT error");

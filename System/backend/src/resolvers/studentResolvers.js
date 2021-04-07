@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { signJWT } from "../utility/jwtTool";
 import lang from "../language";
+import getRandomColor from "../utility/getRandomColor";
+import capitalize from "../utility/capitalize";
 
 const studentResolvers = {
   Query: {
@@ -13,6 +15,12 @@ const studentResolvers = {
         return await Student.findOne({ where: { id: authObject.student } });
       }
       return null;
+    },
+    students: async (_, args, { models, authObject }) => {
+      const { Student } = models;
+      if (authObject.practiceSuperviser) {
+        return await Student.findAll();
+      } else throw new AuthenticationError(lang.noPermission);
     },
   },
   Mutation: {
@@ -37,9 +45,10 @@ const studentResolvers = {
       const student = await Student.create({
         index_number,
         email,
-        first_name,
-        last_name,
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
         password,
+        color: getRandomColor(),
       });
       const token = signJWT({ student: student.id });
       return { token, student };

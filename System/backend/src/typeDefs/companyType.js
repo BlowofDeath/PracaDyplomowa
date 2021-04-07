@@ -10,6 +10,7 @@ const companyType = gql`
     email: String!
     first_name: String!
     last_name: String!
+    color: String!
   }
 
   type companyAuth {

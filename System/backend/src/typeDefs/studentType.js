@@ -4,6 +4,7 @@ const studentType = gql`
   type Query {
     test: String
     meStudent: Student
+    students: [Student]
   }
 
   type Student {
@@ -12,6 +13,7 @@ const studentType = gql`
     email: String!
     first_name: String!
     last_name: String!
+    color: String!
   }
 
   type StudentAuth {

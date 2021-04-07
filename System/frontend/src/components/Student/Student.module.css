@@ -1,0 +1,13 @@
+.container span {
+  display: block;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.avatar > h3 {
+  margin-left: 10px;
+}

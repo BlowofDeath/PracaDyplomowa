@@ -7,6 +7,7 @@ const Student = db.define("Student", {
   first_name: Sequelize.STRING,
   last_name: Sequelize.STRING,
   password: Sequelize.STRING,
+  color: Sequelize.STRING,
 });
 
 export default Student;
