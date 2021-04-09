@@ -16,13 +16,13 @@ const useAuth = () => {
   };
 
   const removeToken = () => {
-    localStorage.removeItem("token");
     setTokenValue(undefined);
+    localStorage.removeItem("token");
   };
 
   const removeUserType = () => {
-    localStorage.removeItem("userType");
     setUserTypeValue(undefined);
+    localStorage.removeItem("userType");
   };
 
   return {

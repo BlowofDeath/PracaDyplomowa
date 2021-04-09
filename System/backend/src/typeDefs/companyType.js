@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const companyType = gql`
   type Query {
     meCompany: Company
+    companies: [Company]
   }
 
   type Company {
@@ -11,6 +12,9 @@ const companyType = gql`
     first_name: String!
     last_name: String!
     color: String!
+    name: String!
+    city: String!
+    adress: String!
   }
 
   type companyAuth {
@@ -24,6 +28,9 @@ const companyType = gql`
       first_name: String!
       last_name: String!
       password: String!
+      name: String!
+      city: String!
+      adress: String!
     ): companyAuth!
     loginCompany(email: String!, password: String!): companyAuth!
   }

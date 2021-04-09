@@ -6,6 +6,7 @@ import useAuth from "@hooks/useAuth";
 import USER_TYPES from "@config/userTypes";
 import Page from "@components/Page";
 import Students from "./Students";
+import Companies from "./Companies";
 // import Companies from "./Companies"
 import css from "./UsersPage.module.css";
 
@@ -33,7 +34,7 @@ const UsersPage = () => {
           </Tabs>
         </div>
         {tabValue === 0 && <Students />}
-        {/* {tabValue === 1 && <Companies />} */}
+        {tabValue === 1 && <Companies />}
       </Page>
     </>
   );

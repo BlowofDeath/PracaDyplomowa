@@ -18,11 +18,17 @@ const companyResolvers = {
       }
       return null;
     },
+    companies: async (_, args, { models, authObject }) => {
+      const { Company } = models;
+      if (authObject.practiceSuperviser) {
+        return await Company.findAll();
+      } else throw new AuthenticationError(lang.noPermission);
+    },
   },
   Mutation: {
     createCompany: async (
       _,
-      { email, first_name, last_name, password },
+      { email, first_name, last_name, password, name, city, adress },
       { models }
     ) => {
       const { Company } = models;
@@ -36,11 +42,20 @@ const companyResolvers = {
         throw new UserInputError(lang.firstNameValidation);
       if (!validator.isLength(last_name, { min: 3, max: undefined }))
         throw new UserInputError(lang.lastNameValidation);
+      if (!validator.isLength(name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.nameValidation);
+      if (!validator.isLength(city, { min: 3, max: undefined }))
+        throw new UserInputError(lang.cityValidation);
+      if (!validator.isLength(adress, { min: 3, max: undefined }))
+        throw new UserInputError(lang.adressValidation);
 
       password = bcrypt.hashSync(password, 10);
 
       const company = await Company.create({
         email,
+        name: capitalize(name),
+        city: capitalize(city),
+        adress: capitalize(adress),
         first_name: capitalize(first_name),
         last_name: capitalize(last_name),
         password,
