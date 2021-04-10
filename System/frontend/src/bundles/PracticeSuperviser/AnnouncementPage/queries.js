@@ -11,6 +11,8 @@ export const ANNOUNCEMENTS = gql`
       to
       from
       accepted
+      email
+      phone
     }
   }
 `;

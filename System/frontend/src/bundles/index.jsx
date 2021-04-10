@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Login from "@bundles/Login";
 import Student from "@bundles/Student";
@@ -12,6 +12,7 @@ import Company from "./Company";
 import Layout from "@components/Layout";
 import Logout from "./Logout";
 import USER_TYPES from "@config/userTypes";
+import Invitation from "@bundles/Invitation";
 
 const Application = () => {
   return (
@@ -23,6 +24,9 @@ const Application = () => {
 
         <Route path="/logout">
           <Logout />
+        </Route>
+        <Route path="/invitation/:token">
+          <Invitation />
         </Route>
 
         <ProtectedRoute path="/">

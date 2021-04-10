@@ -14,13 +14,13 @@ const Companies = () => {
   return (
     <div className={css.companiesList}>
       {data.companies.map(
-        ({ id, name, city, adress, email, first_name, last_name, color }) => (
+        ({ id, name, city, address, email, first_name, last_name, color }) => (
           <Company
             key={id}
             first_name={first_name}
             last_name={last_name}
             email={email}
-            adress={adress}
+            address={address}
             city={city}
             name={name}
             color={color}

@@ -1,5 +1,9 @@
-.container span {
+.container > span {
   display: block;
+}
+
+.container > span > span {
+  font-weight: 600;
 }
 
 .avatar {

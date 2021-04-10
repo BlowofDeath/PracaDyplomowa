@@ -14,8 +14,12 @@ const Student = ({ first_name, last_name, index_number, email, color }) => {
         </Avatar>
         <h3>{`${first_name} ${last_name}`}</h3>
       </div>
-      <span>Email: {email}</span>
-      <span>Numer indeksu: {index_number}</span>
+      <span>
+        <span>Email:</span> {email}
+      </span>
+      <span>
+        <span>Numer indeksu:</span> {index_number}
+      </span>
     </Container>
   );
 };

@@ -1,5 +1,5 @@
 const Errors = {
-  badEmail: "Wrong email adress",
+  badEmail: "Wrong email address",
   userExist: "User exist",
   userNotFound: "User not found",
   passwordValidation: "Password must have from 8 to 16 chars",

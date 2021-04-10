@@ -6,7 +6,7 @@ export const GET_COMPANIES = gql`
       id
       name
       city
-      adress
+      address
       email
       first_name
       last_name

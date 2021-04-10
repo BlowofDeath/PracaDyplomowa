@@ -24,6 +24,8 @@ const Announcement = ({
   accepted,
   announcements,
   setAnnouncements,
+  email,
+  phone,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -65,18 +67,30 @@ const Announcement = ({
     });
   };
 
-  console.log(announcements);
-
   return (
     <Container className={css.container}>
       <h2>{header}</h2>
       {/* <span>Nazwa firmy: Example z.o.o</span> */}
-      <span>Miejsca: {slots}</span>
       <span>
-        Od: {dayjs(from).format("DD/MM/YYYY")} do:
+        <span>Miejsca:</span> {slots}
+      </span>
+      <span>
+        <span>Od:</span> {dayjs(from).format("DD/MM/YYYY")} <span>do: </span>
         {dayjs(to).format("DD/MM/YYYY")}
       </span>
-      <span>Technologie: {technologies}</span>
+      {email && (
+        <span>
+          <span>Email:</span> {email}
+        </span>
+      )}
+      {phone && (
+        <span>
+          <span>Telefon:</span> {phone}
+        </span>
+      )}
+      <span>
+        <span>Technologie:</span> {technologies}
+      </span>
       <p>{description}</p>
       <div className={css.buttons}>
         {userType === USER_TYPES.student && <button>Złóż podanie</button>}

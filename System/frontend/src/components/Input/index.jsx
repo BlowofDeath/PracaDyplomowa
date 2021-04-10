@@ -14,6 +14,7 @@ const Input = ({
   labelOnTop,
   bright,
   placeholder,
+  defaultValue,
 }) => {
   return (
     <div
@@ -28,6 +29,7 @@ const Input = ({
         onChange={onChange}
         ref={inputRef}
         value={value}
+        defaultValue={defaultValue}
       />
     </div>
   );

@@ -6,6 +6,8 @@ const PracticeAnnouncement = db.define("PracticeAnnouncement", {
   slots: Sequelize.INTEGER,
   description: Sequelize.STRING,
   technologies: Sequelize.STRING,
+  email: Sequelize.STRING,
+  phone: Sequelize.STRING,
   from: Sequelize.DATE,
   to: Sequelize.DATE,
   accepted: Sequelize.BOOLEAN,

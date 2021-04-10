@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { Redirect, useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import validator from "validator";
 
 import css from "./Login.module.css";
 import Input from "@components/Input";
@@ -104,13 +105,21 @@ const Login = () => {
         <div className={css.content}>
           <h1 className={css.title}>Zaloguj</h1>
           <div className={css.form}>
-            <Input name="email" label="Email:" bright inputRef={register} />
+            <Input
+              name="email"
+              label="Email:"
+              bright
+              inputRef={register({
+                required: true,
+                validate: validator.isEmail,
+              })}
+            />
             <Input
               name="password"
               label="Hasło:"
               type="password"
               bright
-              inputRef={register}
+              inputRef={register({ required: true, min: 8 })}
             />
 
             <Select

@@ -8,7 +8,7 @@ const Student = ({
   id,
   name,
   city,
-  adress,
+  address,
   email,
   first_name,
   last_name,
@@ -23,10 +23,18 @@ const Student = ({
         </CompanyAvatar>
         <h3>{name}</h3>
       </div>
-      <span>Przedstawiciel: {`${first_name} ${last_name}`}</span>
-      <span>Email: {email}</span>
-      <span>Miasto: {city}</span>
-      <span>Adres: {adress}</span>
+      <span>
+        <span>Przedstawiciel:</span> {`${first_name} ${last_name}`}
+      </span>
+      <span>
+        <span>Email:</span> {email}
+      </span>
+      <span>
+        <span>Miasto:</span> {city}
+      </span>
+      <span>
+        <span>Adres:</span> {address}
+      </span>
     </Container>
   );
 };

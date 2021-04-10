@@ -21,7 +21,7 @@ const practiceAnnouncementResolvers = {
   Mutation: {
     createPracticeAnnouncement: async (
       _,
-      { header, slots, description, technologies, from, to },
+      { header, slots, description, technologies, from, to, email, phone },
       { models, authObject }
     ) => {
       if (!authObject)
@@ -32,15 +32,19 @@ const practiceAnnouncementResolvers = {
       if (!technologies) throw new UserInputError(lang.technologiesRequired);
       if (!from) throw new UserInputError(lang.fromRequired);
       if (!to) throw new UserInputError(lang.toRequired);
+      if (email && !validator.isEmail(email))
+        throw new UserInputError(lang.invalidEmail);
 
       const practiceAnnouncementr = await PracticeAnnouncement.create({
         header,
         slots,
-        description: description ?? "",
+        description: description ?? null,
         technologies,
         from,
         to,
         accepted: authObject.practiceSuperviser ? true : false,
+        phone: phone ?? null,
+        email: email ?? null,
       });
 
       return practiceAnnouncementr;

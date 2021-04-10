@@ -16,6 +16,8 @@ const practiceAnnouncementType = gql`
     technologies: String!
     from: Date!
     to: Date!
+    phone: String
+    email: String
     accepted: Boolean!
   }
 
@@ -27,6 +29,8 @@ const practiceAnnouncementType = gql`
       technologies: String!
       from: Date!
       to: Date!
+      phone: String
+      email: String
     ): PracticeAnnouncement
     deletePracticeAnnouncement(id: ID!): Boolean
     confirmPracticeAnnouncement(id: ID!): PracticeAnnouncement

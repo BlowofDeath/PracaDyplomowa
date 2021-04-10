@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import Alert from "@material-ui/lab/Alert";
+import validator from "validator";
 
 import css from "./AddAnnouncementModal.module.css";
 import Input from "@components/Input";
@@ -17,11 +18,10 @@ const AddAnnouncementModal = (props) => {
   const [addAnnouncement] = useMutation(ADD_ANNOUNCEMENT);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setOpenModal } = props;
+  const { setOpenModal, refetch } = props;
 
   const onSubmit = (data) => {
     setIsLoading(true);
-    console.log(data);
     addAnnouncement({
       variables: {
         header: data.header,
@@ -30,11 +30,14 @@ const AddAnnouncementModal = (props) => {
         description: data.description,
         from: data.from,
         to: data.to,
+        phone: data.phone,
+        email: data.email,
       },
     })
       .then(() => {
         console.log("success!");
         setIsLoading(false);
+        refetch();
         setOpenModal(false);
       })
       .catch((err) => {
@@ -81,7 +84,7 @@ const AddAnnouncementModal = (props) => {
               labelOnTop
               inputRef={register({ required: true })}
               name="slots"
-              placeholder="1"
+              defaultValue={1}
             />
             <Input
               label="Technologie*"
@@ -89,6 +92,22 @@ const AddAnnouncementModal = (props) => {
               inputRef={register({ required: true })}
               name="technologies"
               placeholder="Java, C++, c#"
+            />
+            <Input
+              label="Email"
+              labelOnTop
+              inputRef={register({
+                validate: (value) => (value ? validator.isEmail(value) : true),
+              })}
+              name="email"
+              placeholder="jk@example.com"
+            />
+            <Input
+              label="Telefon"
+              labelOnTop
+              inputRef={register}
+              name="phone"
+              placeholder="678 890 ..."
             />
           </div>
         </div>
@@ -142,6 +161,11 @@ const AddAnnouncementModal = (props) => {
         {(errors.from || errors.to) && (
           <Alert variant="filled" severity="error">
             Podaj poprawny przedział czasowy
+          </Alert>
+        )}
+        {errors.email && (
+          <Alert variant="filled" severity="error">
+            Adres email jest niepoprawny
           </Alert>
         )}
       </div>

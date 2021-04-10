@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
+import { JWT_HASH } from "../configs/environment";
 
-const signJWT = (obj) =>
-  jwt.sign(obj, process.env.JWT_HASH, {
-    expiresIn: "2d",
+const signJWT = (obj, expire = "2d") =>
+  jwt.sign(obj, JWT_HASH, {
+    expiresIn: expire,
   });
 
-const verifyJWT = (token) => jwt.verify(token, process.env.JWT_HASH);
+const verifyJWT = (token, callback = undefined) =>
+  jwt.verify(token, JWT_HASH, callback);
 
 export { signJWT, verifyJWT };

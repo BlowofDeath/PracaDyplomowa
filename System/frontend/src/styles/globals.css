@@ -82,9 +82,9 @@ p {
 span {
   font-family: Roboto;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 18px;
+  line-height: 20px;
   color: var(--theme-color-three);
 }
 

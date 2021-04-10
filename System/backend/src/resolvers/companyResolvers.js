@@ -1,7 +1,7 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
-import { signJWT } from "../utility/jwtTool";
+import { signJWT, verifyJWT } from "../utility/jwtTool";
 import lang from "../language";
 import getRandomColor from "../utility/getRandomColor";
 import capitalize from "../utility/capitalize";
@@ -28,7 +28,7 @@ const companyResolvers = {
   Mutation: {
     createCompany: async (
       _,
-      { email, first_name, last_name, password, name, city, adress },
+      { email, first_name, last_name, password, name, city, address },
       { models }
     ) => {
       const { Company } = models;
@@ -46,8 +46,8 @@ const companyResolvers = {
         throw new UserInputError(lang.nameValidation);
       if (!validator.isLength(city, { min: 3, max: undefined }))
         throw new UserInputError(lang.cityValidation);
-      if (!validator.isLength(adress, { min: 3, max: undefined }))
-        throw new UserInputError(lang.adressValidation);
+      if (!validator.isLength(address, { min: 3, max: undefined }))
+        throw new UserInputError(lang.addressValidation);
 
       password = bcrypt.hashSync(password, 10);
 
@@ -55,7 +55,7 @@ const companyResolvers = {
         email,
         name: capitalize(name),
         city: capitalize(city),
-        adress: capitalize(adress),
+        address: capitalize(address),
         first_name: capitalize(first_name),
         last_name: capitalize(last_name),
         password,
@@ -79,6 +79,62 @@ const companyResolvers = {
       const token = signJWT({ company: company.id });
 
       return { token, company };
+    },
+    registerCompany: async (
+      _,
+      {
+        token,
+        name,
+        city,
+        address,
+        first_name,
+        last_name,
+        phone,
+        password,
+        confirm_password,
+      },
+      { models }
+    ) => {
+      const { Company, Invitation } = models;
+      const invitationToken = verifyJWT(token);
+      if (!invitationToken) throw new Error(lang.invalidToken);
+      const { email } = invitationToken;
+      const invitation = await Invitation.findOne({ where: { token } });
+      if (!invitation) throw new Error(lang.invalidToken);
+      if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
+      const exist = await Company.findOne({ where: { email } });
+      if (exist) throw new Error(lang.userExist);
+      if (!validator.isLength(password, { min: 8, max: undefined }))
+        throw new UserInputError(lang.passwordValidation);
+      if (!validator.isLength(first_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.firstNameValidation);
+      if (!validator.isLength(last_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.lastNameValidation);
+      if (!validator.isLength(name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.nameValidation);
+      if (!validator.isLength(city, { min: 3, max: undefined }))
+        throw new UserInputError(lang.cityValidation);
+      if (!validator.isLength(address, { min: 3, max: undefined }))
+        throw new UserInputError(lang.addressValidation);
+      if (password !== confirm_password)
+        throw new UserInputError(lang.passwordsIdentical);
+
+      password = bcrypt.hashSync(password, 10);
+      const company = await Company.create({
+        email,
+        name: capitalize(name),
+        city: capitalize(city),
+        address: capitalize(address),
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
+        password,
+        phone: phone ?? null,
+        color: getRandomColor(),
+      });
+
+      const userToken = signJWT({ company: company.id });
+      await invitation.destroy();
+      return { token: userToken, company };
     },
   },
 };

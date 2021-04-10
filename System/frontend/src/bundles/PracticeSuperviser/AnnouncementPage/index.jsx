@@ -10,7 +10,7 @@ import Tabs from "@components/Tabs";
 import css from "./AnnouncementPage.module.css";
 
 const AnnouncementPage = () => {
-  const { loading, error, data } = useQuery(ANNOUNCEMENTS);
+  const { loading, error, data, refetch } = useQuery(ANNOUNCEMENTS);
   const [openModal, setOpenModal] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [announcements, setAnnouncements] = useState([]);
@@ -63,7 +63,11 @@ const AnnouncementPage = () => {
         })}
       </Page>
       {openModal && (
-        <AddAnnouncementModal open={openModal} setOpenModal={setOpenModal} />
+        <AddAnnouncementModal
+          open={openModal}
+          setOpenModal={setOpenModal}
+          refetch={refetch}
+        />
       )}
     </>
   );

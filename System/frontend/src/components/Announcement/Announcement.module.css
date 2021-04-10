@@ -2,8 +2,12 @@
   margin-bottom: 40px;
 }
 
-.container span {
+.container > span {
   display: block;
+}
+
+.container > span > span {
+  font-weight: 600;
 }
 
 .container button {

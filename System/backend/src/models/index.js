@@ -3,6 +3,7 @@ import PracticeSuperviser from "./PracticeSuperviser";
 import PracticeAgreement from "./PracticeAgreement";
 import PracticeAnnouncement from "./PracticeAnnouncement";
 import Student from "./Student";
+import Invitation from "./Invitation";
 
 Student.hasOne(PracticeAgreement);
 PracticeAgreement.belongsTo(Student);
@@ -19,4 +20,5 @@ export default {
   PracticeAgreement,
   PracticeAnnouncement,
   Student,
+  Invitation,
 };

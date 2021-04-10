@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { ApolloServer, AuthenticationError } from "apollo-server-express";
+import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import express from "express";
 import path from "path";
@@ -11,6 +10,7 @@ const app = express();
 import { verifyJWT } from "./utility/jwtTool";
 import models from "./models";
 import util from "util";
+import { EMAIL_CONFIG, PORT } from "./configs/environment";
 
 async function startServer() {
   await db
@@ -23,9 +23,14 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  // await db.sync({ force: true }).then(() => {
-  //   console.log(`Database & tables created!`);
-  // });
+  // await db
+  //   .sync({ alter: true })
+  //   .then(() => {
+  //     console.log(`Database & tables created!`);
+  //   })
+  //   .catch((err) => {
+  //     console.log("Error database");
+  //   });
 
   //This create or alter table
   //   await db.sync({ alter: true }).then(async () => {
@@ -46,6 +51,7 @@ async function startServer() {
   //       console.log(`password: ${password} \n`);
   //     }
   //   });
+  let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
 
   const server = new ApolloServer({
     typeDefs,
@@ -63,13 +69,13 @@ async function startServer() {
         throw new AuthenticationError("JWT incorrect");
       }
 
-      return { models, authObject };
+      return { models, authObject, emailTransporter };
     },
   });
 
   server.applyMiddleware({ app });
 
-  const port = process.env.PORT || 4001;
+  const port = PORT || 4001;
   app.listen({ port }, () =>
     console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
   );

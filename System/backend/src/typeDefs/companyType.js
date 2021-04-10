@@ -14,7 +14,8 @@ const companyType = gql`
     color: String!
     name: String!
     city: String!
-    adress: String!
+    address: String!
+    phone: String
   }
 
   type companyAuth {
@@ -30,9 +31,21 @@ const companyType = gql`
       password: String!
       name: String!
       city: String!
-      adress: String!
+      address: String!
+      phone: String
     ): companyAuth!
     loginCompany(email: String!, password: String!): companyAuth!
+    registerCompany(
+      token: String!
+      first_name: String!
+      last_name: String!
+      password: String!
+      confirm_password: String!
+      name: String!
+      city: String!
+      address: String!
+      phone: String
+    ): companyAuth!
   }
 `;
 

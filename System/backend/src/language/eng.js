@@ -1,5 +1,5 @@
 const Errors = {
-  badEmail: "Wrong email adress",
+  badEmail: "Wrong email address",
   userExist: "User exist",
   userNotFound: "User not found",
   passwordValidation: "Password must have from 8 to 16 chars",
@@ -7,7 +7,7 @@ const Errors = {
   lastNameValidation: "Last name must have at least 3 characters",
   nameValidation: "Name must have at least 3 characters",
   cityValidation: "City must have at least 3 characters",
-  adressValidation: "Addres must have at least 3 characters",
+  addressValidation: "Addres must have at least 3 characters",
   passwordIncorrect: "Password incorrect",
   noAccessToCreateAnnouncement: "You have no access to create announcement",
   headerRequired: "Header is required",
@@ -17,6 +17,13 @@ const Errors = {
   toRequired: "To date is required",
   noPermission: "You don't have permissions to do this action",
   objectNotFound: "Object not found",
+  invalidEmail: "Invalid email address",
+  badUserType: "Invalid user type",
+  objectCreationFail: "Object creation error",
+  emailServerError: "Email server error",
+  invalidToken: "Invalid token",
+  passwordsIdentical: "Passwords must be identical",
+  invitationExpired: "Invitation expired",
 };
 
 export default Errors;
