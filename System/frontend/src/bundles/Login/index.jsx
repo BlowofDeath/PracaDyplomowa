@@ -31,25 +31,16 @@ const Login = () => {
   const [, setCompany] = useRecoilState(companyAtom);
   const [, setPracticeSupervisor] = useRecoilState(practiceSuperviserAtom);
 
-  const [
-    loginStudent,
-    { loading: loginStudentLoading, error: loginStudentError },
-  ] = useMutation(LOGIN_STUDENT);
-  const [
-    loginPracticeSuperviser,
-    {
-      loading: loginPracticeSuperviserLoading,
-      error: loginPracticeSuperviserError,
-    },
-  ] = useMutation(LOGIN_PRACTICE_SUPERVISER);
-  const [
-    loginCompany,
-    { loading: loginCompanyLoading, error: loginCompanyError },
-  ] = useMutation(LOGIN_COMPANY);
+  const [loginStudent] = useMutation(LOGIN_STUDENT);
+  const [loginPracticeSuperviser] = useMutation(LOGIN_PRACTICE_SUPERVISER);
+  const [loginCompany] = useMutation(LOGIN_COMPANY);
 
   if (token && userType) return <Redirect to="/" />;
 
   const onSubmit = (data) => {
+    setStudent(null);
+    setCompany(null);
+    setPracticeSupervisor(null);
     switch (data.type) {
       case USER_TYPES.student:
         loginStudent({

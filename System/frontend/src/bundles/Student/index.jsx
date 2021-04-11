@@ -20,7 +20,6 @@ const Student = () => {
   }, [student, getStudent]);
 
   useEffect(() => {
-    console.log("data", data);
     if (data) setStudent(data.meStudent);
   }, [data, setStudent]);
 

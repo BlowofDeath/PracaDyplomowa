@@ -10,6 +10,9 @@ export const ANNOUNCEMENTS = gql`
       to
       from
       accepted
+      phone
+      email
+      company_name
     }
   }
 `;

@@ -46,6 +46,7 @@ const additiveLink = from([
   errorLink,
   authMiddleware,
   new HttpLink({ uri: "http://localhost:4001/graphql" }),
+  // new HttpLink({ uri: "http://192.168.0.6:4001/graphql" }),
 ]);
 
 const client = new ApolloClient({

@@ -26,6 +26,7 @@ const Announcement = ({
   setAnnouncements,
   email,
   phone,
+  company_name,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -70,7 +71,11 @@ const Announcement = ({
   return (
     <Container className={css.container}>
       <h2>{header}</h2>
-      {/* <span>Nazwa firmy: Example z.o.o</span> */}
+      <span>
+        <span>Nazwa firmy: </span>
+        {company_name}
+      </span>
+
       <span>
         <span>Miejsca:</span> {slots}
       </span>

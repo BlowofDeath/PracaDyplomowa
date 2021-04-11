@@ -13,6 +13,7 @@ export const ANNOUNCEMENTS = gql`
       accepted
       email
       phone
+      company_name
     }
   }
 `;

@@ -25,6 +25,7 @@ const Navbar = () => {
   const [company] = useRecoilState(companyAtom);
   const [student] = useRecoilState(studentAtom);
   const history = useHistory();
+
   return (
     <div className={css.container}>
       <div>

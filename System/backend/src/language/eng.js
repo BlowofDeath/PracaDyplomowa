@@ -27,6 +27,8 @@ const Errors = {
   invalidUserType: "Invalid user type",
   indexNumberRequired: "Index number is required",
   indexNumberExist: "Index number already exists",
+  companyNameRequired: "Company name is required",
+  companyNotFound: "Company not found",
 };
 
 export default Errors;

@@ -4,6 +4,8 @@ export const GET_COMPANY = gql`
   query meCompany {
     meCompany {
       email
+      phone
+      name
     }
   }
 `;

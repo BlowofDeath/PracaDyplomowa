@@ -7,10 +7,9 @@ import LoadingSpinner from "@components/LoadingSpinner";
 import AddAnnouncementModal from "@components/AddAnnouncementModal";
 
 const AnnouncementPage = () => {
-  const { loading, error, data } = useQuery(ANNOUNCEMENTS);
+  const { loading, error, data, refetch } = useQuery(ANNOUNCEMENTS);
   const [openModal, setOpenModal] = useState(false);
 
-  console.log(data);
   if (loading) return <LoadingSpinner />;
   if (error) return "error";
   return (
@@ -27,7 +26,11 @@ const AnnouncementPage = () => {
       </Page>
 
       {openModal && (
-        <AddAnnouncementModal open={openModal} setOpenModal={setOpenModal} />
+        <AddAnnouncementModal
+          open={openModal}
+          setOpenModal={setOpenModal}
+          refetch={refetch}
+        />
       )}
     </>
   );

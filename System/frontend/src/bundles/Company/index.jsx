@@ -5,11 +5,11 @@ import { useLazyQuery } from "@apollo/client";
 
 import css from "./Company.module.css";
 import AnnouncementPage from "./AnnouncementPage";
-import { studentAtom } from "@config/userRecoilAtoms";
+import { companyAtom } from "@config/userRecoilAtoms";
 import { GET_COMPANY } from "./queries.js";
 
 const Company = () => {
-  const [company, setCompany] = useRecoilState(studentAtom);
+  const [company, setCompany] = useRecoilState(companyAtom);
   const [getCompany, { data }] = useLazyQuery(GET_COMPANY);
 
   useEffect(() => {

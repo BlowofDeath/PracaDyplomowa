@@ -10,6 +10,7 @@ export const ADD_ANNOUNCEMENT = gql`
     $to: Date!
     $email: String
     $phone: String
+    $company_name: String
   ) {
     createPracticeAnnouncement(
       header: $header
@@ -20,6 +21,7 @@ export const ADD_ANNOUNCEMENT = gql`
       to: $to
       phone: $phone
       email: $email
+      company_name: $company_name
     ) {
       header
       slots

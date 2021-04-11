@@ -19,6 +19,7 @@ const practiceAnnouncementType = gql`
     phone: String
     email: String
     accepted: Boolean!
+    company_name: String
   }
 
   type Mutation {
@@ -31,6 +32,7 @@ const practiceAnnouncementType = gql`
       to: Date!
       phone: String
       email: String
+      company_name: String
     ): PracticeAnnouncement
     deletePracticeAnnouncement(id: ID!): Boolean
     confirmPracticeAnnouncement(id: ID!): PracticeAnnouncement

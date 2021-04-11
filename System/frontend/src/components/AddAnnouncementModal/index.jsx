@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import Alert from "@material-ui/lab/Alert";
 import validator from "validator";
+import { useRecoilValue } from "recoil";
 
 import css from "./AddAnnouncementModal.module.css";
 import Input from "@components/Input";
@@ -11,12 +12,14 @@ import Modal from "@components/Modal";
 import { ADD_ANNOUNCEMENT } from "./queries.js";
 import useSnackGraphql from "@hooks/useSnackGraphql";
 import LoadingSpinner from "@components/LoadingSpinner";
+import { companyAtom } from "@config/userRecoilAtoms";
 
 const AddAnnouncementModal = (props) => {
   const { register, errors, handleSubmit } = useForm();
-  const [showGraphqlErrors] = useSnackGraphql();
+  const [showGraphqlErrors, enqueueSnackbar] = useSnackGraphql();
   const [addAnnouncement] = useMutation(ADD_ANNOUNCEMENT);
   const [isLoading, setIsLoading] = useState(false);
+  const company = useRecoilValue(companyAtom);
 
   const { setOpenModal, refetch } = props;
 
@@ -30,17 +33,19 @@ const AddAnnouncementModal = (props) => {
         description: data.description,
         from: data.from,
         to: data.to,
-        phone: data.phone,
-        email: data.email,
+        phone: company?.phone ?? data.phone,
+        email: company ? company.email : data.email,
+        company_name: company ? company.name : data.company_name,
       },
     })
       .then(() => {
-        console.log("success!");
         setIsLoading(false);
         refetch();
+        enqueueSnackbar("Ogłoszenie dodano pomyślnie", { variant: "success" });
         setOpenModal(false);
       })
       .catch((err) => {
+        console.log(err);
         showGraphqlErrors(err);
         setIsLoading(false);
       });
@@ -71,13 +76,21 @@ const AddAnnouncementModal = (props) => {
               placeholder="Praktyki na stanowisku..."
             />
 
-            <Input
-              label="Nazwa firmy*"
-              labelOnTop
-              inputRef={register({ required: true })}
-              name="company"
-              placeholder="Example z.o.o"
-            />
+            {company ? (
+              <div>
+                <label>Nazwa firmy</label>
+                <br />
+                <span>{company.name}</span>
+              </div>
+            ) : (
+              <Input
+                label="Nazwa firmy*"
+                labelOnTop
+                inputRef={register({ required: true })}
+                name="company_name"
+                placeholder="Example z.o.o"
+              />
+            )}
             <Input
               label="Miejsca*"
               type="number"
@@ -93,22 +106,39 @@ const AddAnnouncementModal = (props) => {
               name="technologies"
               placeholder="Java, C++, c#"
             />
-            <Input
-              label="Email"
-              labelOnTop
-              inputRef={register({
-                validate: (value) => (value ? validator.isEmail(value) : true),
-              })}
-              name="email"
-              placeholder="jk@example.com"
-            />
-            <Input
-              label="Telefon"
-              labelOnTop
-              inputRef={register}
-              name="phone"
-              placeholder="678 890 ..."
-            />
+            {company ? (
+              <div>
+                <label>Email</label>
+                <br />
+                <span>{company.email}</span>
+              </div>
+            ) : (
+              <Input
+                label="Email"
+                labelOnTop
+                inputRef={register({
+                  validate: (value) =>
+                    value ? validator.isEmail(value) : true,
+                })}
+                name="email"
+                placeholder="jk@example.com"
+              />
+            )}
+            {company?.phone ? (
+              <div>
+                <label>Phone</label>
+                <br />
+                <span>{company.phone}</span>
+              </div>
+            ) : (
+              <Input
+                label="Telefon"
+                labelOnTop
+                inputRef={register}
+                name="phone"
+                placeholder="678 890 ..."
+              />
+            )}
           </div>
         </div>
         <div>
@@ -143,7 +173,7 @@ const AddAnnouncementModal = (props) => {
             Nagłówek jest wymagany
           </Alert>
         )}
-        {errors.company && (
+        {errors.company_name && (
           <Alert variant="filled" severity="error">
             Nazwa firmy jest wymagana
           </Alert>

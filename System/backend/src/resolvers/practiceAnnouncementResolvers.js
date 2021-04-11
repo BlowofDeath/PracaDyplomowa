@@ -1,6 +1,7 @@
 import validator from "validator";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import lang from "../language";
+import capitalize from "../utility/capitalize";
 
 const practiceAnnouncementResolvers = {
   Query: {
@@ -21,12 +22,38 @@ const practiceAnnouncementResolvers = {
   Mutation: {
     createPracticeAnnouncement: async (
       _,
-      { header, slots, description, technologies, from, to, email, phone },
+      {
+        header,
+        slots,
+        description,
+        technologies,
+        from,
+        to,
+        email,
+        phone,
+        company_name,
+      },
       { models, authObject }
     ) => {
+      const { PracticeAnnouncement, Company } = models;
       if (!authObject)
         throw new AuthenticationError(lang.noAccessToCreateAnnouncement);
-      const { PracticeAnnouncement } = models;
+      if (
+        (authObject.student || authObject.practiceSuperviser) &&
+        !company_name
+      ) {
+        throw new UserInputError(lang.companyNameRequired);
+      } else if (authObject.company) {
+        const company = await Company.findOne({
+          where: { id: authObject.company },
+        });
+        if (company) {
+          phone = company.phone;
+          email = company.email;
+          company_name = company.name;
+        } else throw new Error(lang.companyNotFound);
+      }
+
       if (!header) throw new UserInputError(lang.headerRequired);
       if (!slots) throw new UserInputError(lang.slotsRequired);
       if (!technologies) throw new UserInputError(lang.technologiesRequired);
@@ -45,6 +72,7 @@ const practiceAnnouncementResolvers = {
         accepted: authObject.practiceSuperviser ? true : false,
         phone: phone ?? null,
         email: email ?? null,
+        company_name: capitalize(company_name),
       });
 
       return practiceAnnouncementr;

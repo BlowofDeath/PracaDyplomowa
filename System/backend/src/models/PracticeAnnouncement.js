@@ -11,6 +11,7 @@ const PracticeAnnouncement = db.define("PracticeAnnouncement", {
   from: Sequelize.DATE,
   to: Sequelize.DATE,
   accepted: Sequelize.BOOLEAN,
+  company_name: Sequelize.STRING,
 });
 
 export default PracticeAnnouncement;
