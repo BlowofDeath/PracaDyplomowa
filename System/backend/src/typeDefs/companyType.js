@@ -16,6 +16,7 @@ const companyType = gql`
     city: String!
     address: String!
     phone: String
+    CompanyId: ID
   }
 
   type CompanyAuth {

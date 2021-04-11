@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const ANNOUNCEMENTS = gql`
   query practiceAnnouncements {
     practiceAnnouncements {
+      id
       header
       slots
       technologies
@@ -13,6 +14,7 @@ export const ANNOUNCEMENTS = gql`
       phone
       email
       company_name
+      CompanyId
     }
   }
 `;

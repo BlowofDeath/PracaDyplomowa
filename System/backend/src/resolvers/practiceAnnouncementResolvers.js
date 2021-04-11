@@ -2,6 +2,7 @@ import validator from "validator";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import lang from "../language";
 import capitalize from "../utility/capitalize";
+import { Op } from "sequelize";
 
 const practiceAnnouncementResolvers = {
   Query: {
@@ -12,6 +13,15 @@ const practiceAnnouncementResolvers = {
       const { PracticeAnnouncement } = models;
       if (authObject && authObject.practiceSuperviser) {
         return await PracticeAnnouncement.findAll();
+      } else if (authObject && authObject.company) {
+        return await PracticeAnnouncement.findAll({
+          where: {
+            [Op.or]: [
+              { accepted: true },
+              { accepted: false, CompanyId: authObject.company },
+            ],
+          },
+        });
       }
       const announcements = await PracticeAnnouncement.findAll({
         where: { accepted: true },
@@ -38,6 +48,8 @@ const practiceAnnouncementResolvers = {
       const { PracticeAnnouncement, Company } = models;
       if (!authObject)
         throw new AuthenticationError(lang.noAccessToCreateAnnouncement);
+
+      let companyId;
       if (
         (authObject.student || authObject.practiceSuperviser) &&
         !company_name
@@ -48,6 +60,7 @@ const practiceAnnouncementResolvers = {
           where: { id: authObject.company },
         });
         if (company) {
+          companyId = company.id;
           phone = company.phone;
           email = company.email;
           company_name = company.name;
@@ -73,6 +86,7 @@ const practiceAnnouncementResolvers = {
         phone: phone ?? null,
         email: email ?? null,
         company_name: capitalize(company_name),
+        CompanyId: companyId ?? null,
       });
 
       return practiceAnnouncementr;
@@ -81,6 +95,10 @@ const practiceAnnouncementResolvers = {
       const { PracticeAnnouncement } = models;
       if (authObject && authObject.practiceSuperviser) {
         return await PracticeAnnouncement.destroy({ where: { id } });
+      } else if (authObject && authObject.company) {
+        return await PracticeAnnouncement.destroy({
+          where: { id, CompanyId: authObject.company },
+        });
       } else {
         throw new AuthenticationError(lang.noPermission);
       }

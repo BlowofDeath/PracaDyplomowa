@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import { useMutation } from "@apollo/client";
 import { useSnackbar } from "notistack";
+import { useRecoilState } from "recoil";
 
 import css from "./Announcement.module.css";
 import Container from "@components/Container";
@@ -12,6 +13,7 @@ import {
   DELETE_PRACTICE_ANNOUNCEMENT,
   CONFIRM_PRACTICE_ANNOUNCEMENT,
 } from "./queries";
+import { companyAtom } from "@config/userRecoilAtoms";
 
 const Announcement = ({
   id,
@@ -22,14 +24,16 @@ const Announcement = ({
   technologies,
   description,
   accepted,
-  announcements,
-  setAnnouncements,
   email,
   phone,
   company_name,
+  CompanyId,
+  announcements,
+  setAnnouncements,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [company] = useRecoilState(companyAtom);
   const [confirmPracticeAnnouncement] = useMutation(
     CONFIRM_PRACTICE_ANNOUNCEMENT
   );
@@ -96,13 +100,28 @@ const Announcement = ({
       <span>
         <span>Technologie:</span> {technologies}
       </span>
+      {CompanyId &&
+        CompanyId === company?.id &&
+        userType === USER_TYPES.company && (
+          <span>
+            <span>Zatwierdzone:</span> {accepted ? "Tak" : "Nie"}
+          </span>
+        )}
       <p>{description}</p>
       <div className={css.buttons}>
         {userType === USER_TYPES.student && <button>Złóż podanie</button>}
         {userType === USER_TYPES.practiceSuperviser && accepted === false && (
           <button onClick={handleConfirm}>Zatwierdź</button>
         )}
-        {userType === USER_TYPES.practiceSuperviser && (
+        {userType === USER_TYPES.company &&
+          CompanyId &&
+          CompanyId === company?.id && (
+            <button onClick={() => null}>Edytuj</button>
+          )}
+        {(userType === USER_TYPES.practiceSuperviser ||
+          (CompanyId &&
+            CompanyId === company?.id &&
+            userType === USER_TYPES.company)) && (
           <button preset="red" onClick={() => setOpenDeleteModal(true)}>
             Usuń
           </button>

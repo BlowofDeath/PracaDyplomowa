@@ -20,6 +20,7 @@ const practiceAnnouncementType = gql`
     email: String
     accepted: Boolean!
     company_name: String
+    CompanyId: ID
   }
 
   type Mutation {

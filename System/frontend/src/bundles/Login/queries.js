@@ -5,6 +5,7 @@ export const LOGIN_STUDENT = gql`
     loginStudent(email: $email, password: $password) {
       token
       student {
+        id
         email
       }
     }
@@ -16,6 +17,7 @@ export const LOGIN_PRACTICE_SUPERVISER = gql`
     loginPracticeSuperviser(email: $email, password: $password) {
       token
       practiceSuperviser {
+        id
         email
       }
     }
@@ -27,7 +29,10 @@ export const LOGIN_COMPANY = gql`
     loginCompany(email: $email, password: $password) {
       token
       company {
+        id
         email
+        phone
+        name
       }
     }
   }
