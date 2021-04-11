@@ -13,6 +13,7 @@ import Layout from "@components/Layout";
 import Logout from "./Logout";
 import USER_TYPES from "@config/userTypes";
 import Invitation from "@bundles/Invitation";
+import Background from "@assets/Background.jpg";
 
 const Application = () => {
   return (

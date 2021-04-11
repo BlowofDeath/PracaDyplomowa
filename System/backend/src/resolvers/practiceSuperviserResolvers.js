@@ -1,10 +1,11 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
-import { signJWT } from "../utility/jwtTool";
+import { signJWT, verifyJWT } from "../utility/jwtTool";
 import lang from "../language";
 import getRandomColor from "../utility/getRandomColor";
 import capitalize from "../utility/capitalize";
+import USER_TYPES from "../configs/userTypes";
 
 const practiceSuperviserResolvers = {
   Query: {
@@ -67,6 +68,47 @@ const practiceSuperviserResolvers = {
       const token = signJWT({ practiceSuperviser: practiceSuperviser.id });
 
       return { token, practiceSuperviser };
+    },
+    registerPracticeSuperviser: async (
+      _,
+      { token, first_name, last_name, password, confirm_password },
+      { models }
+    ) => {
+      const { PracticeSuperviser, Invitation } = models;
+      const invitationToken = verifyJWT(token, (err, decoded) => {
+        if (err) throw new Error(lang.invalidToken);
+        return decoded;
+      });
+
+      const { email, userType } = invitationToken;
+      const invitation = await Invitation.findOne({ where: { token } });
+      if (userType !== USER_TYPES.practiceSuperviser)
+        throw new Error(lang.invalidUserType);
+      if (!invitation) throw new Error(lang.invalidToken);
+      if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
+      const exist = await PracticeSuperviser.findOne({ where: { email } });
+      if (exist) throw new Error(lang.userExist);
+      if (!validator.isLength(password, { min: 8, max: undefined }))
+        throw new UserInputError(lang.passwordValidation);
+      if (!validator.isLength(first_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.firstNameValidation);
+      if (!validator.isLength(last_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.lastNameValidation);
+      if (password !== confirm_password)
+        throw new UserInputError(lang.passwordsIdentical);
+
+      password = bcrypt.hashSync(password, 10);
+      const practiceSuperviser = await PracticeSuperviser.create({
+        email,
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
+        password,
+        color: getRandomColor(),
+      });
+
+      const userToken = signJWT({ practiceSuperviser: practiceSuperviser.id });
+      await invitation.destroy();
+      return { token: userToken, practiceSuperviser };
     },
   },
 };

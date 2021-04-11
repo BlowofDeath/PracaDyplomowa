@@ -18,7 +18,7 @@ const companyType = gql`
     phone: String
   }
 
-  type companyAuth {
+  type CompanyAuth {
     token: String!
     company: Company!
   }
@@ -33,8 +33,8 @@ const companyType = gql`
       city: String!
       address: String!
       phone: String
-    ): companyAuth!
-    loginCompany(email: String!, password: String!): companyAuth!
+    ): CompanyAuth!
+    loginCompany(email: String!, password: String!): CompanyAuth!
     registerCompany(
       token: String!
       first_name: String!
@@ -45,7 +45,7 @@ const companyType = gql`
       city: String!
       address: String!
       phone: String
-    ): companyAuth!
+    ): CompanyAuth!
   }
 `;
 

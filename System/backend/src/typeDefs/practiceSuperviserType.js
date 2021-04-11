@@ -29,6 +29,13 @@ const practiceSuperviserType = gql`
       email: String!
       password: String!
     ): PracticeSuperviserAuth!
+    registerPracticeSuperviser(
+      token: String!
+      first_name: String!
+      last_name: String!
+      password: String!
+      confirm_password: String!
+    ): PracticeSuperviserAuth!
   }
 `;
 

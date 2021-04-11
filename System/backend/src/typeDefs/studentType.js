@@ -30,6 +30,14 @@ const studentType = gql`
       password: String!
     ): StudentAuth!
     loginStudent(email: String!, password: String!): StudentAuth!
+    registerStudent(
+      token: String!
+      first_name: String!
+      last_name: String!
+      password: String!
+      confirm_password: String!
+      index_number: Int!
+    ): StudentAuth!
   }
 `;
 

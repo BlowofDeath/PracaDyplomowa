@@ -5,6 +5,7 @@ import { signJWT, verifyJWT } from "../utility/jwtTool";
 import lang from "../language";
 import getRandomColor from "../utility/getRandomColor";
 import capitalize from "../utility/capitalize";
+import USER_TYPES from "../configs/userTypes";
 
 const companyResolvers = {
   Query: {
@@ -33,8 +34,8 @@ const companyResolvers = {
     ) => {
       const { Company } = models;
       const exist = await Company.findOne({ where: { email } });
-
       if (exist) throw new Error(lang.userExist);
+
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       if (!validator.isLength(password, { min: 8, max: undefined }))
         throw new UserInputError(lang.passwordValidation);
@@ -96,11 +97,17 @@ const companyResolvers = {
       { models }
     ) => {
       const { Company, Invitation } = models;
-      const invitationToken = verifyJWT(token);
-      if (!invitationToken) throw new Error(lang.invalidToken);
-      const { email } = invitationToken;
+      const invitationToken = verifyJWT(token, (err, decoded) => {
+        if (err) throw new Error(lang.invalidToken);
+        return decoded;
+      });
+
+      const { email, userType } = invitationToken;
       const invitation = await Invitation.findOne({ where: { token } });
       if (!invitation) throw new Error(lang.invalidToken);
+      if (userType !== USER_TYPES.company)
+        throw new Error(lang.invalidUserType);
+
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       const exist = await Company.findOne({ where: { email } });
       if (exist) throw new Error(lang.userExist);

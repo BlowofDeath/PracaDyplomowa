@@ -24,6 +24,9 @@ const Errors = {
   invalidToken: "Invalid token",
   passwordsIdentical: "Passwords must be identical",
   invitationExpired: "Invitation expired",
+  invalidUserType: "Invalid user type",
+  indexNumberRequired: "Index number is required",
+  indexNumberExist: "Index number already exists",
 };
 
 export default Errors;

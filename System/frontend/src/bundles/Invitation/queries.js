@@ -47,3 +47,59 @@ export const REGISTER_COMPANY = gql`
     }
   }
 `;
+
+export const REGISTER_STUDENT = gql`
+  mutation registerStudent(
+    $token: String!
+    $first_name: String!
+    $last_name: String!
+    $password: String!
+    $confirm_password: String!
+    $index_number: Int!
+  ) {
+    registerStudent(
+      token: $token
+      first_name: $first_name
+      last_name: $last_name
+      password: $password
+      confirm_password: $confirm_password
+      index_number: $index_number
+    ) {
+      token
+      student {
+        id
+        email
+        first_name
+        last_name
+        color
+      }
+    }
+  }
+`;
+
+export const REGISTER_PRACTICE_SUPERVISER = gql`
+  mutation registerPracticeSuperviser(
+    $token: String!
+    $first_name: String!
+    $last_name: String!
+    $password: String!
+    $confirm_password: String!
+  ) {
+    registerPracticeSuperviser(
+      token: $token
+      first_name: $first_name
+      last_name: $last_name
+      password: $password
+      confirm_password: $confirm_password
+    ) {
+      token
+      practiceSuperviser {
+        id
+        email
+        first_name
+        last_name
+        color
+      }
+    }
+  }
+`;

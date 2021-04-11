@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import Alert from "@material-ui/lab/Alert";
-import { useHistory } from "react-router-dom";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import css from "./Invitation.module.css";
 import LoadingSpinner from "@components/LoadingSpinner";
-import { CONFIRM_INVITATION_TOKEN, REGISTER_COMPANY } from "./queries";
+import {
+  CONFIRM_INVITATION_TOKEN,
+  REGISTER_COMPANY,
+  REGISTER_PRACTICE_SUPERVISER,
+  REGISTER_STUDENT,
+} from "./queries";
 import useSnackGraphql from "@hooks/useSnackGraphql";
 import Input from "@components/Input";
 import USER_TYPES from "@config/userTypes";
@@ -23,47 +26,67 @@ const Invitation = () => {
     CONFIRM_INVITATION_TOKEN
   );
   const [invitationError, setInvitationError] = useState(false);
-  // const [registerStudent, { loading: studentLoading }] = useMutation(
-  //   REGISTER_STUDENT
-  // );
+  const [registerStudent] = useMutation(REGISTER_STUDENT);
   const [registerCompany] = useMutation(REGISTER_COMPANY);
-  // const [registerPracticeSuperviser, { loading: practiceSuperviserLoading }] = useMutation(
-  //   REGISTER_PRACTICE_SUPERVISER
-  // );
+  const [registerPracticeSuperviser] = useMutation(
+    REGISTER_PRACTICE_SUPERVISER
+  );
   const [invitationData, setInvitationData] = useState(null);
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [enqueueError, enqueueSnackbar] = useSnackGraphql();
   const { register, handleSubmit, watch, errors } = useForm();
   const { removeToken, removeUserType } = useAuth();
 
+  const succesRegister = () => {
+    enqueueSnackbar("Zarejestrowano pomyślnie", {
+      variant: "success",
+    });
+
+    setRegisterSuccess(true);
+
+    setTimeout(() => {
+      removeToken();
+      removeUserType();
+      history.push("/login");
+    }, 5000);
+  };
+
   const onSubmit = (data) => {
     if (invitationData) {
       const { userType } = invitationData;
       switch (userType) {
         case USER_TYPES.student:
+          registerStudent({
+            variables: {
+              ...data,
+              index_number: parseInt(data.index_number),
+              token,
+            },
+          })
+            .then((data) => {
+              data && succesRegister();
+            })
+            .catch((error) => {
+              enqueueError(error);
+            });
           break;
         case USER_TYPES.company:
           registerCompany({ variables: { ...data, token } })
             .then((data) => {
-              if (data) {
-                enqueueSnackbar("Zarejestrowana pomyślnie", {
-                  variant: "success",
-                });
-
-                setRegisterSuccess(true);
-
-                setTimeout(() => {
-                  removeToken();
-                  removeUserType();
-                  history.push("/login");
-                }, 5000);
-              }
+              data && succesRegister();
             })
             .catch((error) => {
               enqueueError(error);
             });
           break;
         case USER_TYPES.practiceSuperviser:
+          registerPracticeSuperviser({ variables: { ...data, token } })
+            .then((data) => {
+              data && succesRegister();
+            })
+            .catch((error) => {
+              enqueueError(error);
+            });
           break;
         default:
           console.log("UserType error");
