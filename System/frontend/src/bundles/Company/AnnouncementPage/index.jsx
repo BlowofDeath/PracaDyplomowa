@@ -47,6 +47,7 @@ const AnnouncementPage = () => {
           if (tabValue === 0)
             return (
               <Announcement
+                refetch={refetch}
                 key={index}
                 {...announcement}
                 announcements={announcements}
@@ -56,6 +57,7 @@ const AnnouncementPage = () => {
           if (tabValue === 1 && company?.id === announcement.CompanyId)
             return (
               <Announcement
+                refetch={refetch}
                 key={index}
                 {...announcement}
                 announcements={announcements}

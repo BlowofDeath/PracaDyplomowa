@@ -119,6 +119,60 @@ const practiceAnnouncementResolvers = {
         throw new AuthenticationError(lang.noPermission);
       }
     },
+    editPracticeAnnouncement: async (
+      _,
+      {
+        id,
+        header,
+        slots,
+        technologies,
+        description,
+        from,
+        to,
+        phone,
+        email,
+        company_name,
+      },
+      { models, authObject }
+    ) => {
+      const { PracticeAnnouncement } = models;
+      if (authObject && authObject.practiceSuperviser) {
+        const practiceAnnouncement = await PracticeAnnouncement.findOne({
+          where: { id },
+        });
+        if (practiceAnnouncement) {
+          if (header) practiceAnnouncement.header = header;
+          if (slots) practiceAnnouncement.slots = slots;
+          if (technologies) practiceAnnouncement.technologies = technologies;
+          if (description) practiceAnnouncement.description = description;
+          if (from) practiceAnnouncement.from = from;
+          if (to) practiceAnnouncement.to = to;
+          if (phone) practiceAnnouncement.phone = phone;
+          if (company_name) practiceAnnouncement.company_name = company_name;
+          if (email) practiceAnnouncement.email = email;
+          return await practiceAnnouncement.save();
+        } else {
+          throw new UserInputError(lang.objectNotFound);
+        }
+      } else if (authObject && authObject.company) {
+        const practiceAnnouncement = await PracticeAnnouncement.findOne({
+          where: { id, CompanyId: authObject.company },
+        });
+        if (practiceAnnouncement) {
+          if (header) practiceAnnouncement.header = header;
+          if (slots) practiceAnnouncement.slots = slots;
+          if (technologies) practiceAnnouncement.technologies = technologies;
+          if (description) practiceAnnouncement.description = description;
+          if (from) practiceAnnouncement.from = from;
+          if (to) practiceAnnouncement.to = to;
+          return await practiceAnnouncement.save();
+        } else {
+          throw new UserInputError(lang.objectNotFound);
+        }
+      } else {
+        throw new AuthenticationError(lang.noPermission);
+      }
+    },
   },
 };
 

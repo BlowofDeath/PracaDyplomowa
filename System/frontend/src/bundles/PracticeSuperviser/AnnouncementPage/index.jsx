@@ -48,6 +48,7 @@ const AnnouncementPage = () => {
                 {...announcement}
                 announcements={announcements}
                 setAnnouncements={setAnnouncements}
+                refetch={refetch}
               />
             );
           if (tabValue === 1 && !announcement.accepted)
@@ -57,6 +58,7 @@ const AnnouncementPage = () => {
                 {...announcement}
                 announcements={announcements}
                 setAnnouncements={setAnnouncements}
+                refetch={refetch}
               />
             );
           else return null;

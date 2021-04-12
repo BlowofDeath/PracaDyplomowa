@@ -9,6 +9,7 @@ import Container from "@components/Container";
 import useAuth from "@hooks/useAuth";
 import USER_TYPES from "@config/userTypes";
 import ConfirmModal from "@components/ConfirmModal";
+import EditAnnouncementModal from "@components/EditAnnouncementModal";
 import {
   DELETE_PRACTICE_ANNOUNCEMENT,
   CONFIRM_PRACTICE_ANNOUNCEMENT,
@@ -30,9 +31,11 @@ const Announcement = ({
   CompanyId,
   announcements,
   setAnnouncements,
+  refetch,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const [company] = useRecoilState(companyAtom);
   const [confirmPracticeAnnouncement] = useMutation(
     CONFIRM_PRACTICE_ANNOUNCEMENT
@@ -116,7 +119,7 @@ const Announcement = ({
         {userType === USER_TYPES.company &&
           CompanyId &&
           CompanyId === company?.id && (
-            <button onClick={() => null}>Edytuj</button>
+            <button onClick={() => setOpenEditModal(true)}>Edytuj</button>
           )}
         {(userType === USER_TYPES.practiceSuperviser ||
           (CompanyId &&
@@ -138,6 +141,27 @@ const Announcement = ({
           <br />
           Tej operacji nie da się cofnąć.
         </ConfirmModal>
+      )}
+      {openEditModal && (
+        <EditAnnouncementModal
+          open={openEditModal}
+          setOpenModal={setOpenEditModal}
+          announcement={{
+            id,
+            header,
+            slots,
+            from,
+            to,
+            technologies,
+            description,
+            accepted,
+            email,
+            phone,
+            company_name,
+            CompanyId,
+          }}
+          refetch={refetch}
+        />
       )}
     </Container>
   );
