@@ -3,7 +3,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useRecoilState } from "recoil";
 import { Switch, Route } from "react-router-dom";
 
-import ReportPractice from "./ReportPractice";
+import MyPractice from "./MyPractice";
 import AnnouncementPage from "./AnnouncementPage";
 import AgreementPage from "./AgreementPage";
 import { studentAtom } from "@config/userRecoilAtoms";
@@ -29,8 +29,8 @@ const Student = () => {
         <Route exact path="/">
           <AnnouncementPage />
         </Route>
-        <Route exact path="/reportpractice">
-          <ReportPractice />
+        <Route exact path="/mypractice">
+          <MyPractice />
         </Route>
         <Route exact path="/agreement">
           <AgreementPage />

@@ -75,7 +75,7 @@ const practiceAnnouncementResolvers = {
       if (email && !validator.isEmail(email))
         throw new UserInputError(lang.invalidEmail);
 
-      const practiceAnnouncementr = await PracticeAnnouncement.create({
+      const practiceAnnouncement = await PracticeAnnouncement.create({
         header,
         slots,
         description: description ?? null,
@@ -89,7 +89,7 @@ const practiceAnnouncementResolvers = {
         CompanyId: companyId ?? null,
       });
 
-      return practiceAnnouncementr;
+      return practiceAnnouncement;
     },
     deletePracticeAnnouncement: async (_, { id }, { models, authObject }) => {
       const { PracticeAnnouncement } = models;

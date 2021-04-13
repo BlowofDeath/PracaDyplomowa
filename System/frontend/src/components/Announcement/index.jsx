@@ -112,15 +112,16 @@ const Announcement = ({
         )}
       <p>{description}</p>
       <div className={css.buttons}>
-        {userType === USER_TYPES.student && <button>Złóż podanie</button>}
+        {/* {userType === USER_TYPES.student && <button>Złóż podanie</button>} */}
         {userType === USER_TYPES.practiceSuperviser && accepted === false && (
           <button onClick={handleConfirm}>Zatwierdź</button>
         )}
-        {userType === USER_TYPES.company &&
+        {((userType === USER_TYPES.company &&
           CompanyId &&
-          CompanyId === company?.id && (
-            <button onClick={() => setOpenEditModal(true)}>Edytuj</button>
-          )}
+          CompanyId === company?.id) ||
+          userType === USER_TYPES.practiceSuperviser) && (
+          <button onClick={() => setOpenEditModal(true)}>Edytuj</button>
+        )}
         {(userType === USER_TYPES.practiceSuperviser ||
           (CompanyId &&
             CompanyId === company?.id &&

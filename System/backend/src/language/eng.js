@@ -29,6 +29,8 @@ const Errors = {
   indexNumberExist: "Index number already exists",
   companyNameRequired: "Company name is required",
   companyNotFound: "Company not found",
+  noAccessToCreateAgreement: "No access to create practice agreement",
+  phoneIsRequired: "Phone is required",
 };
 
 export default Errors;

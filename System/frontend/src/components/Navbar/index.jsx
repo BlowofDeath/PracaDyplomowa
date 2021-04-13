@@ -36,7 +36,7 @@ const Navbar = () => {
         <div className={css.menu}>
           <Link to="/">Ogłoszenia praktyk</Link>
           {practiceSuperviser && <Link to="/users">Użytkownicy</Link>}
-          {student && <Link to="/reportpractice">Zgłoś praktykę</Link>}
+          {student && <Link to="/mypractice">Moja praktyka</Link>}
           {/* <Link to="/agreement">Umowy</Link> */}
         </div>
       </div>

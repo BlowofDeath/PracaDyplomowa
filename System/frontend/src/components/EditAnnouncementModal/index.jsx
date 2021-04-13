@@ -101,6 +101,7 @@ const EditAnnouncementModal = (props) => {
                 inputRef={register({ required: true })}
                 name="company_name"
                 placeholder="Example z.o.o"
+                defaultValue={announcement.company_name}
               />
             )}
             <Input
@@ -135,6 +136,7 @@ const EditAnnouncementModal = (props) => {
                 })}
                 name="email"
                 placeholder="jk@example.com"
+                defaultValue={announcement.email}
               />
             )}
             {company?.phone ? (
@@ -150,6 +152,7 @@ const EditAnnouncementModal = (props) => {
                 inputRef={register}
                 name="phone"
                 placeholder="678 890 ..."
+                defaultValue={announcement.phone}
               />
             )}
           </div>

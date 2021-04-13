@@ -30,7 +30,7 @@ const Student = ({
         <span>Email:</span> {email}
       </span>
       <span>
-        <span>Miasto:</span> {city}
+        <span>Miejscowość:</span> {city}
       </span>
       <span>
         <span>Adres:</span> {address}

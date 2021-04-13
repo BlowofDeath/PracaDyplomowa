@@ -211,7 +211,7 @@ const Invitation = () => {
                     required: "Musisz podać numer indeksu",
                   })}
                   labelOnTop
-                  label="Numer indeksu"
+                  label="Numer indeksu*"
                 />
                 {errors.index_number && (
                   <Alert variant="filled" severity="error">
@@ -230,7 +230,7 @@ const Invitation = () => {
                     required: "Musisz podać nazwę firmy",
                   })}
                   labelOnTop
-                  label="Nazwa firmy"
+                  label="Nazwa firmy*"
                 />
                 {errors.name && (
                   <Alert variant="filled" severity="error">
@@ -240,10 +240,10 @@ const Invitation = () => {
                 <Input
                   name="city"
                   inputRef={register({
-                    required: "Musisz podać miasto",
+                    required: "Musisz podać miejscowość i kod pocztowy",
                   })}
                   labelOnTop
-                  label="Miasto"
+                  label="Miejscowość i kod pocztowy*"
                 />
                 {errors.city && (
                   <Alert variant="filled" severity="error">
@@ -256,7 +256,7 @@ const Invitation = () => {
                     required: "Musisz podać adres",
                   })}
                   labelOnTop
-                  label="Adres"
+                  label="Adres*"
                 />
                 {errors.address && (
                   <Alert variant="filled" severity="error">
@@ -267,7 +267,7 @@ const Invitation = () => {
                   name="phone"
                   inputRef={register}
                   labelOnTop
-                  label="Phone"
+                  label="Telefon"
                 />
               </>
             )}

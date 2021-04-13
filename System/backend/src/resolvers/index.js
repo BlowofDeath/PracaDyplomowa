@@ -5,6 +5,7 @@ import practiceAnnouncementResolvers from "./practiceAnnouncementResolvers";
 import companyResolvers from "./companyResolvers";
 import customScalarsResolvers from "./customScalarsResolvers";
 import invitationResolvers from "./invitationResolvers";
+import practiceAgreementResolvers from "./practiceAgreementResolvers";
 
 const mergedResolvers = mergeResolvers([
   studentResolvers,
@@ -13,6 +14,7 @@ const mergedResolvers = mergeResolvers([
   practiceAnnouncementResolvers,
   customScalarsResolvers,
   invitationResolvers,
+  practiceAgreementResolvers,
 ]);
 
 export default mergedResolvers;
