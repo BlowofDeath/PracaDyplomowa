@@ -23,14 +23,14 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  // await db
-  //   .sync({ alter: true })
-  //   .then(() => {
-  //     console.log(`Database & tables created!`);
-  //   })
-  //   .catch((err) => {
-  //     console.log("Error database");
-  //   });
+  await db
+    .sync({ alter: true })
+    .then(() => {
+      console.log(`Database & tables created!`);
+    })
+    .catch((err) => {
+      console.log("Error database");
+    });
 
   //This create or alter table
   //   await db.sync({ alter: true }).then(async () => {
@@ -52,6 +52,14 @@ async function startServer() {
   //     }
   //   });
   let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
+
+  app.use(express.static(path.join(__dirname, "../../frontend/", "build")));
+
+  app.get("/", function (req, res) {
+    res.sendFile(
+      path.join(__dirname, "../../frontend/", "build", "index.html")
+    );
+  });
 
   const server = new ApolloServer({
     typeDefs,
