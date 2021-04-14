@@ -1,6 +1,6 @@
 .container {
-  display: grid;
-  grid-template-columns: 120px 240px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 

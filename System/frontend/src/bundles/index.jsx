@@ -1,29 +1,48 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import Login from "@bundles/Login";
 import Student from "@bundles/Student";
 import "../styles/globals.css";
 import useLocalStorage from "@hooks/useLocalStorage";
 import PrivateRoute from "../routes/PrivateRoute";
+import ProtectedRoute from "../routes/ProtectedRoute";
+import PracticeSuperviser from "./PracticeSuperviser";
+import Company from "./Company";
 import Layout from "@components/Layout";
 import Logout from "./Logout";
+import USER_TYPES from "@config/userTypes";
+import Invitation from "@bundles/Invitation";
+import Background from "@assets/Background.jpg";
 
 const Application = () => {
-  const [token] = useLocalStorage("token");
-
   return (
     <BrowserRouter>
       <Switch>
-        <Login path="/login" />
-        <Layout>
-          <PrivateRoute path="/" userTypeExpected="student">
-            <Student />
-          </PrivateRoute>
-        </Layout>
-        <Route exact path="/logout">
+        <Route path="/login">
+          <Login />
+        </Route>
+
+        <Route path="/logout">
           <Logout />
         </Route>
+        <Route path="/invitation/:token">
+          <Invitation />
+        </Route>
+
+        <ProtectedRoute path="/">
+          <Layout>
+            <PrivateRoute userType={USER_TYPES.student}>
+              <Student />
+            </PrivateRoute>
+            <PrivateRoute userType={USER_TYPES.practiceSuperviser}>
+              <PracticeSuperviser />
+            </PrivateRoute>
+            <PrivateRoute userType={USER_TYPES.company}>
+              <Company />
+            </PrivateRoute>
+          </Layout>
+        </ProtectedRoute>
       </Switch>
     </BrowserRouter>
   );

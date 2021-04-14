@@ -1,7 +1,19 @@
-.container span {
+.container {
+  margin-bottom: 40px;
+}
+
+.container > span {
   display: block;
+}
+
+.container > span > span {
+  font-weight: 600;
 }
 
 .container button {
   margin-top: 50px;
+}
+
+.buttons > button {
+  margin-right: 8px;
 }

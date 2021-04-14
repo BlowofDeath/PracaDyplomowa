@@ -13,6 +13,7 @@ const Textarea = ({
   label,
   className,
   bright,
+  defaultValue,
 }) => {
   return (
     <div
@@ -25,6 +26,7 @@ const Textarea = ({
         onChange={onChange}
         ref={inputRef}
         placeholder={placeholder}
+        defaultValue={defaultValue}
       ></textarea>
     </div>
   );

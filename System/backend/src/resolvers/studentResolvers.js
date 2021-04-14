@@ -1,31 +1,36 @@
-import Student from "../models/Student";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
-import { signJWT } from "../utility/jwtTool";
+import { signJWT, verifyJWT } from "../utility/jwtTool";
 import lang from "../language";
+import getRandomColor from "../utility/getRandomColor";
+import capitalize from "../utility/capitalize";
+import USER_TYPES from "../configs/userTypes";
 
 const studentResolvers = {
   Query: {
-    test: async (_, args, context) => {
-      return "It is work!!";
+    meStudent: async (_, args, { models, authObject }) => {
+      const { Student } = models;
+
+      if (authObject.student) {
+        return await Student.findOne({ where: { id: authObject.student } });
+      }
+      return null;
     },
-    me: async (_, args, context) => {
-      const id = 1; //id z token auth
-      const me = await Student.findOne({ id });
-      return me;
-    },
-    student: async (_, { id }, context) => {
-      const student = await Student.findOne({ id });
-      return student;
+    students: async (_, args, { models, authObject }) => {
+      const { Student } = models;
+      if (authObject.practiceSuperviser) {
+        return await Student.findAll();
+      } else throw new AuthenticationError(lang.noPermission);
     },
   },
   Mutation: {
     createStudent: async (
       _,
       { index_number, email, first_name, last_name, password },
-      context
+      { models }
     ) => {
+      const { Student } = models;
       const exist = await Student.findOne({ where: { email } });
       if (exist) throw new Error(lang.userExist);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
@@ -41,14 +46,16 @@ const studentResolvers = {
       const student = await Student.create({
         index_number,
         email,
-        first_name,
-        last_name,
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
         password,
+        color: getRandomColor(),
       });
       const token = signJWT({ student: student.id });
       return { token, student };
     },
-    loginStudent: async (_, { email, password }, context) => {
+    loginStudent: async (_, { email, password }, { models }) => {
+      const { Student } = models;
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       const student = await Student.findOne({ where: { email } });
       if (!student) throw new Error(lang.userNotFound);
@@ -58,6 +65,60 @@ const studentResolvers = {
       const token = signJWT({ student: student.id });
 
       return { token, student };
+    },
+    registerStudent: async (
+      _,
+      {
+        token,
+        first_name,
+        last_name,
+        password,
+        confirm_password,
+        index_number,
+      },
+      { models }
+    ) => {
+      const { Student, Invitation } = models;
+      const invitationToken = verifyJWT(token, (err, decoded) => {
+        if (err) throw new Error(lang.invalidToken);
+        return decoded;
+      });
+
+      const { email, userType } = invitationToken;
+      const invitation = await Invitation.findOne({ where: { token } });
+      if (!invitation) throw new Error(lang.invalidToken);
+      if (userType !== USER_TYPES.student)
+        throw new Error(lang.invalidUserType);
+      if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
+      const exist = await Student.findOne({ where: { email } });
+      if (exist) throw new Error(lang.userExist);
+      if (!validator.isLength(password, { min: 8, max: undefined }))
+        throw new UserInputError(lang.passwordValidation);
+      if (!validator.isLength(first_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.firstNameValidation);
+      if (!validator.isLength(last_name, { min: 3, max: undefined }))
+        throw new UserInputError(lang.lastNameValidation);
+      if (password !== confirm_password)
+        throw new UserInputError(lang.passwordsIdentical);
+      if (!index_number) throw new UserInputError(lang.indexNumberRequired);
+      const indexNumberExist = await Student.findOne({
+        where: { index_number },
+      });
+      if (indexNumberExist) throw new UserInputError(lang.indexNumberExist);
+
+      password = bcrypt.hashSync(password, 10);
+      const student = await Student.create({
+        email,
+        first_name: capitalize(first_name),
+        last_name: capitalize(last_name),
+        password,
+        color: getRandomColor(),
+        index_number,
+      });
+
+      const userToken = signJWT({ student: student.id });
+      await invitation.destroy();
+      return { token: userToken, student };
     },
   },
 };

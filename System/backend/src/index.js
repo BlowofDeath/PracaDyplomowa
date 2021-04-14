@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, AuthenticationError } from "apollo-server-express";
+import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import express from "express";
 import path from "path";
@@ -8,9 +7,10 @@ import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import db from "./database/sqliteDB";
 const app = express();
-import Student from "./models/Student";
 import { verifyJWT } from "./utility/jwtTool";
+import models from "./models";
 import util from "util";
+import { EMAIL_CONFIG, PORT } from "./configs/environment";
 
 async function startServer() {
   await db
@@ -23,9 +23,14 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  // await db.sync({ force: true }).then(() => {
-  //   console.log(`Database & tables created!`);
-  // });
+  await db
+    .sync({ alter: true })
+    .then(() => {
+      console.log(`Database & tables created!`);
+    })
+    .catch((err) => {
+      console.log("Error database");
+    });
 
   //This create or alter table
   //   await db.sync({ alter: true }).then(async () => {
@@ -46,6 +51,15 @@ async function startServer() {
   //       console.log(`password: ${password} \n`);
   //     }
   //   });
+  let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
+
+  app.use(express.static(path.join(__dirname, "../../frontend/", "build")));
+
+  app.get("/", function (req, res) {
+    res.sendFile(
+      path.join(__dirname, "../../frontend/", "build", "index.html")
+    );
+  });
 
   const server = new ApolloServer({
     typeDefs,
@@ -56,18 +70,20 @@ async function startServer() {
     // },
     context: ({ req }) => {
       const token = req.headers?.authorization || "";
-      const authObject = token && verifyJWT(token);
+      let authObject;
+      try {
+        authObject = token && verifyJWT(token);
+      } catch (err) {
+        throw new AuthenticationError("JWT incorrect");
+      }
 
-      // console.log(
-      //   util.inspect(verifyJWT(token), { showHidden: false, depth: null })
-      // );
-      return authObject;
+      return { models, authObject, emailTransporter };
     },
   });
 
   server.applyMiddleware({ app });
 
-  const port = process.env.PORT || 4001;
+  const port = PORT || 4001;
   app.listen({ port }, () =>
     console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
   );

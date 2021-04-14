@@ -1,6 +1,6 @@
 .container {
   background-color: var(--theme-color-two);
   max-width: 100%;
-  min-height: 290px;
   padding: 24px 48px;
+  border-radius: 24px;
 }

@@ -1,0 +1,17 @@
+.container > span {
+  display: block;
+}
+
+.container > span > span {
+  font-weight: 600;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.avatar > h3 {
+  margin-left: 10px;
+}

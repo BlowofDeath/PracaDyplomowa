@@ -8,7 +8,8 @@ const useSnackGraphql = (variant = "error") => {
         enqueueSnackbar(message, { variant });
       });
   };
-  return [enqueueError];
+
+  return [enqueueError, enqueueSnackbar];
 };
 
 export default useSnackGraphql;

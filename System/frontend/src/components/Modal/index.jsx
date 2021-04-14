@@ -1,17 +1,38 @@
 import React from "react";
-import Modal from "@material-ui/core/Modal";
+import ReactDOM from "react-dom";
+import css from "./Modal.module.css";
+import CloseIcon from "@material-ui/icons/Close";
+import LoadingSpinner from "@components/LoadingSpinner";
 
-const Modal = ({ openModal, setOpenModal }) => {
+const CustomModal = ({
+  open,
+  setOpenModal,
+  children,
+  header,
+  buttons,
+  isLoading,
+}) => {
   return (
-    <Modal
-      open={openModal}
-      onClose={() => setOpenModal(false)}
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-    >
-      Test
-    </Modal>
+    open &&
+    ReactDOM.createPortal(
+      <div className={css.backdrop} onClick={() => setOpenModal(false)}>
+        <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+          {header && (
+            <div className={css.header}>
+              <h2>{header}</h2>
+              <CloseIcon onClick={() => setOpenModal(false)} />
+            </div>
+          )}
+          <div className={css.content}>{children}</div>
+          <div className={css.footer}>
+            <div>{isLoading && <LoadingSpinner />}</div>
+            <div>{buttons}</div>
+          </div>
+        </div>
+      </div>,
+      document.body
+    )
   );
 };
 
-export default Modal;
+export default CustomModal;

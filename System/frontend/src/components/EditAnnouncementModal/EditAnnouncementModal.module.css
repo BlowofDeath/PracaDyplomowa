@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+}
+
+.content {
+  display: flex;
+}
+
+.content > div:first-child {
+  margin-right: 24px;
+}
+
+.fromToWrapper {
+  margin: 16px 0;
+}
+
+.fromToWrapper > div {
+  margin-bottom: 8px;
+}
+
+.fromToWrapper > label {
+  margin-bottom: 8px;
+  display: block;
+}
+
+.firmName {
+  margin-bottom: 8px;
+}
+
+.inputGroup > div {
+  margin-bottom: 14px;
+}
+
+.errors > div {
+  margin-bottom: 8px;
+}

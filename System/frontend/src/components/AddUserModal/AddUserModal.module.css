@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  min-width: 300px;
+}
+
+.inputGroup > div {
+  margin-bottom: 14px;
+}
+
+.errors > div {
+  margin-bottom: 8px;
+}

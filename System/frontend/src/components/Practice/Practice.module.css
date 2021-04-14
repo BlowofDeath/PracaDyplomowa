@@ -1,0 +1,18 @@
+.container {
+  margin-bottom: 40px;
+}
+
+.container > span {
+  display: block;
+  vertical-align: top;
+}
+
+.container > span > span {
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+.container svg {
+  vertical-align: middle;
+  height: 17px;
+}

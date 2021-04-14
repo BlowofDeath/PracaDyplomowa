@@ -6,6 +6,7 @@ const PracticeSuperviser = db.define("PracticeSuperviser", {
   first_name: Sequelize.STRING,
   last_name: Sequelize.STRING,
   password: Sequelize.STRING,
+  color: Sequelize.STRING,
 });
 
 export default PracticeSuperviser;

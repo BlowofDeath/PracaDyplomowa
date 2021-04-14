@@ -1,0 +1,6 @@
+button.tab:hover,
+button.tab:focus,
+button.tab {
+  box-shadow: none;
+  text-shadow: none;
+}

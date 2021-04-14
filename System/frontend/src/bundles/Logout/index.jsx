@@ -1,9 +1,13 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import useAuth from "@hooks/useAuth";
+import { withApollo } from "@apollo/client/react/hoc";
 
-const Logout = () => {
-  console.log("logout");
-  return <Redirect to="/" push={true} />;
+const Logout = ({ client }) => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userType");
+  client.clearStore();
+  return <Redirect to="/login" push={true} />;
 };
 
-export default Logout;
+export default withApollo(Logout);
