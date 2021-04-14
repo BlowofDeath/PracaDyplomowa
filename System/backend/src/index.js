@@ -46,6 +46,7 @@ async function startServer() {
     })
     .catch((err) => {
       console.log("Error database");
+      conosole.log(err);
     });
 
   //This create or alter table
