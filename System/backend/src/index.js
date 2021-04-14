@@ -53,12 +53,10 @@ async function startServer() {
   //   });
   let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
 
-  app.use(express.static(path.join(__dirname, "../../frontend/", "build")));
+  app.use(express.static(path.join(__dirname, "public")));
 
   app.get("/", function (req, res) {
-    res.sendFile(
-      path.join(__dirname, "../../frontend/", "build", "index.html")
-    );
+    res.sendFile(path.join(__dirname, "public", "index.html"));
   });
 
   const server = new ApolloServer({
