@@ -11,6 +11,7 @@ import { verifyJWT } from "./utility/jwtTool";
 import models from "./models";
 import util from "util";
 import { EMAIL_CONFIG, PORT } from "./configs/environment";
+import { PracticeSuperviser } from "./models/index.js";
 
 async function startServer() {
   await db
@@ -25,8 +26,23 @@ async function startServer() {
   //This makes that tables are dropped and created on server restart
   await db
     .sync({ alter: true })
-    .then(() => {
+    .then(async () => {
       console.log(`Database & tables created!`);
+      const exist = await PracticeSuperviser.findOne();
+      const password = process.env.PS_PASSWORD || "12345678";
+      const hash = bcrypt.hashSync(password, 10);
+      if (!exist) {
+        const practiceSuperviser = await PracticeSuperviser.create({
+          email: process.env.PS_EMAIL || "ps@example.com",
+          first_name: capitalize(process.env.PS_FIRST_NAME || "Jan"),
+          last_name: capitalize([process.env.PS_LAST_NAME || "Kowalski"]),
+          password: hash,
+          color: "#fff",
+        });
+        console.log("\nKonto opiekuna praktyk \n");
+        console.log(`email: ${practiceSuperviser.email}`);
+        console.log(`password: ${password} \n`);
+      }
     })
     .catch((err) => {
       console.log("Error database");
@@ -53,11 +69,13 @@ async function startServer() {
   //   });
   let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
 
-  app.use(express.static(path.join(__dirname, "../public")));
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../public")));
 
-  app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "../public", "index.html"));
-  });
+    app.get("*", function (req, res) {
+      res.sendFile(path.join(__dirname, "../public", "index.html"));
+    });
+  }
 
   const server = new ApolloServer({
     typeDefs,
