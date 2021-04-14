@@ -11,7 +11,6 @@ import { verifyJWT } from "./utility/jwtTool";
 import models from "./models";
 import util from "util";
 import { EMAIL_CONFIG, PORT } from "./configs/environment";
-import { PracticeSuperviser } from "./models/index.js";
 
 async function startServer() {
   await db
@@ -28,14 +27,14 @@ async function startServer() {
     .sync({ alter: true })
     .then(async () => {
       console.log(`Database & tables created!`);
-      const exist = await PracticeSuperviser.findOne();
+      const exist = await models.PracticeSuperviser.findOne();
       const password = process.env.PS_PASSWORD || "12345678";
       const hash = bcrypt.hashSync(password, 10);
       if (!exist) {
-        const practiceSuperviser = await PracticeSuperviser.create({
+        const practiceSuperviser = await models.PracticeSuperviser.create({
           email: process.env.PS_EMAIL || "ps@example.com",
-          first_name: capitalize(process.env.PS_FIRST_NAME || "Jan"),
-          last_name: capitalize([process.env.PS_LAST_NAME || "Kowalski"]),
+          first_name: process.env.PS_FIRST_NAME || "Jan",
+          last_name: process.env.PS_LAST_NAME || "Kowalski",
           password: hash,
           color: "#fff",
         });
@@ -46,7 +45,7 @@ async function startServer() {
     })
     .catch((err) => {
       console.log("Error database");
-      conosole.log(err);
+      console.log(err);
     });
 
   //This create or alter table
