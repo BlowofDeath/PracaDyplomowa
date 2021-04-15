@@ -30,6 +30,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+console.log(process.env.NODE_ENV);
+
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   const token = localStorage.getItem("token");
@@ -45,8 +47,12 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const additiveLink = from([
   errorLink,
   authMiddleware,
-  // new HttpLink({ uri: "http://localhost:4001/graphql" }),
-  new HttpLink({ uri: "https://sep-praca-dyplomowa.herokuapp.com/graphql" }),
+  new HttpLink({
+    uri:
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:4001/graphql"
+        : "https://sep-praca-dyplomowa.herokuapp.com/graphql",
+  }),
 ]);
 
 const client = new ApolloClient({

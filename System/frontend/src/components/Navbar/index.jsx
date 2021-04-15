@@ -35,7 +35,12 @@ const Navbar = () => {
 
         <div className={css.menu}>
           <Link to="/">Ogłoszenia praktyk</Link>
-          {practiceSuperviser && <Link to="/users">Użytkownicy</Link>}
+          {practiceSuperviser && (
+            <>
+              <Link to="/users">Użytkownicy</Link>
+              <Link to="/agreements">Umowy</Link>
+            </>
+          )}
           {student && <Link to="/mypractice">Moja praktyka</Link>}
           {/* <Link to="/agreement">Umowy</Link> */}
         </div>

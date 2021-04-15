@@ -6,9 +6,6 @@ import { Op } from "sequelize";
 
 const practiceAgreementResolvers = {
   Query: {
-    testAnnouncement: async (_, args, context) => {
-      return "It is work!!";
-    },
     myPracticeAgreements: async (_, args, { models, authObject }) => {
       const { PracticeAgreement } = models;
       if (authObject && authObject.student) {
@@ -16,6 +13,16 @@ const practiceAgreementResolvers = {
           where: {
             StudentId: authObject.student,
           },
+        });
+      } else {
+        throw new Error(lang.noPermission);
+      }
+    },
+    agreements: async (_, args, { models, authObject }) => {
+      const { PracticeAgreement, Student } = models;
+      if (authObject && authObject.practiceSuperviser) {
+        return await PracticeAgreement.findAll({
+          include: Student,
         });
       } else {
         throw new Error(lang.noPermission);
@@ -65,10 +72,6 @@ const practiceAgreementResolvers = {
       const { PracticeAgreement } = models;
       if (authObject && authObject.practiceSuperviser) {
         return await PracticeAgreement.destroy({ where: { id } });
-      } else if (authObject && authObject.company) {
-        return await PracticeAgreement.destroy({
-          where: { id, CompanyId: authObject.company },
-        });
       } else {
         throw new AuthenticationError(lang.noPermission);
       }

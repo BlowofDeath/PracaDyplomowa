@@ -32,7 +32,7 @@ const Practice = ({
       </span>
       <br />
       <span>
-        <span>Okres wykonywania praktyki:</span> od{" "}
+        <span>Okres wykonywania praktyki:</span> od
         {dayjs(from).format("DD/MM/YYYY")} do {dayjs(to).format("DD/MM/YYYY")}
       </span>
       <span>

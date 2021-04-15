@@ -63,7 +63,6 @@ const Announcement = ({
     confirmPracticeAnnouncement({ variables: { id } }).then((data) => {
       if (data) {
         enqueueSnackbar("Zatwierdzono pomyślnie", { variant: "success" });
-        setOpenDeleteModal(false);
         setAnnouncements(
           announcements.map((announcement) => {
             if (announcement.id === id)

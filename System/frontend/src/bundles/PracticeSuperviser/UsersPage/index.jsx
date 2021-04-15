@@ -7,18 +7,14 @@ import USER_TYPES from "@config/userTypes";
 import Page from "@components/Page";
 import Students from "./Students";
 import Companies from "./Companies";
-// import Companies from "./Companies"
 import css from "./UsersPage.module.css";
 import AddUserModal from "@components/AddUserModal";
 
 const UsersPage = () => {
   const { userType } = useAuth();
   const [openModal, setOpenModal] = useState(false);
-  //   const { loading, error, data } = useQuery(ANNOUNCEMENTS);
-  const [tabValue, setTabValue] = useState(0);
 
-  //   if (loading) return <LoadingSpinner />;
-  //   if (error) return "error";
+  const [tabValue, setTabValue] = useState(0);
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
   return (
     <>

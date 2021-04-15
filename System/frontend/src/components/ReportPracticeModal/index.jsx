@@ -13,7 +13,7 @@ import { CREATE_PRACTICE_AGREEMENT } from "./queries.js";
 import useSnackGraphql from "@hooks/useSnackGraphql";
 
 const ReportPracticeModal = (props) => {
-  const { setOpenModal } = props;
+  const { setOpenModal, refetch } = props;
   const [isLoading, setIsLoading] = useState(false);
   const { register, errors, handleSubmit } = useForm();
   const [createPracticeAgreement] = useMutation(CREATE_PRACTICE_AGREEMENT);
@@ -36,6 +36,7 @@ const ReportPracticeModal = (props) => {
         setIsLoading(false);
         // refetch();
         enqueueSnackbar("Praktyka zgłoszona pomyślnie", { variant: "success" });
+        refetch();
         setOpenModal(false);
       })
       .catch((err) => {

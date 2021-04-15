@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 const practiceAgreementType = gql`
   type Query {
-    testAnnouncement: String!
     myPracticeAgreements: [PracticeAgreement]
+    agreements: [PracticeAgreement]
   }
 
   type PracticeAgreement {
@@ -17,6 +17,7 @@ const practiceAgreementType = gql`
     city: String!
     address: String!
     StudentId: ID!
+    Student: Student
   }
 
   type Mutation {

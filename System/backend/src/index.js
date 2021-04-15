@@ -23,50 +23,31 @@ async function startServer() {
     });
 
   //This makes that tables are dropped and created on server restart
-  await db
-    .sync({ alter: true })
-    .then(async () => {
-      console.log(`Database & tables created!`);
-      const exist = await models.PracticeSuperviser.findOne();
-      const password = process.env.PS_PASSWORD || "12345678";
-      const hash = bcrypt.hashSync(password, 10);
-      if (!exist) {
-        const practiceSuperviser = await models.PracticeSuperviser.create({
-          email: process.env.PS_EMAIL || "ps@example.com",
-          first_name: process.env.PS_FIRST_NAME || "Jan",
-          last_name: process.env.PS_LAST_NAME || "Kowalski",
-          password: hash,
-          color: "#fff",
-        });
-        console.log("\nKonto opiekuna praktyk \n");
-        console.log(`email: ${practiceSuperviser.email}`);
-        console.log(`password: ${password} \n`);
-      }
-    })
-    .catch((err) => {
-      console.log("Error database");
-      console.log(err);
-    });
-
-  //This create or alter table
-  //   await db.sync({ alter: true }).then(async () => {
-  //     const exist = await User.findOne();
-  //     const password = process.env.ADMIN_PASSWORD || "12345678";
+  // await db
+  //   .sync({ alter: true })
+  //   .then(async () => {
+  //     console.log(`Database & tables created!`);
+  //     const exist = await models.PracticeSuperviser.findOne();
+  //     const password = process.env.PS_PASSWORD || "12345678";
   //     const hash = bcrypt.hashSync(password, 10);
   //     if (!exist) {
-  //       const user = await User.create({
-  //         email: process.env.ADMIN_EMAIL || "admin@example.com",
-  //         role: "Admin",
+  //       const practiceSuperviser = await models.PracticeSuperviser.create({
+  //         email: process.env.PS_EMAIL || "ps@example.com",
+  //         first_name: process.env.PS_FIRST_NAME || "Jan",
+  //         last_name: process.env.PS_LAST_NAME || "Kowalski",
   //         password: hash,
-  //         first_name: "admin",
-  //         last_name: "admin",
-  //         isActive: true,
+  //         color: "#fff",
   //       });
-  //       console.log("\nFirst user account \n");
-  //       console.log(`email: ${user.email}`);
+  //       console.log("\nKonto opiekuna praktyk \n");
+  //       console.log(`email: ${practiceSuperviser.email}`);
   //       console.log(`password: ${password} \n`);
   //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log("Error database");
+  //     console.log(err);
   //   });
+
   let emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
 
   if (process.env.NODE_ENV === "production") {

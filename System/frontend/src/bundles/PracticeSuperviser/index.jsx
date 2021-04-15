@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
 import AnnouncementPage from "./AnnouncementPage";
+import AgreementPage from "./AgreementPage";
 import UsersPage from "./UsersPage";
 import { practiceSuperviserAtom } from "@config/userRecoilAtoms";
 import { GET_PRACTICE_SUPERVISER } from "./queries.js";
@@ -35,9 +36,9 @@ const PracticeSuperviser = () => {
         <Route exact path="/users">
           <UsersPage />
         </Route>
-        {/* <Route exact path="/agreement">
+        <Route exact path="/agreements">
           <AgreementPage />
-        </Route> */}
+        </Route>
       </Switch>
     </>
   );

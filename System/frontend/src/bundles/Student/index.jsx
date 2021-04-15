@@ -5,7 +5,6 @@ import { Switch, Route } from "react-router-dom";
 
 import MyPractice from "./MyPractice";
 import AnnouncementPage from "./AnnouncementPage";
-import AgreementPage from "./AgreementPage";
 import { studentAtom } from "@config/userRecoilAtoms";
 import { GET_STUDENT } from "./queries.js";
 
@@ -31,9 +30,6 @@ const Student = () => {
         </Route>
         <Route exact path="/mypractice">
           <MyPractice />
-        </Route>
-        <Route exact path="/agreement">
-          <AgreementPage />
         </Route>
       </Switch>
     </>
