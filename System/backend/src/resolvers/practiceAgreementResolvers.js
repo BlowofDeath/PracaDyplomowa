@@ -19,10 +19,10 @@ const practiceAgreementResolvers = {
       }
     },
     agreements: async (_, args, { models, authObject }) => {
-      const { PracticeAgreement, Student } = models;
+      const { PracticeAgreement, InternshipJournal, Student } = models;
       if (authObject && authObject.practiceSuperviser) {
         return await PracticeAgreement.findAll({
-          include: Student,
+          include: [Student, InternshipJournal],
         });
       } else {
         throw new Error(lang.noPermission);

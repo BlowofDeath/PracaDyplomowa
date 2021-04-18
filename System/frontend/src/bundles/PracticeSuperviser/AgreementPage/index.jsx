@@ -22,6 +22,7 @@ const AgreementPage = () => {
     if (data) setAgreements(data.agreements);
   }, [data]);
 
+  console.log(agreements);
   if (loading) return <LoadingSpinner />;
   //   if (error) return "error";
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;

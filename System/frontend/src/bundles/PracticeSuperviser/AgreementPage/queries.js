@@ -20,6 +20,10 @@ export const AGREEMENTS = gql`
         email
         color
       }
+      InternshipJournal {
+        id
+        accepted
+      }
     }
   }
 `;

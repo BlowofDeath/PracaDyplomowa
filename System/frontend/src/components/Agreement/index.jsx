@@ -11,6 +11,7 @@ import {
   CONFIRM_PRACTICE_AGREEMENT,
   DELETE_PRACTICE_AGREEMENT,
 } from "./queries";
+import useAuth from "@hooks/useAuth";
 
 const Agreement = ({
   id,
@@ -26,9 +27,11 @@ const Agreement = ({
   accepted,
   agreements,
   setAgreements,
+  InternshipJournal,
 }) => {
   const [confirmPracticeAgreement] = useMutation(CONFIRM_PRACTICE_AGREEMENT);
   const [deletePracticeAgreement] = useMutation(DELETE_PRACTICE_AGREEMENT);
+  const { token } = useAuth();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -108,6 +111,14 @@ const Agreement = ({
           <button preset="red" onClick={() => setOpenDeleteModal(true)}>
             Usuń
           </button>
+
+          {InternshipJournal && (
+            <a
+              href={`http://localhost:4001/uploads/${InternshipJournal.id}/?token=${token}`}
+            >
+              <button preset="bright">Dziennik</button>
+            </a>
+          )}
         </div>
       </Container>
       {openDeleteModal && (
