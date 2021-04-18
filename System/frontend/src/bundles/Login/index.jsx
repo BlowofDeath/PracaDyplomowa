@@ -4,6 +4,7 @@ import { useMutation, useQuery, gql } from "@apollo/client";
 import { Redirect, useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import validator from "validator";
+import Alert from "@material-ui/lab/Alert";
 
 import css from "./Login.module.css";
 import Input from "@components/Input";
@@ -24,7 +25,7 @@ import {
 } from "@config/userRecoilAtoms";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const { token, setToken, userType, setUserType } = useAuth();
   const [showGraphqlErrors] = useSnackGraphql();
   const [, setStudent] = useRecoilState(studentAtom);
@@ -105,13 +106,23 @@ const Login = () => {
                 validate: validator.isEmail,
               })}
             />
+            {errors.email && (
+              <Alert variant="filled" severity="error">
+                Adres email jest niepoprawny.
+              </Alert>
+            )}
             <Input
               name="password"
               label="Hasło:"
               type="password"
               bright
-              inputRef={register({ required: true, min: 8 })}
+              inputRef={register({ required: true, minLength: 8 })}
             />
+            {errors.password && (
+              <Alert variant="filled" severity="error">
+                Hasło musi zawierać minimum 8 znaków.
+              </Alert>
+            )}
 
             <Select
               inputRef={register}
@@ -126,6 +137,7 @@ const Login = () => {
               label="Zaloguj jako:"
               name="type"
               bright
+              className={css.select}
             />
             <button
               preset="bright"

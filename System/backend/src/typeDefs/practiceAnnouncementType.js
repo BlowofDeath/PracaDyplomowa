@@ -1,8 +1,6 @@
 import { gql } from "apollo-server-express";
 
 const practiceAnnouncementType = gql`
-  scalar Date
-
   type Query {
     testAnnouncement: String!
     practiceAnnouncements: [PracticeAnnouncement]

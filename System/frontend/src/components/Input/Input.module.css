@@ -4,6 +4,10 @@
   align-items: center;
 }
 
+.container > input {
+  width: 200px;
+}
+
 .labelOnTop label {
   display: block;
   margin-bottom: 8px;

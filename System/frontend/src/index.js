@@ -11,6 +11,7 @@ import {
 import { onError } from "@apollo/client/link/error";
 import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
+import { createUploadLink } from "apollo-upload-client";
 import jwt from "jsonwebtoken";
 
 import Application from "@bundles";
@@ -22,9 +23,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       );
       if (extensions.code === "UNAUTHENTICATED") {
-        console.log("remove token");
         localStorage.removeItem("token");
         localStorage.removeItem("userType");
+        window.location.reload();
       }
     });
   if (networkError) console.log(`[Network error]: ${networkError}`);
@@ -47,7 +48,13 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const additiveLink = from([
   errorLink,
   authMiddleware,
-  new HttpLink({
+  // new HttpLink({
+  //   uri:
+  // process.env.NODE_ENV === "development"
+  //   ? "http://localhost:4001/graphql"
+  //   : "https://sep-praca-dyplomowa.herokuapp.com/graphql",
+  // }),
+  createUploadLink({
     uri:
       process.env.NODE_ENV === "development"
         ? "http://localhost:4001/graphql"

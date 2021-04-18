@@ -1,0 +1,28 @@
+.container > * {
+  margin-top: 10px;
+}
+
+.container span > svg {
+  padding-top: 4px;
+}
+
+.container span > span {
+  font-weight: 600;
+}
+
+.fileHandler {
+  display: flex;
+  align-items: center;
+}
+
+.fileHandler > span {
+  margin-left: 10px;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.wrapper > a {
+  margin-right: 10px;
+}

@@ -1,4 +1,5 @@
-const { GraphQLScalarType, Kind } = require("graphql");
+import { GraphQLScalarType, Kind } from "graphql";
+import { GraphQLUpload } from "graphql-upload";
 
 const customScalarsResolvers = {
   Date: new GraphQLScalarType({
@@ -17,6 +18,7 @@ const customScalarsResolvers = {
       return new Date(ast.value).getTime(); // Invalid hard-coded value (not an integer)
     },
   }),
+  Upload: GraphQLUpload,
 };
 
 export default customScalarsResolvers;

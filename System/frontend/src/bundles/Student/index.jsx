@@ -28,7 +28,7 @@ const Student = () => {
         <Route exact path="/">
           <AnnouncementPage />
         </Route>
-        <Route exact path="/mypractice">
+        <Route path="/mypractice">
           <MyPractice />
         </Route>
       </Switch>

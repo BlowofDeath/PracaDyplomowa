@@ -8,3 +8,4 @@ Dokumentacja/~$aca_Inżynierska-Tomasz_Jabłoński.docx
 System/frontend/package-lock.json
 System/backend/build
 System/backend/.env
+System/backend/src/uploads/journals/*.pdf
