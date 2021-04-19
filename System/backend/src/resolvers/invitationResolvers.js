@@ -14,9 +14,10 @@ const invitationResolvers = {
     createInvite: async (
       _,
       { email, userType },
-      { models, emailTransporter }
+      { models, emailTransporter, authObject }
     ) => {
       const { Student, Company, Invitation, PracticeSuperviser } = models;
+      if (!authObject.practiceSuperviser) throw new Error(lang.noPermission);
       if (!validator.isEmail(email)) throw new UserInputError(lang.badEmail);
       switch (userType) {
         case USER_TYPES.student:
