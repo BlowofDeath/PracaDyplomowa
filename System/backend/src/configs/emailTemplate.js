@@ -1,4 +1,6 @@
 import { FRONTEND_URL } from "./environment";
+import path from "path";
+
 export const getInvitationTemplate = (token, email) => ({
   from: '"System ewidencji praktyk" <sep@codeinq.pl>', // sender address
   to: email, // list of receivers
@@ -8,7 +10,7 @@ export const getInvitationTemplate = (token, email) => ({
   attachments: [
     {
       filename: "Logo.png",
-      path: __dirname + "/../assets/Logo.png",
+      path: path.join(__dirname, "/../assets/Logo.png"),
       cid: "logo",
     },
   ],
