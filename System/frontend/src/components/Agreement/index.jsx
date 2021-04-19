@@ -132,9 +132,7 @@ const Agreement = ({
 
           {InternshipJournal && (
             <>
-              <a
-                href={`http://localhost:4001/uploads/${InternshipJournal.id}/?token=${token}`}
-              >
+              <a href={`uploads/${InternshipJournal.id}/?token=${token}`}>
                 <button preset="bright">Dziennik</button>
               </a>
               {!InternshipJournal.accepted && (

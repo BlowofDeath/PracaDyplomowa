@@ -37,9 +37,7 @@ const Journal = () => {
 
       <div className={css.wrapper}>
         {journalId && (
-          <a
-            href={`http://localhost:4001/uploads/${journalId}/?token=${token}`}
-          >
+          <a href={`/uploads/${journalId}/?token=${token}`}>
             <button preset="bright">Dziennik</button>
           </a>
         )}
