@@ -12,6 +12,7 @@ const internshipJournalType = gql`
 
   type Mutation {
     createJournal(file: Upload!, PracticeAgreementId: ID!): InternshipJournal
+    confirmJournal(id: ID!): InternshipJournal
   }
 `;
 

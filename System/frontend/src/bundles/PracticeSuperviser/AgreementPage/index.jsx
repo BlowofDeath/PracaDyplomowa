@@ -13,8 +13,7 @@ import LoadingSpinner from "@components/LoadingSpinner";
 
 const AgreementPage = () => {
   const { userType } = useAuth();
-  const [openModal, setOpenModal] = useState(false);
-  const { loading, error, data } = useQuery(AGREEMENTS);
+  const { loading, error, data, refetch } = useQuery(AGREEMENTS);
   const [tabValue, setTabValue] = useState(0);
   const [agreements, setAgreements] = useState([]);
 
@@ -22,7 +21,6 @@ const AgreementPage = () => {
     if (data) setAgreements(data.agreements);
   }, [data]);
 
-  console.log(agreements);
   if (loading) return <LoadingSpinner />;
   //   if (error) return "error";
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
@@ -51,6 +49,7 @@ const AgreementPage = () => {
                       {...agreement}
                       agreements={agreements}
                       setAgreements={setAgreements}
+                      refetch={refetch}
                     />
                   )
               )}
@@ -66,6 +65,7 @@ const AgreementPage = () => {
                       {...agreement}
                       agreements={agreements}
                       setAgreements={setAgreements}
+                      refetch={refetch}
                     />
                   )
               )}

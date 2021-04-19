@@ -8,6 +8,7 @@ import useAuth from "@hooks/useAuth";
 import LoadingSpinner from "@components/LoadingSpinner";
 import FileUploadWrapper from "@components/FileUploadWrapper";
 import { IconAccept, IconDecline } from "@icons";
+import useSnackGraphql from "@hooks/useSnackGraphql";
 
 const Journal = () => {
   const { token } = useAuth();
@@ -15,6 +16,7 @@ const Journal = () => {
   const { agreementId } = useParams();
   const [getJournal, { data, loading, refetch }] = useLazyQuery(GET_JOURNAL);
   const [file, setFile] = useState();
+  const [enqueueError] = useSnackGraphql();
 
   useEffect(() => {
     if (agreementId)
@@ -26,10 +28,12 @@ const Journal = () => {
   const journalId = data?.getJournal?.id;
   return (
     <div className={css.container}>
-      <span>
-        <span>Zatwierdzone przez opiekuna prakty:</span>
-        {data?.getJournal?.accepted ? <IconAccept /> : <IconDecline />}
-      </span>
+      {journalId && (
+        <span>
+          <span>Zatwierdzone przez opiekuna prakty:</span>
+          {data?.getJournal?.accepted ? <IconAccept /> : <IconDecline />}
+        </span>
+      )}
 
       <div className={css.wrapper}>
         {journalId && (
@@ -59,8 +63,12 @@ const Journal = () => {
                 createJournal({
                   variables: { file, PracticeAgreementId: agreementId },
                 })
-                  .then((result) => console.log(result))
-                  .catch((err) => console.log(err));
+                  .then((result) => {
+                    if (result) {
+                      refetch();
+                    }
+                  })
+                  .catch(enqueueError);
             }}
           >
             Wyślij

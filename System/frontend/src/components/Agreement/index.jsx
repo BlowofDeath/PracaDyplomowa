@@ -10,8 +10,10 @@ import ConfirmModal from "@components/ConfirmModal";
 import {
   CONFIRM_PRACTICE_AGREEMENT,
   DELETE_PRACTICE_AGREEMENT,
+  CONFIRM_JOURNAL,
 } from "./queries";
 import useAuth from "@hooks/useAuth";
+import { IconAccept } from "@icons";
 
 const Agreement = ({
   id,
@@ -28,12 +30,15 @@ const Agreement = ({
   agreements,
   setAgreements,
   InternshipJournal,
+  refetch,
 }) => {
   const [confirmPracticeAgreement] = useMutation(CONFIRM_PRACTICE_AGREEMENT);
   const [deletePracticeAgreement] = useMutation(DELETE_PRACTICE_AGREEMENT);
+  const [confirmJournal] = useMutation(CONFIRM_JOURNAL);
   const { token } = useAuth();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleConfirm = () => {
@@ -55,12 +60,19 @@ const Agreement = ({
     if (deleted) {
       enqueueSnackbar("Usunięto pomyślnie", { variant: "success" });
       setOpenDeleteModal(false);
-      setAgreements(
-        agreements.filter((announcement) => announcement.id !== id)
-      );
+      setAgreements(agreements.filter((agreement) => agreement.id !== id));
     } else {
       enqueueSnackbar("Wystąpił problem", { variant: "error" });
     }
+  };
+
+  const handleConfirmJournal = () => {
+    confirmJournal({ variables: { id: InternshipJournal.id } }).then((data) => {
+      if (data) {
+        setOpenConfirmModal(false);
+        refetch();
+      }
+    });
   };
 
   return (
@@ -106,6 +118,12 @@ const Agreement = ({
           <span>Adres: </span>
           {address}
         </span>
+        <br />
+        {InternshipJournal?.accepted && (
+          <span>
+            Dziennik zatwierdzony <IconAccept />
+          </span>
+        )}
         <div className={css.buttons}>
           {!accepted && <button onClick={handleConfirm}>Zatwierdź</button>}
           <button preset="red" onClick={() => setOpenDeleteModal(true)}>
@@ -113,11 +131,18 @@ const Agreement = ({
           </button>
 
           {InternshipJournal && (
-            <a
-              href={`http://localhost:4001/uploads/${InternshipJournal.id}/?token=${token}`}
-            >
-              <button preset="bright">Dziennik</button>
-            </a>
+            <>
+              <a
+                href={`http://localhost:4001/uploads/${InternshipJournal.id}/?token=${token}`}
+              >
+                <button preset="bright">Dziennik</button>
+              </a>
+              {!InternshipJournal.accepted && (
+                <button onClick={() => setOpenConfirmModal(true)}>
+                  Zatwierdź dziennik
+                </button>
+              )}
+            </>
           )}
         </div>
       </Container>
@@ -129,6 +154,18 @@ const Agreement = ({
           onConfirm={handleDelete}
         >
           Czy na pewno chcesz usunąć tą umowe?
+          <br />
+          Tej operacji nie da się cofnąć.
+        </ConfirmModal>
+      )}
+      {openConfirmModal && (
+        <ConfirmModal
+          open={openConfirmModal}
+          setOpenModal={setOpenConfirmModal}
+          onDecline={() => setOpenConfirmModal(false)}
+          onConfirm={handleConfirmJournal}
+        >
+          Czy na pewno chcesz zatwierdzić dziennik?
           <br />
           Tej operacji nie da się cofnąć.
         </ConfirmModal>

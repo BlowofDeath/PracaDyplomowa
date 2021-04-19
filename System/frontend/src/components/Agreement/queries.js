@@ -13,3 +13,11 @@ export const CONFIRM_PRACTICE_AGREEMENT = gql`
     }
   }
 `;
+
+export const CONFIRM_JOURNAL = gql`
+  mutation confirmJournal($id: ID!) {
+    confirmJournal(id: $id) {
+      id
+    }
+  }
+`;

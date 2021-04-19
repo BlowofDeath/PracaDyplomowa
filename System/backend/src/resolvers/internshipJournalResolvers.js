@@ -70,6 +70,15 @@ const internshipJournalResolvers = {
         throw new Error(error);
       }
     },
+    confirmJournal: async (_, { id }, { models, authObject }) => {
+      const { InternshipJournal } = models;
+      if (!authObject.practiceSuperviser) throw new Error(lang.noPermission);
+      const journal = await InternshipJournal.findOne({ where: { id } });
+      if (!journal) throw new Error(lang.notFound);
+      journal.accepted = true;
+      journal.save();
+      return journal;
+    },
   },
 };
 
