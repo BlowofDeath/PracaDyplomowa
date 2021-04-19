@@ -14,4 +14,20 @@ export const EMAIL_CONFIG = {
 export const JWT_HASH = process.env.JWT_HASH;
 export const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://localhost:3000";
 
-export default { PORT, EMAIL_CONFIG, JWT_HASH, FRONTEND_URL };
+export const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
+export const MYSQL_USER = process.env.MYSQL_USER;
+export const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
+export const MYSQL_HOST = process.env.MYSQL_HOST;
+export const MYSQL_PORT = process.env.MYSQL_PORT;
+
+export default {
+  PORT,
+  EMAIL_CONFIG,
+  JWT_HASH,
+  FRONTEND_URL,
+  MYSQL_PASSWORD,
+  MYSQL_USER,
+  MYSQL_DATABASE,
+  MYSQL_PORT,
+  MYSQL_HOST,
+};
