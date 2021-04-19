@@ -45,6 +45,7 @@ const invitationResolvers = {
       if (!invitation) throw new Error(lang.objectCreationFail);
       const template = getInvitationTemplate(token, email);
       await emailTransporter.sendMail(template).catch((err) => {
+        console.log(err);
         throw new Error(lang.emailServerError);
       });
 
