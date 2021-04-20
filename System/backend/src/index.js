@@ -27,7 +27,7 @@ async function startServer() {
 
   //This makes that tables are dropped and created on server restart
   await db
-    .sync({ force: true })
+    .sync({ alter: true })
     .then(async () => {
       console.log(`Database & tables created!`);
       const exist = await models.PracticeSuperviser.findOne();
