@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import db from "../database/sqliteDB";
+import db from "../database/db";
 
 const PracticeSuperviser = db.define("PracticeSuperviser", {
   email: Sequelize.STRING,

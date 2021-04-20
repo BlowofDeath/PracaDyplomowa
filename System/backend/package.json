@@ -22,6 +22,8 @@
     "graphql-tools": "^6.0.18",
     "graphql-upload": "^11.0.0",
     "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",
     "nodemon": "^2.0.4",
     "sequelize": "^6.3.4",

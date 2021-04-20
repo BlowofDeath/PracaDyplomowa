@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import db from "../database/sqliteDB";
+import db from "../database/db";
 
 const PracticeAnnouncement = db.define("PracticeAnnouncement", {
   header: Sequelize.STRING,

@@ -6,7 +6,7 @@ import path from "path";
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 import bcrypt from "bcrypt";
-import db from "./database/sqliteDB";
+import db from "./database/db";
 const app = express();
 import { verifyJWT } from "./utility/jwtTool";
 import models from "./models";
