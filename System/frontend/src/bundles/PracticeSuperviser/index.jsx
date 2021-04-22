@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
 import AnnouncementPage from "./AnnouncementPage";
@@ -10,6 +10,7 @@ import { practiceSuperviserAtom } from "@config/userRecoilAtoms";
 import { GET_PRACTICE_SUPERVISER } from "./queries.js";
 
 const PracticeSuperviser = () => {
+  const history = useHistory();
   const [practiceSuperviser, setPracticeSuperviser] = useRecoilState(
     practiceSuperviserAtom
   );
@@ -24,7 +25,10 @@ const PracticeSuperviser = () => {
   }, [practiceSuperviser, getPracticeSuperviser]);
 
   useEffect(() => {
-    if (data) setPracticeSuperviser(data.mePracticeSuperviser);
+    if (data) {
+      if (!data.mePracticeSuperviser) history.push("/logout");
+      setPracticeSuperviser(data.mePracticeSuperviser);
+    }
   }, [data, setPracticeSuperviser]);
 
   return (

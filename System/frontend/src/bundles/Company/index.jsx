@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { useLazyQuery } from "@apollo/client";
 
@@ -11,6 +11,7 @@ import { GET_COMPANY } from "./queries.js";
 const Company = () => {
   const [company, setCompany] = useRecoilState(companyAtom);
   const [getCompany, { data }] = useLazyQuery(GET_COMPANY);
+  const history = useHistory();
 
   useEffect(() => {
     if (!company) {
@@ -19,7 +20,10 @@ const Company = () => {
   }, [company, getCompany]);
 
   useEffect(() => {
-    if (data) setCompany(data.meCompany);
+    if (data) {
+      if (!data.meCompany) history.push("/logout");
+      setCompany(data.meCompany);
+    }
   }, [data, setCompany]);
   return (
     <>

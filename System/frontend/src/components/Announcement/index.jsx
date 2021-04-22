@@ -15,6 +15,7 @@ import {
   CONFIRM_PRACTICE_ANNOUNCEMENT,
 } from "./queries";
 import { companyAtom } from "@config/userRecoilAtoms";
+import { IconAccept, IconDecline } from "@icons";
 
 const Announcement = ({
   id,
@@ -106,7 +107,8 @@ const Announcement = ({
         CompanyId === company?.id &&
         userType === USER_TYPES.company && (
           <span>
-            <span>Zatwierdzone:</span> {accepted ? "Tak" : "Nie"}
+            <span>Zatwierdzone:</span>{" "}
+            {accepted ? <IconAccept /> : <IconDecline />}
           </span>
         )}
       <p>{description}</p>

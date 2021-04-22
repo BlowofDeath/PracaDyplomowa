@@ -14,12 +14,7 @@ const AnnouncementPage = () => {
   if (error) return "error";
   return (
     <>
-      <Page
-        title="Ogłoszenia praktyk"
-        // button={
-        //   <button onClick={() => setOpenModal(true)}>Dodaj ogłoszenie</button>
-        // }
-      >
+      <Page title="Ogłoszenia praktyk">
         {data.practiceAnnouncements.map((announcement, index) => {
           return <Announcement key={index} {...announcement} />;
         })}

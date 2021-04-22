@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { useRecoilState } from "recoil";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 
 import MyPractice from "./MyPractice";
 import AnnouncementPage from "./AnnouncementPage";
@@ -10,7 +10,8 @@ import { GET_STUDENT } from "./queries.js";
 
 const Student = () => {
   const [student, setStudent] = useRecoilState(studentAtom);
-  const [getStudent, { data }] = useLazyQuery(GET_STUDENT);
+  const [getStudent, { data, loading, error }] = useLazyQuery(GET_STUDENT);
+  const history = useHistory();
 
   useEffect(() => {
     if (!student) {
@@ -19,7 +20,10 @@ const Student = () => {
   }, [student, getStudent]);
 
   useEffect(() => {
-    if (data) setStudent(data.meStudent);
+    if (data) {
+      if (!data.meStudent) history.push("/logout");
+      setStudent(data.meStudent);
+    }
   }, [data, setStudent]);
 
   return (
