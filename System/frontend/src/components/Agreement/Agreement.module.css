@@ -1,8 +1,17 @@
-.container > span {
+.container {
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.container > .block {
+  margin-right: 48px;
+}
+
+.block > span {
   display: block;
 }
 
-.container > span > span {
+.block > span > span {
   font-weight: 600;
 }
 
@@ -25,8 +34,12 @@
   margin-left: 10px;
 }
 
-.container button {
+/* .container button {
   margin-top: 50px;
+} */
+
+.buttons {
+  margin-top: 24px;
 }
 
 .buttons > button {

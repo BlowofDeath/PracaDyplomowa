@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import Avatar from "@material-ui/core/Avatar";
 import { useMutation } from "@apollo/client";
 import { useSnackbar } from "notistack";
+import clsx from "clsx";
 
 import css from "./Agreement.module.css";
 import Container from "@components/Container";
@@ -31,6 +32,7 @@ const Agreement = ({
   setAgreements,
   InternshipJournal,
   refetch,
+  className,
 }) => {
   const [confirmPracticeAgreement] = useMutation(CONFIRM_PRACTICE_AGREEMENT);
   const [deletePracticeAgreement] = useMutation(DELETE_PRACTICE_AGREEMENT);
@@ -78,69 +80,74 @@ const Agreement = ({
   return (
     <>
       <Container className={css.container}>
-        <div className={css.avatar}>
-          {" "}
-          <Avatar style={{ backgroundColor: Student.color }}>
-            {Student.first_name.charAt(0)}
-            {Student.last_name.charAt(0)}
-          </Avatar>
-          <h2>{`${Student.first_name} ${Student.last_name}`}</h2>
-        </div>
+        <div className={css.block}>
+          <div className={css.avatar}>
+            {" "}
+            <Avatar style={{ backgroundColor: Student.color }}>
+              {Student.first_name.charAt(0)}
+              {Student.last_name.charAt(0)}
+            </Avatar>
+            <h2>{`${Student.first_name} ${Student.last_name}`}</h2>
+          </div>
 
-        <span>
-          <span>Okres wykonywania praktyki:</span> Od{" "}
-          {dayjs(from).format("DD/MM/YYYY")} do {dayjs(to).format("DD/MM/YYYY")}
-        </span>
-        <span>
-          <span>Numer indeksu: </span> {Student.index_number}
-        </span>
-        <span>
-          <span>Email:</span> {Student.email}
-        </span>
-        <h3>Dane firmy</h3>
-        <span>
-          <span>Nazwa firmy: </span>
-          {company_name}
-        </span>
-        <span>
-          <span>Email: </span>
-          {email}
-        </span>
-        <span>
-          <span>Telefon: </span>
-          {phone}
-        </span>
-        <span>
-          <span>Miejscowość: </span>
-          {city}
-        </span>
-        <span>
-          <span>Adres: </span>
-          {address}
-        </span>
-        <br />
-        {InternshipJournal?.accepted && (
           <span>
-            Dziennik zatwierdzony <IconAccept />
+            <span>Okres wykonywania praktyki:</span> Od{" "}
+            {dayjs(from).format("DD/MM/YYYY")} do{" "}
+            {dayjs(to).format("DD/MM/YYYY")}
           </span>
-        )}
-        <div className={css.buttons}>
-          {!accepted && <button onClick={handleConfirm}>Zatwierdź</button>}
-          <button preset="red" onClick={() => setOpenDeleteModal(true)}>
-            Usuń
-          </button>
+          <span>
+            <span>Numer indeksu: </span> {Student.index_number}
+          </span>
+          <span>
+            <span>Email:</span> {Student.email}
+          </span>
+          <div className={css.buttons}>
+            {!accepted && <button onClick={handleConfirm}>Zatwierdź</button>}
+            <button preset="red" onClick={() => setOpenDeleteModal(true)}>
+              Usuń
+            </button>
 
-          {InternshipJournal && (
-            <>
-              <a href={`uploads/${InternshipJournal.id}/?token=${token}`}>
-                <button preset="bright">Dziennik</button>
-              </a>
-              {!InternshipJournal.accepted && (
-                <button onClick={() => setOpenConfirmModal(true)}>
-                  Zatwierdź dziennik
-                </button>
-              )}
-            </>
+            {InternshipJournal && (
+              <>
+                <a href={`uploads/${InternshipJournal.id}/?token=${token}`}>
+                  <button preset="bright">Dziennik</button>
+                </a>
+                {!InternshipJournal.accepted && (
+                  <button onClick={() => setOpenConfirmModal(true)}>
+                    Zatwierdź dziennik
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <div className={css.block}>
+          <h3>Dane firmy</h3>
+          <span>
+            <span>Nazwa firmy: </span>
+            {company_name}
+          </span>
+          <span>
+            <span>Email: </span>
+            {email}
+          </span>
+          <span>
+            <span>Telefon: </span>
+            {phone}
+          </span>
+          <span>
+            <span>Miejscowość: </span>
+            {city}
+          </span>
+          <span>
+            <span>Adres: </span>
+            {address}
+          </span>
+          <br />
+          {InternshipJournal?.accepted && (
+            <span>
+              Dziennik zatwierdzony <IconAccept />
+            </span>
           )}
         </div>
       </Container>
