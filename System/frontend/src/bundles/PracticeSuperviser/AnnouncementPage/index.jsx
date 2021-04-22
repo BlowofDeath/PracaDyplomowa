@@ -8,12 +8,15 @@ import Announcement from "@components/Announcement";
 import AddAnnouncementModal from "@components/AddAnnouncementModal";
 import Tabs from "@components/Tabs";
 import css from "./AnnouncementPage.module.css";
+import SearchInput from "@components/SearchInput";
+import searchHelper from "@utility/searchHelper";
 
 const AnnouncementPage = () => {
   const { loading, error, data, refetch } = useQuery(ANNOUNCEMENTS);
   const [openModal, setOpenModal] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [announcements, setAnnouncements] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (data) setAnnouncements(data.practiceAnnouncements);
@@ -39,9 +42,30 @@ const AnnouncementPage = () => {
             <Tabs.Tab label="Zatwierdzone" />
             <Tabs.Tab label="Oczekujące" />
           </Tabs>
+          <SearchInput
+            className={css.searchInput}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
         </div>
         {announcements.map((announcement, index) => {
-          if (tabValue === 0 && announcement.accepted)
+          if (
+            (tabValue === 0 && announcement.accepted) ||
+            (tabValue === 1 && !announcement.accepted)
+          ) {
+            if (
+              !searchHelper(
+                [
+                  announcement.email,
+                  announcement.company_name,
+                  announcement.header,
+                  announcement.phone,
+                  announcement.technologies,
+                ],
+                search
+              )
+            )
+              return null;
             return (
               <Announcement
                 key={index}
@@ -51,17 +75,7 @@ const AnnouncementPage = () => {
                 refetch={refetch}
               />
             );
-          if (tabValue === 1 && !announcement.accepted)
-            return (
-              <Announcement
-                key={index}
-                {...announcement}
-                announcements={announcements}
-                setAnnouncements={setAnnouncements}
-                refetch={refetch}
-              />
-            );
-          else return null;
+          } else return null;
         })}
       </Page>
       {openModal && (

@@ -9,12 +9,14 @@ import Students from "./Students";
 import Companies from "./Companies";
 import css from "./UsersPage.module.css";
 import AddUserModal from "@components/AddUserModal";
+import SearchInput from "@components/SearchInput";
 
 const UsersPage = () => {
   const { userType } = useAuth();
   const [openModal, setOpenModal] = useState(false);
-
+  const [search, setSearch] = useState("");
   const [tabValue, setTabValue] = useState(0);
+
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
   return (
     <>
@@ -34,9 +36,14 @@ const UsersPage = () => {
             <Tabs.Tab label="Studenci" />
             <Tabs.Tab label="Firmy" />
           </Tabs>
+          <SearchInput
+            className={css.searchInput}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
         </div>
-        {tabValue === 0 && <Students />}
-        {tabValue === 1 && <Companies />}
+        {tabValue === 0 && <Students search={search} />}
+        {tabValue === 1 && <Companies search={search} />}
       </Page>
       {openModal && (
         <AddUserModal open={openModal} setOpenModal={setOpenModal} />

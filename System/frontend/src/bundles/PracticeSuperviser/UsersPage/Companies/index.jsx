@@ -5,8 +5,9 @@ import Company from "@components/Company";
 import css from "./Companies.module.css";
 import { GET_COMPANIES } from "./queries";
 import LoadingSpinner from "@components/LoadingSpinner";
+import searchHelper from "@utility/searchHelper";
 
-const Companies = () => {
+const Companies = ({ search }) => {
   const { loading, error, data } = useQuery(GET_COMPANIES);
 
   if (loading) return <LoadingSpinner />;
@@ -14,18 +15,22 @@ const Companies = () => {
   return (
     <div className={css.companiesList}>
       {data.companies.map(
-        ({ id, name, city, address, email, first_name, last_name, color }) => (
-          <Company
-            key={id}
-            first_name={first_name}
-            last_name={last_name}
-            email={email}
-            address={address}
-            city={city}
-            name={name}
-            color={color}
-          />
-        )
+        ({ id, name, city, address, email, first_name, last_name, color }) => {
+          if (!searchHelper([name, email, first_name, last_name], search))
+            return null;
+          return (
+            <Company
+              key={id}
+              first_name={first_name}
+              last_name={last_name}
+              email={email}
+              address={address}
+              city={city}
+              name={name}
+              color={color}
+            />
+          );
+        }
       )}
     </div>
   );
