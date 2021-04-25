@@ -17,15 +17,16 @@ const Journal = () => {
   const [getJournal, { data, loading, refetch }] = useLazyQuery(GET_JOURNAL);
   const [file, setFile] = useState();
   const [enqueueError] = useSnackGraphql();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (agreementId)
       getJournal({ variables: { PracticeAgreementId: agreementId } });
   }, [agreementId]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading || isLoading) return <LoadingSpinner />;
   console.log(data);
-  const journalId = data?.getJournal?.id;
+  const journalId = data?.getDocumentFile?.id;
   return (
     <div className={css.container}>
       {journalId && (
@@ -37,11 +38,29 @@ const Journal = () => {
 
       <div className={css.wrapper}>
         {journalId && (
-          <a href={`/uploads/${journalId}/?token=${token}`}>
-            <button preset="bright">Dziennik</button>
-          </a>
+          <button
+            preset="bright"
+            onClick={() =>
+              fetch(`http://localhost:4001/uploads/${journalId}`, {
+                headers: new Headers({
+                  Authorization: token,
+                }),
+              })
+                .then((response) => response.blob())
+                .then((blob) => {
+                  console.log(blob);
+                  const url = window.URL.createObjectURL(blob);
+                  window.open(url);
+                })
+                .catch((error) => {
+                  console.error(error);
+                })
+            }
+          >
+            Dziennik
+          </button>
         )}
-        {(!journalId || !data?.getJournal?.accepted) && (
+        {(!journalId || !data?.getJournal?.status) && (
           <div className={css.fileHandler}>
             <FileUploadWrapper onFileSelect={(file) => setFile(file)}>
               <button>Przeglądaj</button>
@@ -51,12 +70,12 @@ const Journal = () => {
         )}
       </div>
 
-      {(!journalId || !data?.getJournal?.accepted) && (
+      {(!journalId || !data?.getJournal?.status) && (
         <>
           {console.log("file", file)}
           <button
             onClick={() => {
-              console.log(file);
+              setIsLoading(true);
               file &&
                 createJournal({
                   variables: { file, PracticeAgreementId: agreementId },
@@ -65,8 +84,12 @@ const Journal = () => {
                     if (result) {
                       refetch();
                     }
+                    setIsLoading(false);
                   })
-                  .catch(enqueueError);
+                  .catch((err) => {
+                    setIsLoading(false);
+                    enqueueError(err);
+                  });
             }}
           >
             Wyślij

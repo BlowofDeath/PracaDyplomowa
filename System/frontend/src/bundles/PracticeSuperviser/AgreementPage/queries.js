@@ -20,9 +20,10 @@ export const AGREEMENTS = gql`
         email
         color
       }
-      InternshipJournal {
+      DocumentFiles {
         id
-        accepted
+        status
+        type
       }
     }
   }

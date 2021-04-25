@@ -23,6 +23,6 @@
   display: flex;
 }
 
-.wrapper > a {
+.wrapper > button {
   margin-right: 10px;
 }

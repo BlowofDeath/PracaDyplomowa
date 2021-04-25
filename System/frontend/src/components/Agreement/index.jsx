@@ -30,7 +30,7 @@ const Agreement = ({
   accepted,
   agreements,
   setAgreements,
-  InternshipJournal,
+  DocumentFiles,
   refetch,
   className,
 }) => {
@@ -42,6 +42,9 @@ const Agreement = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const InternshipJournal = DocumentFiles.find(
+    (document) => document.type === "journal"
+  );
 
   const handleConfirm = () => {
     confirmPracticeAgreement({ variables: { id } }).then((data) => {
@@ -109,10 +112,32 @@ const Agreement = ({
 
             {InternshipJournal && (
               <>
-                <a href={`uploads/${InternshipJournal.id}/?token=${token}`}>
-                  <button preset="bright">Dziennik</button>
-                </a>
-                {!InternshipJournal.accepted && (
+                <button
+                  preset="bright"
+                  onClick={() =>
+                    fetch(
+                      `http://localhost:4001/uploads/${InternshipJournal.id}`,
+                      {
+                        headers: new Headers({
+                          Authorization: token,
+                        }),
+                      }
+                    )
+                      .then((response) => response.blob())
+                      .then((blob) => {
+                        console.log(blob);
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url);
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      })
+                  }
+                >
+                  Dziennik
+                </button>
+
+                {!InternshipJournal.status && (
                   <button onClick={() => setOpenConfirmModal(true)}>
                     Zatwierdź dziennik
                   </button>

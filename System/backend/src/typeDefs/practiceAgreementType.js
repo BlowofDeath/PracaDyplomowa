@@ -18,7 +18,7 @@ const practiceAgreementType = gql`
     address: String!
     StudentId: ID!
     Student: Student
-    InternshipJournal: InternshipJournal
+    DocumentFiles: [DocumentFile]
   }
 
   type Mutation {

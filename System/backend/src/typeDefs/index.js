@@ -7,7 +7,7 @@ import companyType from "./companyType";
 import customScalarType from "./customScalarType";
 import invitationType from "./invitationType";
 import practiceAgreementType from "./practiceAgreementType";
-import internshipJournalType from "./internshipJournalType";
+import documentFileType from "./documentFileType";
 
 const types = [
   studentType,
@@ -17,7 +17,7 @@ const types = [
   customScalarType,
   invitationType,
   practiceAgreementType,
-  internshipJournalType,
+  documentFileType,
 ];
 
 // NOTE: 2nd param is optional, and defaults to false
