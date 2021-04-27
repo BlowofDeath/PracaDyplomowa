@@ -58,11 +58,10 @@ const AgreementPage = () => {
     );
   };
 
-  if (loading) return <LoadingSpinner />;
-  //   if (error) return "error";
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
   return (
     <>
+      {loading && <LoadingSpinner global />}
       <Page title="Umowy">
         <div className={css.tabs}>
           <Tabs

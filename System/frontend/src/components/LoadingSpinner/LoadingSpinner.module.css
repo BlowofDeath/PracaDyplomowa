@@ -1,1 +1,12 @@
+.container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  bottom: 60px;
+  z-index: 1;
+}
 
+.spinner > svg {
+  color: var(--theme-color-one);
+}

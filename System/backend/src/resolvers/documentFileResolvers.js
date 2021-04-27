@@ -64,7 +64,10 @@ const documentFileResolvers = {
         const buffer = await streamToBuffer(stream);
 
         if (documentFile) {
+          if (documentFile.status === STATUS.accepted) return documentFile;
           documentFile.file = buffer;
+          documentFile.status = null;
+          documentFile.rejectNote = null;
           await documentFile.save();
           return documentFile;
         } else {
@@ -82,7 +85,7 @@ const documentFileResolvers = {
     },
     changeDocumentFileStatus: async (
       _,
-      { id, status },
+      { id, status, rejectNote },
       { models, authObject }
     ) => {
       const { DocumentFile } = models;
@@ -90,6 +93,8 @@ const documentFileResolvers = {
       const documentFile = await DocumentFile.findOne({ where: { id } });
       if (!documentFile) throw new Error(lang.notFound);
       documentFile.status = STATUS[status];
+      if (rejectNote) documentFile.rejectNote = rejectNote;
+
       documentFile.save();
       return documentFile;
     },

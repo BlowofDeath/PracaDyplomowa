@@ -1,10 +1,23 @@
 .container {
   margin-bottom: 24px;
   display: flex;
+  flex-grow: 1;
+}
+.container span > svg {
+  padding-top: 4px;
 }
 
 .container > .block {
-  margin-right: 48px;
+  margin-right: 24px;
+  flex-basis: 33%;
+}
+
+.container > .block:first-child {
+  flex-basis: 35%;
+}
+
+.container > .block:nth-child(2) {
+  flex-basis: 25%;
 }
 
 .block > span {
@@ -44,8 +57,18 @@
 
 .buttons > button {
   margin-right: 8px;
+  margin-bottom: 8px;
 }
 
 .buttons > a {
   margin-right: 8px;
+}
+
+.agreements {
+  display: flex;
+  flex-direction: column;
+}
+
+.agreements > button {
+  margin-bottom: 8px;
 }

@@ -3,7 +3,7 @@ import css from "./ConfirmModal.module.css";
 import Modal from "@components/Modal";
 
 const ConfirmModal = (props) => {
-  const { children, onConfirm, onDecline } = props;
+  const { children, onConfirm, onDecline, component } = props;
   return (
     <Modal
       {...props}
@@ -16,7 +16,7 @@ const ConfirmModal = (props) => {
         </>
       }
     >
-      <p className={css.text}>{children}</p>
+      {component ? children : <p className={css.text}>{children}</p>}
     </Modal>
   );
 };

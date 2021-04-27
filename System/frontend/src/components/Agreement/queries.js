@@ -14,10 +14,21 @@ export const CONFIRM_PRACTICE_AGREEMENT = gql`
   }
 `;
 
-export const CONFIRM_JOURNAL = gql`
-  mutation confirmJournal($id: ID!) {
-    confirmJournal(id: $id) {
+export const CHANGE_DOCUMENT_STATUS = gql`
+  mutation changeDocumentFileStatus(
+    $id: ID!
+    $status: Status!
+    $rejectNote: String
+  ) {
+    changeDocumentFileStatus(
+      id: $id
+      status: $status
+      rejectNote: $rejectNote
+    ) {
       id
+      status
+      type
+      rejectNote
     }
   }
 `;

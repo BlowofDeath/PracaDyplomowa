@@ -11,10 +11,18 @@ import ConfirmModal from "@components/ConfirmModal";
 import {
   CONFIRM_PRACTICE_AGREEMENT,
   DELETE_PRACTICE_AGREEMENT,
-  CONFIRM_JOURNAL,
+  CHANGE_DOCUMENT_STATUS,
 } from "./queries";
 import useAuth from "@hooks/useAuth";
-import { IconAccept } from "@icons";
+import { IconAccept, IconDecline } from "@icons";
+import LoadingSpinner from "@components/LoadingSpinner";
+import Textarea from "@components/Textarea";
+import { API_URL } from "@config/global";
+
+const STATUS = {
+  accepted: { value: "accepted", label: "Zatwierdzono", icon: <IconAccept /> },
+  rejected: { value: "rejected", label: "Odrzucono", icon: <IconDecline /> },
+};
 
 const Agreement = ({
   id,
@@ -36,14 +44,23 @@ const Agreement = ({
 }) => {
   const [confirmPracticeAgreement] = useMutation(CONFIRM_PRACTICE_AGREEMENT);
   const [deletePracticeAgreement] = useMutation(DELETE_PRACTICE_AGREEMENT);
-  const [confirmJournal] = useMutation(CONFIRM_JOURNAL);
+  const [changeDocumentStatus] = useMutation(CHANGE_DOCUMENT_STATUS);
   const { token } = useAuth();
 
+  const [rejectNote, setRejectNote] = useState("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const InternshipJournal = DocumentFiles.find(
     (document) => document.type === "journal"
+  );
+  const PracticeAgreement = DocumentFiles.find(
+    (document) => document.type === "agreement"
+  );
+  const PersonalDataAgreement = DocumentFiles.find(
+    (document) => document.type === "personalData"
   );
 
   const handleConfirm = () => {
@@ -71,17 +88,35 @@ const Agreement = ({
     }
   };
 
-  const handleConfirmJournal = () => {
-    confirmJournal({ variables: { id: InternshipJournal.id } }).then((data) => {
-      if (data) {
-        setOpenConfirmModal(false);
-        refetch();
-      }
-    });
+  const handleDocumentStatusChange = (status, rejectNote) => {
+    setIsLoading(true);
+    changeDocumentStatus({
+      variables: {
+        id: InternshipJournal.id,
+        status: status ? STATUS.accepted.value : STATUS.rejected.value,
+        rejectNote: rejectNote,
+      },
+    })
+      .then((data) => {
+        if (data) {
+          openConfirmModal && setOpenConfirmModal(false);
+          openRejectModal && setOpenRejectModal(false);
+
+          refetch();
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        enqueueSnackbar("Wystąpił problem", { variant: "error" });
+        setIsLoading(false);
+        openConfirmModal && setOpenConfirmModal(false);
+        openRejectModal && setOpenRejectModal(false);
+      });
   };
 
   return (
     <>
+      {isLoading && <LoadingSpinner global />}
       <Container className={css.container}>
         <div className={css.block}>
           <div className={css.avatar}>
@@ -104,6 +139,10 @@ const Agreement = ({
           <span>
             <span>Email:</span> {Student.email}
           </span>
+          <span>
+            <span>Status dziennika:</span>{" "}
+            {STATUS[InternshipJournal?.status]?.icon ?? "Brak"}
+          </span>
           <div className={css.buttons}>
             {!accepted && <button onClick={handleConfirm}>Zatwierdź</button>}
             <button preset="red" onClick={() => setOpenDeleteModal(true)}>
@@ -114,33 +153,41 @@ const Agreement = ({
               <>
                 <button
                   preset="bright"
-                  onClick={() =>
-                    fetch(
-                      `http://localhost:4001/uploads/${InternshipJournal.id}`,
-                      {
-                        headers: new Headers({
-                          Authorization: token,
-                        }),
-                      }
-                    )
+                  onClick={() => {
+                    setIsLoading(true);
+                    return fetch(`${API_URL}/uploads/${InternshipJournal.id}`, {
+                      headers: new Headers({
+                        Authorization: token,
+                      }),
+                    })
                       .then((response) => response.blob())
                       .then((blob) => {
-                        console.log(blob);
                         const url = window.URL.createObjectURL(blob);
                         window.open(url);
+                        setIsLoading(false);
                       })
                       .catch((error) => {
                         console.error(error);
-                      })
-                  }
+                        setIsLoading(false);
+                      });
+                  }}
                 >
                   Dziennik
                 </button>
 
-                {!InternshipJournal.status && (
-                  <button onClick={() => setOpenConfirmModal(true)}>
-                    Zatwierdź dziennik
-                  </button>
+                {InternshipJournal && (
+                  <>
+                    <button onClick={() => setOpenConfirmModal(true)}>
+                      Zatwierdź dziennik
+                    </button>
+
+                    <button
+                      preset="bright"
+                      onClick={() => setOpenRejectModal(true)}
+                    >
+                      Odrzuć dziennik
+                    </button>
+                  </>
                 )}
               </>
             )}
@@ -175,6 +222,69 @@ const Agreement = ({
             </span>
           )}
         </div>
+        <div className={css.block}>
+          <h3>Dokumenty</h3>
+          <div className={css.agreements}>
+            {InternshipJournal && (
+              <>
+                {PracticeAgreement && (
+                  <button
+                    onClick={() => {
+                      setIsLoading(true);
+                      return fetch(
+                        `${API_URL}/uploads/${PracticeAgreement.id}`,
+                        {
+                          headers: new Headers({
+                            Authorization: token,
+                          }),
+                        }
+                      )
+                        .then((response) => response.blob())
+                        .then((blob) => {
+                          const url = window.URL.createObjectURL(blob);
+                          window.open(url);
+                          setIsLoading(false);
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                          setIsLoading(false);
+                        });
+                    }}
+                  >
+                    Umowa o praktyki
+                  </button>
+                )}
+                {PersonalDataAgreement && (
+                  <button
+                    onClick={() => {
+                      setIsLoading(true);
+                      return fetch(
+                        `${API_URL}/uploads/${PersonalDataAgreement.id}`,
+                        {
+                          headers: new Headers({
+                            Authorization: token,
+                          }),
+                        }
+                      )
+                        .then((response) => response.blob())
+                        .then((blob) => {
+                          const url = window.URL.createObjectURL(blob);
+                          window.open(url);
+                          setIsLoading(false);
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                          setIsLoading(false);
+                        });
+                    }}
+                  >
+                    Umowa o danych osobowych
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </Container>
       {openDeleteModal && (
         <ConfirmModal
@@ -193,11 +303,27 @@ const Agreement = ({
           open={openConfirmModal}
           setOpenModal={setOpenConfirmModal}
           onDecline={() => setOpenConfirmModal(false)}
-          onConfirm={handleConfirmJournal}
+          onConfirm={() => handleDocumentStatusChange(true)}
         >
           Czy na pewno chcesz zatwierdzić dziennik?
           <br />
           Tej operacji nie da się cofnąć.
+        </ConfirmModal>
+      )}
+      {openRejectModal && (
+        <ConfirmModal
+          open={openRejectModal}
+          setOpenModal={setOpenConfirmModal}
+          onDecline={() => setOpenRejectModal(false)}
+          onConfirm={() => handleDocumentStatusChange(false, rejectNote)}
+          component
+        >
+          <Textarea
+            label="Podaj powód odrzucenia"
+            name="description"
+            onChange={(e) => setRejectNote(e.target.value)}
+            labelOnTop
+          />
         </ConfirmModal>
       )}
     </>

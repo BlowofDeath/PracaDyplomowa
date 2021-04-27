@@ -31,7 +31,7 @@ const Journal = () => {
     <div className={css.container}>
       {journalId && (
         <span>
-          <span>Zatwierdzone przez opiekuna prakty:</span>
+          <span>Zatwierdzone przez opiekuna praktyk:</span>
           {data?.getJournal?.accepted ? <IconAccept /> : <IconDecline />}
         </span>
       )}
