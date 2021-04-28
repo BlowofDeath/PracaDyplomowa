@@ -7,9 +7,10 @@ import { Op } from "sequelize";
 const practiceAgreementResolvers = {
   Query: {
     myPracticeAgreements: async (_, args, { models, authObject }) => {
-      const { PracticeAgreement } = models;
+      const { PracticeAgreement, DocumentFile } = models;
       if (authObject && authObject.student) {
         return await PracticeAgreement.findAll({
+          include: [DocumentFile],
           where: {
             StudentId: authObject.student,
           },

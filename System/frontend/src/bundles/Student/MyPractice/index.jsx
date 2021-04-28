@@ -14,7 +14,7 @@ const MyPractice = () => {
   const [openModal, setOpenModal] = useState(false);
   const { data, loading, error, refetch } = useQuery(MY_PRACTICE_AGREEMENTS);
   const match = useRouteMatch();
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner global />;
   return (
     <>
       <Route exact path={`${match.path}/`}>
@@ -30,7 +30,7 @@ const MyPractice = () => {
             </>
           }
         >
-          {data.myPracticeAgreements.map((practice) => (
+          {data?.myPracticeAgreements.map((practice) => (
             <Practice
               key={practice.id}
               {...practice}

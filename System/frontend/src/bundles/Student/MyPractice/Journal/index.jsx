@@ -72,7 +72,6 @@ const Journal = () => {
 
       {(!journalId || !data?.getJournal?.status) && (
         <>
-          {console.log("file", file)}
           <button
             onClick={() => {
               setIsLoading(true);

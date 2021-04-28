@@ -12,6 +12,12 @@ export const MY_PRACTICE_AGREEMENTS = gql`
       from
       to
       accepted
+      DocumentFiles {
+        id
+        status
+        type
+        rejectNote
+      }
     }
   }
 `;
