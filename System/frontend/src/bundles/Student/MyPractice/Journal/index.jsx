@@ -48,12 +48,15 @@ const Journal = () => {
               })
                 .then((response) => response.blob())
                 .then((blob) => {
-                  console.log(blob);
-                  const url = window.URL.createObjectURL(blob);
-                  window.open(url);
+                  var link = document.createElement("a");
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = "Dziennik praktyk.pdf";
+                  link.click();
+                  setIsLoading(false);
                 })
                 .catch((error) => {
                   console.error(error);
+                  setIsLoading(false);
                 })
             }
           >

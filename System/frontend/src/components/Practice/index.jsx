@@ -9,6 +9,8 @@ import { IconAccept, IconDecline } from "@icons";
 import FileUploadWrapper from "@components/FileUploadWrapper";
 import { CREATE_DOCUMENT } from "./queries.js";
 import LoadingSpinner from "@components/LoadingSpinner";
+import useAuth from "@hooks/useAuth";
+import { API_URL } from "@config/global";
 
 const DOCUMENT_TYPE = {
   journal: "journal",
@@ -28,12 +30,14 @@ const Practice = ({
   accepted,
   dictionaryUrl,
   DocumentFiles,
+  refetch,
 }) => {
   const history = useHistory();
   const [filePracticeAgreement, setFilePracticeAgreement] = useState();
   const [filePersonalDataAgreement, setFilePersonalDataAgreement] = useState();
   const [isLoading, setIsLoading] = useState();
   const [createDocument] = useMutation(CREATE_DOCUMENT);
+  const { token } = useAuth();
 
   const PracticeAgreement = DocumentFiles.find(
     (document) => document.type === DOCUMENT_TYPE.agreement
@@ -54,6 +58,7 @@ const Practice = ({
       .then((data) => {
         if (data) console.log(data);
         setIsLoading(false);
+        refetch();
       })
       .catch((err) => {
         console.log(err);
@@ -103,24 +108,42 @@ const Practice = ({
             <span>Umowa o praktykę</span>
           </span>
           <div className={css.buttons}>
-            {accepted && (
-              <button
-                onClick={() =>
-                  console.log("PracticeAgreement", PracticeAgreement)
-                }
-                disabled={!PracticeAgreement}
-              >
-                Umowa o praktykę
-              </button>
+            <button
+              onClick={() => {
+                setIsLoading(true);
+                fetch(`${API_URL}/uploads/${PracticeAgreement.id}`, {
+                  headers: new Headers({
+                    Authorization: token,
+                  }),
+                })
+                  .then((response) => response.blob())
+                  .then((blob) => {
+                    var link = document.createElement("a");
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "Umowa o praktykę.pdf";
+                    link.click();
+                    setIsLoading(false);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    setIsLoading(false);
+                  });
+              }}
+              disabled={!PracticeAgreement}
+            >
+              Umowa o praktykę
+            </button>
+
+            {!accepted && (
+              <div className={css.fileHandler}>
+                <FileUploadWrapper
+                  onFileSelect={(file) => setFilePracticeAgreement(file)}
+                >
+                  <button>Przeglądaj</button>
+                </FileUploadWrapper>
+                <span>{filePracticeAgreement?.name}</span>
+              </div>
             )}
-            <div className={css.fileHandler}>
-              <FileUploadWrapper
-                onFileSelect={(file) => setFilePracticeAgreement(file)}
-              >
-                <button>Przeglądaj</button>
-              </FileUploadWrapper>
-              <span>{filePracticeAgreement?.name}</span>
-            </div>
           </div>
           {filePracticeAgreement && (
             <button
@@ -139,24 +162,42 @@ const Practice = ({
             <span>Umowa powierzenia przetwarzania danych osobowych</span>
           </span>
           <div className={css.buttons}>
-            {accepted && (
-              <button
-                onClick={() =>
-                  console.log("PersonalDataAgreement", PersonalDataAgreement)
-                }
-                disabled={!PersonalDataAgreement}
-              >
-                Umowa przetwarzania danych
-              </button>
+            <button
+              onClick={() =>
+                fetch(`${API_URL}/uploads/${PersonalDataAgreement.id}`, {
+                  headers: new Headers({
+                    Authorization: token,
+                  }),
+                })
+                  .then((response) => response.blob())
+                  .then((blob) => {
+                    var link = document.createElement("a");
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download =
+                      "Umowa powierzenia przetwarzania danych osobowych.pdf";
+                    link.click();
+                    setIsLoading(false);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    setIsLoading(false);
+                  })
+              }
+              disabled={!PersonalDataAgreement}
+            >
+              Umowa przetwarzania danych
+            </button>
+
+            {!accepted && (
+              <div className={css.fileHandler}>
+                <FileUploadWrapper
+                  onFileSelect={(file) => setFilePersonalDataAgreement(file)}
+                >
+                  <button>Przeglądaj</button>
+                </FileUploadWrapper>
+                <span>{filePersonalDataAgreement?.name}</span>
+              </div>
             )}
-            <div className={css.fileHandler}>
-              <FileUploadWrapper
-                onFileSelect={(file) => setFilePersonalDataAgreement(file)}
-              >
-                <button>Przeglądaj</button>
-              </FileUploadWrapper>
-              <span>{filePersonalDataAgreement?.name}</span>
-            </div>
           </div>
           {filePersonalDataAgreement && (
             <button

@@ -50,6 +50,9 @@ const Agreement = ({
   const [rejectNote, setRejectNote] = useState("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [openConfirmAgreementModal, setOpenConfirmAgreementModal] = useState(
+    false
+  );
   const [openRejectModal, setOpenRejectModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -144,7 +147,20 @@ const Agreement = ({
             {STATUS[InternshipJournal?.status]?.icon ?? "Brak"}
           </span>
           <div className={css.buttons}>
-            {!accepted && <button onClick={handleConfirm}>Zatwierdź</button>}
+            {!accepted && (
+              <button
+                onClick={() => {
+                  if (!PracticeAgreement || !PersonalDataAgreement) {
+                    enqueueSnackbar(
+                      "Nie możesz zatwierdzić umowy, brak dokumentów.",
+                      { variant: "warning" }
+                    );
+                  } else setOpenConfirmAgreementModal(true);
+                }}
+              >
+                Zatwierdź
+              </button>
+            )}
             <button preset="red" onClick={() => setOpenDeleteModal(true)}>
               Usuń
             </button>
@@ -294,6 +310,18 @@ const Agreement = ({
           onConfirm={handleDelete}
         >
           Czy na pewno chcesz usunąć tą umowe?
+          <br />
+          Tej operacji nie da się cofnąć.
+        </ConfirmModal>
+      )}
+      {openConfirmAgreementModal && (
+        <ConfirmModal
+          open={openConfirmAgreementModal}
+          setOpenModal={setOpenConfirmAgreementModal}
+          onDecline={() => setOpenConfirmAgreementModal(false)}
+          onConfirm={handleConfirm}
+        >
+          Czy na pewno chcesz zatwierdzić tę umowę?
           <br />
           Tej operacji nie da się cofnąć.
         </ConfirmModal>

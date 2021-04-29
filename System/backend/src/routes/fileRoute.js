@@ -48,7 +48,7 @@ const fileRoute = async (req, res, next) => {
         }
 
         res.set("Content-Type", "application/pdf");
-        res.send(internshipJournal.file);
+        res.send(documentFile.file);
       } else if (authObject.practiceSuperviser) {
         if (
           !(await models.PracticeSuperviser.findOne({

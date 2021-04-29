@@ -52,8 +52,16 @@ const documentFileResolvers = {
       { models, authObject }
     ) => {
       if (!authObject.student) throw new Error(lang.noPermission);
-      const { DocumentFile } = models;
+      const { DocumentFile, PracticeAgreement } = models;
       try {
+        const practiceAgreement = await PracticeAgreement.findOne({
+          where: { id: PracticeAgreementId },
+        });
+        if (!practiceAgreement) throw new Error(lang.practiceAgreementNotFound);
+        if (practiceAgreement.accepted && type !== DOCUMENT_TYPE.journal)
+          throw new Error(
+            lang.cannotCreateDocumentWhenPracticeAgreementAccepted
+          );
         const { createReadStream } = await file;
         const stream = createReadStream();
 

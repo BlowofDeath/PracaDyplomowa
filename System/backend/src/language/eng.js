@@ -31,6 +31,9 @@ const Errors = {
   companyNotFound: "Company not found",
   noAccessToCreateAgreement: "No access to create practice agreement",
   phoneIsRequired: "Phone is required",
+  practiceAgreementNotFound: "Practice agreement not found",
+  cannotCreateDocumentWhenPracticeAgreementAccepted:
+    "Cannot create document when practice agreement accepted",
 };
 
 export default Errors;

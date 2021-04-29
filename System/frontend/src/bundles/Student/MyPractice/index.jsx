@@ -32,6 +32,7 @@ const MyPractice = () => {
         >
           {data?.myPracticeAgreements.map((practice) => (
             <Practice
+              refetch={refetch}
               key={practice.id}
               {...practice}
               dictionaryUrl={`${match.path}/dictionary`}
