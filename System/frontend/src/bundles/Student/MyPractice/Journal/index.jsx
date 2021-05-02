@@ -9,6 +9,7 @@ import LoadingSpinner from "@components/LoadingSpinner";
 import FileUploadWrapper from "@components/FileUploadWrapper";
 import { IconAccept, IconDecline } from "@icons";
 import useSnackGraphql from "@hooks/useSnackGraphql";
+import { API_URL } from "@config/global";
 
 const Journal = () => {
   const { token } = useAuth();
@@ -26,22 +27,38 @@ const Journal = () => {
 
   if (loading || isLoading) return <LoadingSpinner />;
   console.log(data);
-  const journalId = data?.getDocumentFile?.id;
+
+  const journal = data?.getDocumentFile;
   return (
     <div className={css.container}>
-      {journalId && (
-        <span>
-          <span>Zatwierdzone przez opiekuna praktyk:</span>
-          {data?.getJournal?.accepted ? <IconAccept /> : <IconDecline />}
-        </span>
+      {journal?.id && (
+        <>
+          <span>
+            <span>Zatwierdzone przez opiekuna praktyk:</span>
+            {journal?.status === "accepted" ? (
+              <IconAccept />
+            ) : journal?.status === "rejected" ? (
+              <IconDecline />
+            ) : (
+              " Brak"
+            )}
+          </span>
+          <br />
+          {journal?.rejectNote && (
+            <span>
+              <span>Powód odrzucenia: </span>
+              {journal.rejectNote}
+            </span>
+          )}
+        </>
       )}
 
       <div className={css.wrapper}>
-        {journalId && (
+        {journal?.id && (
           <button
             preset="bright"
             onClick={() =>
-              fetch(`http://localhost:4001/uploads/${journalId}`, {
+              fetch(`${API_URL}/uploads/${journal?.id}`, {
                 headers: new Headers({
                   Authorization: token,
                 }),
@@ -63,7 +80,7 @@ const Journal = () => {
             Dziennik
           </button>
         )}
-        {(!journalId || !data?.getJournal?.status) && (
+        {(!journal?.id || !data?.getJournal?.status) && (
           <div className={css.fileHandler}>
             <FileUploadWrapper onFileSelect={(file) => setFile(file)}>
               <button>Przeglądaj</button>
@@ -73,7 +90,7 @@ const Journal = () => {
         )}
       </div>
 
-      {(!journalId || !data?.getJournal?.status) && (
+      {(!journal?.id || !data?.getJournal?.status) && (
         <>
           <button
             onClick={() => {

@@ -17,6 +17,7 @@ export const GET_JOURNAL = gql`
     getDocumentFile(PracticeAgreementId: $PracticeAgreementId, type: journal) {
       id
       status
+      rejectNote
     }
   }
 `;
