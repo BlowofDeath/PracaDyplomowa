@@ -13,6 +13,7 @@ export const ANNOUNCEMENTS = gql`
       phone
       email
       company_name
+      updatedAt
     }
   }
 `;

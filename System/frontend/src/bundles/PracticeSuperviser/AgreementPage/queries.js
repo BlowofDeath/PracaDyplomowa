@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const AGREEMENTS = gql`
-  query agreements {
-    agreements {
+  query agreements($year: Date) {
+    agreements(year: $year) {
       id
       address
       city

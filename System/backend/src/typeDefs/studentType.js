@@ -4,7 +4,7 @@ const studentType = gql`
   type Query {
     test: String
     meStudent: Student
-    students: [Student]
+    students(year: Date): [Student]
   }
 
   type Student {

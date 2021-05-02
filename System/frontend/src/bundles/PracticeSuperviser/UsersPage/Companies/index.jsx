@@ -7,8 +7,10 @@ import { GET_COMPANIES } from "./queries";
 import LoadingSpinner from "@components/LoadingSpinner";
 import searchHelper from "@utility/searchHelper";
 
-const Companies = ({ search }) => {
-  const { loading, error, data } = useQuery(GET_COMPANIES);
+const Companies = ({ search, yearFilter }) => {
+  const { loading, error, data } = useQuery(GET_COMPANIES, {
+    variables: { year: yearFilter },
+  });
 
   if (loading) return <LoadingSpinner />;
   if (error) return "error";

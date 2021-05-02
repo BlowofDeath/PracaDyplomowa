@@ -4,3 +4,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.yearPicker {
+  margin-right: 10px;
+}

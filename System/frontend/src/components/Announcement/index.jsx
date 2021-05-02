@@ -33,6 +33,7 @@ const Announcement = ({
   announcements,
   setAnnouncements,
   refetch,
+  updatedAt,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -77,7 +78,10 @@ const Announcement = ({
 
   return (
     <Container className={css.container}>
-      <h2>{header}</h2>
+      <div className={css.header}>
+        <h2>{header}</h2> <span>{dayjs(updatedAt).format("DD/MM/YYYY")}</span>
+      </div>
+
       <span>
         <span>Nazwa firmy: </span>
         {company_name}

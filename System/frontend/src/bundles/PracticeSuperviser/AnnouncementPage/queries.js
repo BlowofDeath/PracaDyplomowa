@@ -14,6 +14,7 @@ export const ANNOUNCEMENTS = gql`
       email
       phone
       company_name
+      updatedAt
     }
   }
 `;

@@ -7,8 +7,10 @@ import { GET_STUDENTS } from "./queries";
 import LoadingSpinner from "@components/LoadingSpinner";
 import searchHelper from "@utility/searchHelper";
 
-const Students = ({ search }) => {
-  const { loading, error, data } = useQuery(GET_STUDENTS);
+const Students = ({ search, yearFilter }) => {
+  const { loading, error, data } = useQuery(GET_STUDENTS, {
+    variables: { year: yearFilter },
+  });
 
   if (loading) return <LoadingSpinner />;
   if (error) return "error";

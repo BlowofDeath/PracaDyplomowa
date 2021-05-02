@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_STUDENTS = gql`
-  query students {
-    students {
+  query students($year: Date) {
+    students(year: $year) {
       id
       index_number
       email

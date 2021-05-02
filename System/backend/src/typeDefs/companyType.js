@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 const companyType = gql`
   type Query {
     meCompany: Company
-    companies: [Company]
+    companies(year: Date): [Company]
   }
 
   type Company {

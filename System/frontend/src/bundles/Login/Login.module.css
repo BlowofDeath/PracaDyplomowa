@@ -18,7 +18,8 @@
   margin-top: 20px;
 }
 
-.form label {
+.form > div > label {
+  margin-right: 24px;
 }
 
 .title {

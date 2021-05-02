@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 import Tabs from "@components/Tabs";
 import useAuth from "@hooks/useAuth";
@@ -10,12 +11,15 @@ import Companies from "./Companies";
 import css from "./UsersPage.module.css";
 import AddUserModal from "@components/AddUserModal";
 import SearchInput from "@components/SearchInput";
+import { globalDatePickerValueAtom } from "@config/userRecoilAtoms";
+import YearPicker from "@components/YearPicker";
 
 const UsersPage = () => {
   const { userType } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState("");
   const [tabValue, setTabValue] = useState(0);
+  const [yearFilter, setYearFilter] = useRecoilState(globalDatePickerValueAtom);
 
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
   return (
@@ -36,14 +40,23 @@ const UsersPage = () => {
             <Tabs.Tab label="Studenci" />
             <Tabs.Tab label="Firmy" />
           </Tabs>
-          <SearchInput
-            className={css.searchInput}
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+          <div>
+            <YearPicker
+              className={css.yearPicker}
+              onChange={setYearFilter}
+              year={yearFilter}
+            />
+            <SearchInput
+              className={css.searchInput}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
         </div>
-        {tabValue === 0 && <Students search={search} />}
-        {tabValue === 1 && <Companies search={search} />}
+        {tabValue === 0 && <Students search={search} yearFilter={yearFilter} />}
+        {tabValue === 1 && (
+          <Companies search={search} yearFilter={yearFilter} />
+        )}
       </Page>
       {openModal && (
         <AddUserModal open={openModal} setOpenModal={setOpenModal} />

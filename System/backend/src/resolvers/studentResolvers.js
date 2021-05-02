@@ -2,6 +2,7 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { signJWT, verifyJWT } from "../utility/jwtTool";
+import sequelize from "sequelize";
 import lang from "../language";
 import getRandomColor from "../utility/getRandomColor";
 import capitalize from "../utility/capitalize";
@@ -17,10 +18,17 @@ const studentResolvers = {
       }
       return null;
     },
-    students: async (_, args, { models, authObject }) => {
+    students: async (_, { year }, { models, authObject }) => {
       const { Student } = models;
       if (authObject.practiceSuperviser) {
-        return await Student.findAll();
+        if (year)
+          return await Student.findAll({
+            where: sequelize.where(
+              sequelize.fn("YEAR", sequelize.col("createdAt")),
+              year
+            ),
+          });
+        else return await Student.findAll();
       } else throw new AuthenticationError(lang.noPermission);
     },
   },

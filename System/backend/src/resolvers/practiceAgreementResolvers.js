@@ -2,7 +2,7 @@ import validator from "validator";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import lang from "../language";
 import capitalize from "../utility/capitalize";
-import { Op } from "sequelize";
+import sequelize, { Op } from "sequelize";
 
 const practiceAgreementResolvers = {
   Query: {
@@ -19,15 +19,31 @@ const practiceAgreementResolvers = {
         throw new Error(lang.noPermission);
       }
     },
-    agreements: async (_, args, { models, authObject }) => {
+    agreements: async (_, { year }, { models, authObject }) => {
       const { PracticeAgreement, DocumentFile, Student } = models;
       if (authObject && authObject.practiceSuperviser) {
-        return await PracticeAgreement.findAll({
-          include: [
-            Student,
-            { model: DocumentFile, attributes: { exclude: ["file"] } },
-          ],
-        });
+        if (year)
+          return await PracticeAgreement.findAll({
+            where: sequelize.where(
+              sequelize.fn(
+                "YEAR",
+                sequelize.col("PracticeAgreement.createdAt")
+              ),
+              year
+            ),
+            include: [
+              Student,
+              { model: DocumentFile, attributes: { exclude: ["file"] } },
+            ],
+          });
+        else {
+          return await PracticeAgreement.findAll({
+            include: [
+              Student,
+              { model: DocumentFile, attributes: { exclude: ["file"] } },
+            ],
+          });
+        }
       } else {
         throw new Error(lang.noPermission);
       }

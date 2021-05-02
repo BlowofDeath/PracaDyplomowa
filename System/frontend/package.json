@@ -25,6 +25,7 @@
     "react-merge-refs": "^1.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-select": "^4.3.0",
     "react-tooltip": "^4.2.17",
     "recoil": "^0.1.2",
     "validator": "^13.5.2"

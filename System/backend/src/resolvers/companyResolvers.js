@@ -1,6 +1,8 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
+import sequelize from "sequelize";
+
 import { signJWT, verifyJWT } from "../utility/jwtTool";
 import lang from "../language";
 import getRandomColor from "../utility/getRandomColor";
@@ -19,10 +21,17 @@ const companyResolvers = {
       }
       return null;
     },
-    companies: async (_, args, { models, authObject }) => {
+    companies: async (_, { year }, { models, authObject }) => {
       const { Company } = models;
       if (authObject.practiceSuperviser) {
-        return await Company.findAll();
+        if (year)
+          return await Company.findAll({
+            where: sequelize.where(
+              sequelize.fn("YEAR", sequelize.col("createdAt")),
+              year
+            ),
+          });
+        else return await Company.findAll();
       } else throw new AuthenticationError(lang.noPermission);
     },
   },

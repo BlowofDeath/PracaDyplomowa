@@ -15,6 +15,7 @@ export const ANNOUNCEMENTS = gql`
       email
       company_name
       CompanyId
+      updatedAt
     }
   }
 `;

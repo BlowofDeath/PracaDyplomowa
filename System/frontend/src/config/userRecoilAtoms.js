@@ -14,3 +14,8 @@ export const practiceSuperviserAtom = atom({
   key: "practiceSuperviserAtom",
   default: null,
 });
+
+export const globalDatePickerValueAtom = atom({
+  key: "globalDatePickerValue",
+  default: new Date().getFullYear(),
+});

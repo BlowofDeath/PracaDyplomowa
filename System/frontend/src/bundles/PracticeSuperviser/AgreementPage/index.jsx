@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import { useRecoilState } from "recoil";
 
 import Tabs from "@components/Tabs";
 import useAuth from "@hooks/useAuth";
@@ -12,10 +13,15 @@ import Agreement from "@components/Agreement";
 import LoadingSpinner from "@components/LoadingSpinner";
 import SearchInput from "@components/SearchInput";
 import searchHelper from "@utility/searchHelper";
+import YearPicker from "@components/YearPicker";
+import { globalDatePickerValueAtom } from "@config/userRecoilAtoms";
 
 const AgreementPage = () => {
   const { userType } = useAuth();
-  const { loading, error, data, refetch } = useQuery(AGREEMENTS);
+  const [yearFilter, setYearFilter] = useRecoilState(globalDatePickerValueAtom);
+  const { loading, error, data, refetch } = useQuery(AGREEMENTS, {
+    variables: { year: yearFilter },
+  });
   const [tabValue, setTabValue] = useState(0);
   const [agreements, setAgreements] = useState([]);
   const [search, setSearch] = useState("");
@@ -59,6 +65,7 @@ const AgreementPage = () => {
   };
 
   if (userType !== USER_TYPES.practiceSuperviser) return <Redirect to="/" />;
+  if (loading) return <LoadingSpinner global />;
   return (
     <>
       {loading && <LoadingSpinner global />}
@@ -73,11 +80,18 @@ const AgreementPage = () => {
             <Tabs.Tab label="Zatwierdzone" />
             <Tabs.Tab label="Oczekujące" />
           </Tabs>
-          <SearchInput
-            className={css.searchInput}
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+          <div>
+            <YearPicker
+              className={css.yearPicker}
+              onChange={setYearFilter}
+              year={yearFilter}
+            />
+            <SearchInput
+              className={css.searchInput}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
         </div>
         <div className={css.agreements}>
           {tabValue === 0 && getAgreements(true)}

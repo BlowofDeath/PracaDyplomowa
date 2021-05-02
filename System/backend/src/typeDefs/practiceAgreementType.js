@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 const practiceAgreementType = gql`
   type Query {
     myPracticeAgreements: [PracticeAgreement]
-    agreements: [PracticeAgreement]
+    agreements(year: Date): [PracticeAgreement]
   }
 
   type PracticeAgreement {
