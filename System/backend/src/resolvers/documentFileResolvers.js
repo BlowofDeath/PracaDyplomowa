@@ -27,6 +27,7 @@ const documentFileResolvers = {
     ) => {
       const { DocumentFile, PracticeAgreement } = models;
       const documentFile = await DocumentFile.findOne({
+        attributes: { exclude: ["file"] },
         where: { PracticeAgreementId, type },
         include: PracticeAgreement,
       });

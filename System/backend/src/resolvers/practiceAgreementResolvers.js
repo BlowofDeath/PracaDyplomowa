@@ -10,7 +10,7 @@ const practiceAgreementResolvers = {
       const { PracticeAgreement, DocumentFile } = models;
       if (authObject && authObject.student) {
         return await PracticeAgreement.findAll({
-          include: [DocumentFile],
+          include: [{ model: DocumentFile, attributes: { exclude: ["file"] } }],
           where: {
             StudentId: authObject.student,
           },
@@ -23,7 +23,10 @@ const practiceAgreementResolvers = {
       const { PracticeAgreement, DocumentFile, Student } = models;
       if (authObject && authObject.practiceSuperviser) {
         return await PracticeAgreement.findAll({
-          include: [Student, DocumentFile],
+          include: [
+            Student,
+            { model: DocumentFile, attributes: { exclude: ["file"] } },
+          ],
         });
       } else {
         throw new Error(lang.noPermission);
