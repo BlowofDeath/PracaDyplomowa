@@ -1,0 +1,12 @@
+.content {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+.formGroup {
+  margin-right: 14px;
+}
+
+.formGroup > div {
+  margin-top: 8px;
+}

@@ -135,8 +135,13 @@ const practiceAnnouncementResolvers = {
       },
       { models, authObject }
     ) => {
-      const { PracticeAnnouncement } = models;
-      if (authObject && authObject.practiceSuperviser) {
+      const { PracticeAnnouncement, PracticeSuperviser, Company } = models;
+
+      if (authObject.practiceSuperviser) {
+        const practiceSuperviser = await PracticeSuperviser.findOne({
+          where: { id: authObject.practiceSuperviser },
+        });
+        if (!practiceSuperviser) throw new Error(lang.noPermission);
         const practiceAnnouncement = await PracticeAnnouncement.findOne({
           where: { id },
         });
@@ -154,7 +159,11 @@ const practiceAnnouncementResolvers = {
         } else {
           throw new UserInputError(lang.objectNotFound);
         }
-      } else if (authObject && authObject.company) {
+      } else if (authObject.company) {
+        const company = await Company.findOne({
+          where: { id: authObject.company },
+        });
+        if (!company) throw new Error(lang.noPermission);
         const practiceAnnouncement = await PracticeAnnouncement.findOne({
           where: { id, CompanyId: authObject.company },
         });
@@ -165,6 +174,9 @@ const practiceAnnouncementResolvers = {
           if (description) practiceAnnouncement.description = description;
           if (from) practiceAnnouncement.from = from;
           if (to) practiceAnnouncement.to = to;
+          practiceAnnouncement.company_name = company.name;
+          practiceAnnouncement.phone = company.phone;
+
           return await practiceAnnouncement.save();
         } else {
           throw new UserInputError(lang.objectNotFound);

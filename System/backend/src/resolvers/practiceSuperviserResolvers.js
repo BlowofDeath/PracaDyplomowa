@@ -110,6 +110,39 @@ const practiceSuperviserResolvers = {
       await invitation.destroy();
       return { token: userToken, practiceSuperviser };
     },
+    updatePracticeSuperviserProfile: async (
+      _,
+      { first_name, last_name, password, confirmPassword },
+      { models, authObject }
+    ) => {
+      const { PracticeSuperviser } = models;
+      if (!authObject.practiceSuperviser) throw new Error(lang.noPermission);
+      const practiceSuperviser = await PracticeSuperviser.findOne({
+        where: { id: authObject.practiceSuperviser },
+      });
+      if (!practiceSuperviser) throw new Error(lang.userNotFound);
+      if (first_name) {
+        if (!validator.isLength(first_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.firstNameValidation);
+        practiceSuperviser.first_name = first_name;
+      }
+      if (last_name) {
+        if (!validator.isLength(last_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.lastNameValidation);
+        practiceSuperviser.last_name = last_name;
+      }
+      if (password) {
+        if (!validator.isLength(password, { min: 8, max: undefined }))
+          throw new UserInputError(lang.passwordValidation);
+        if (password !== confirmPassword)
+          throw new UserInputError(lang.passwordsIdentical);
+        password = bcrypt.hashSync(password, 10);
+        practiceSuperviser.password = password;
+      }
+
+      await practiceSuperviser.save();
+      return practiceSuperviser;
+    },
   },
 };
 

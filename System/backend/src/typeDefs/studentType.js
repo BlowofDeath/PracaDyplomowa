@@ -38,6 +38,12 @@ const studentType = gql`
       confirm_password: String!
       index_number: Int!
     ): StudentAuth!
+    updateStudentProfile(
+      first_name: String
+      last_name: String
+      password: String
+      confirmPassword: String
+    ): Student
   }
 `;
 

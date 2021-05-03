@@ -7,6 +7,12 @@ export const GET_COMPANY = gql`
       email
       phone
       name
+      first_name
+      last_name
+      color
+      city
+      address
+      phone
     }
   }
 `;

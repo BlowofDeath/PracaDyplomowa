@@ -52,7 +52,14 @@ const Navbar = () => {
           {student && student.email}
         </a>
         <ActionMenu ref={anchorEl} closeMenu={closeMenu}>
-          {/* <ActionMenu.Item onClick={closeMenu}>Profil</ActionMenu.Item> */}
+          <ActionMenu.Item
+            onClick={() => {
+              closeMenu();
+              history.push("/profile");
+            }}
+          >
+            Profil
+          </ActionMenu.Item>
           <ActionMenu.Item
             onClick={() => {
               closeMenu();

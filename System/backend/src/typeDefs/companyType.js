@@ -16,7 +16,6 @@ const companyType = gql`
     city: String!
     address: String!
     phone: String
-    CompanyId: ID
   }
 
   type CompanyAuth {
@@ -47,6 +46,16 @@ const companyType = gql`
       address: String!
       phone: String
     ): CompanyAuth!
+    updateCompanyProfile(
+      first_name: String
+      last_name: String
+      name: String
+      password: String
+      confirmPassword: String
+      phone: String
+      city: String
+      address: String
+    ): Company
   }
 `;
 

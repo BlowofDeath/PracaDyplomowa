@@ -5,6 +5,8 @@ import { Switch, Route, useHistory } from "react-router-dom";
 
 import MyPractice from "./MyPractice";
 import AnnouncementPage from "./AnnouncementPage";
+import Profile from "../Profile";
+import NotFound from "@components/NotFound";
 import { studentAtom } from "@config/userRecoilAtoms";
 import { GET_STUDENT } from "./queries.js";
 
@@ -34,6 +36,12 @@ const Student = () => {
         </Route>
         <Route path="/mypractice">
           <MyPractice />
+        </Route>
+        <Route exact path="/profile">
+          <Profile />
+        </Route>
+        <Route>
+          <NotFound />
         </Route>
       </Switch>
     </>

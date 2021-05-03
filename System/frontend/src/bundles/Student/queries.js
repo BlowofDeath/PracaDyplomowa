@@ -4,6 +4,9 @@ export const GET_STUDENT = gql`
   query meStudent {
     meStudent {
       email
+      first_name
+      last_name
+      index_number
     }
   }
 `;

@@ -128,6 +128,49 @@ const studentResolvers = {
       await invitation.destroy();
       return { token: userToken, student };
     },
+    updateStudentProfile: async (
+      _,
+      { first_name, last_name, password, confirmPassword, index_number },
+      { models, authObject }
+    ) => {
+      const { Student } = models;
+      if (!authObject.student) throw new Error(lang.noPermission);
+      const student = await Student.findOne({
+        where: {
+          id: authObject.student,
+        },
+      });
+
+      if (!student) throw new Error(lang.userNotFound);
+      if (last_name) {
+        if (!validator.isLength(last_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.lastNameValidation);
+        student.last_name = last_name;
+      }
+      if (first_name) {
+        if (!validator.isLength(first_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.firstNameValidation);
+
+        student.first_name = first_name;
+      }
+
+      if (index_number) student.index_number = index_number;
+
+      if (password) {
+        if (!validator.isLength(password, { min: 8, max: undefined }))
+          throw new UserInputError(lang.passwordValidation);
+
+        if (password !== confirmPassword)
+          throw new UserInputError(lang.passwordsIdentical);
+
+        password = bcrypt.hashSync(password, 10);
+        student.password = password;
+      }
+
+      await student.save();
+
+      return student;
+    },
   },
 };
 

@@ -36,6 +36,12 @@ const practiceSuperviserType = gql`
       password: String!
       confirm_password: String!
     ): PracticeSuperviserAuth!
+    updatePracticeSuperviserProfile(
+      first_name: String
+      last_name: String
+      password: String
+      confirmPassword: String
+    ): PracticeSuperviser
   }
 `;
 

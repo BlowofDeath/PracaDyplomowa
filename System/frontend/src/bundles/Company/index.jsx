@@ -5,6 +5,8 @@ import { useLazyQuery } from "@apollo/client";
 
 import css from "./Company.module.css";
 import AnnouncementPage from "./AnnouncementPage";
+import NotFound from "@components/NotFound";
+import Profile from "../Profile";
 import { companyAtom } from "@config/userRecoilAtoms";
 import { GET_COMPANY } from "./queries.js";
 
@@ -37,6 +39,12 @@ const Company = () => {
             <Route exact path="/agreement">
               <AgreementPage />
             </Route> */}
+        <Route exact path="/profile">
+          <Profile />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
       </Switch>
     </>
   );

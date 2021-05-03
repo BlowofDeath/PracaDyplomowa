@@ -152,6 +152,69 @@ const companyResolvers = {
       await invitation.destroy();
       return { token: userToken, company };
     },
+    updateCompanyProfile: async (
+      _,
+      {
+        name,
+        first_name,
+        last_name,
+        password,
+        confirmPassword,
+        phone,
+        city,
+        addres,
+      },
+      { authObject, models }
+    ) => {
+      const { Company } = models;
+      if (!authObject.company) throw new Error(lang.noPermission);
+      const company = await Company.findOne({
+        where: { id: authObject.company },
+      });
+      if (!company) throw new Error(lang.userNotFound);
+
+      if (password) {
+        if (!validator.isLength(password, { min: 8, max: undefined }))
+          throw new UserInputError(lang.passwordValidation);
+        if (password !== confirmPassword)
+          throw new UserInputError(lang.passwordsIdentical);
+        password = bcrypt.hashSync(password, 10);
+        company.password = password;
+      }
+      if (first_name) {
+        if (!validator.isLength(first_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.firstNameValidation);
+        company.first_name = first_name;
+      }
+      if (last_name) {
+        if (!validator.isLength(last_name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.lastNameValidation);
+        company.last_name = last_name;
+      }
+      if (name) {
+        if (!validator.isLength(name, { min: 3, max: undefined }))
+          throw new UserInputError(lang.nameValidation);
+        company.name = name;
+      }
+      if (city) {
+        if (!validator.isLength(city, { min: 3, max: undefined }))
+          throw new UserInputError(lang.cityValidation);
+        company.city = city;
+      }
+      if (addres) {
+        if (!validator.isLength(address, { min: 3, max: undefined }))
+          throw new UserInputError(lang.addressValidation);
+        company.addres = addres;
+      }
+
+      if (phone) {
+        company.phone = phone;
+      }
+
+      await company.save();
+
+      return company;
+    },
   },
 };
 

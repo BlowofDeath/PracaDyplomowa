@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: calc(100vh - 70px);
+}
+
+.content {
+  padding: 20px 100px;
+  border-radius: 24px;
+  background-color: var(--theme-color-two);
+  text-align: center;
+}

@@ -6,6 +6,9 @@ import { useRecoilState } from "recoil";
 import AnnouncementPage from "./AnnouncementPage";
 import AgreementPage from "./AgreementPage";
 import UsersPage from "./UsersPage";
+import NotFound from "@components/NotFound";
+import Profile from "../Profile";
+
 import { practiceSuperviserAtom } from "@config/userRecoilAtoms";
 import { GET_PRACTICE_SUPERVISER } from "./queries.js";
 
@@ -42,6 +45,12 @@ const PracticeSuperviser = () => {
         </Route>
         <Route exact path="/agreements">
           <AgreementPage />
+        </Route>
+        <Route exact path="/profile">
+          <Profile />
+        </Route>
+        <Route>
+          <NotFound />
         </Route>
       </Switch>
     </>

@@ -6,8 +6,8 @@ import css from "./YearPicker.module.css";
 const YearPicker = ({ className, onChange, year }) => {
   const now = new Date().getFullYear();
   const years = Array.from(
-    new Array(15),
-    (val, index) => index - 6 + Number(now)
+    new Array(16),
+    (val, index) => index - 8 + Number(now)
   );
   return (
     <>
