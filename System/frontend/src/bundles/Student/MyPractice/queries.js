@@ -18,6 +18,14 @@ export const MY_PRACTICE_AGREEMENTS = gql`
         type
         rejectNote
       }
+      Company {
+        id
+        first_name
+        last_name
+        name
+        color
+      }
+      company_accepted
     }
   }
 `;

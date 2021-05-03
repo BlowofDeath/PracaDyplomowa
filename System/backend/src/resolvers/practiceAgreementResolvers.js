@@ -7,10 +7,13 @@ import sequelize, { Op } from "sequelize";
 const practiceAgreementResolvers = {
   Query: {
     myPracticeAgreements: async (_, args, { models, authObject }) => {
-      const { PracticeAgreement, DocumentFile } = models;
+      const { PracticeAgreement, DocumentFile, Company } = models;
       if (authObject && authObject.student) {
         return await PracticeAgreement.findAll({
-          include: [{ model: DocumentFile, attributes: { exclude: ["file"] } }],
+          include: [
+            { model: DocumentFile, attributes: { exclude: ["file"] } },
+            Company,
+          ],
           where: {
             StudentId: authObject.student,
           },
@@ -20,7 +23,7 @@ const practiceAgreementResolvers = {
       }
     },
     agreements: async (_, { year }, { models, authObject }) => {
-      const { PracticeAgreement, DocumentFile, Student } = models;
+      const { PracticeAgreement, DocumentFile, Student, Company } = models;
       if (authObject && authObject.practiceSuperviser) {
         if (year)
           return await PracticeAgreement.findAll({
@@ -34,6 +37,7 @@ const practiceAgreementResolvers = {
             include: [
               Student,
               { model: DocumentFile, attributes: { exclude: ["file"] } },
+              Company,
             ],
           });
         else {
@@ -41,6 +45,38 @@ const practiceAgreementResolvers = {
             include: [
               Student,
               { model: DocumentFile, attributes: { exclude: ["file"] } },
+              Company,
+            ],
+          });
+        }
+      } else if (authObject && authObject.company) {
+        if (year)
+          return await PracticeAgreement.findAll({
+            where: {
+              [Op.and]: [
+                sequelize.where(
+                  sequelize.fn(
+                    "YEAR",
+                    sequelize.col("PracticeAgreement.createdAt")
+                  ),
+                  year
+                ),
+                { CompanyId: authObject.company },
+              ],
+            },
+            include: [
+              Student,
+              { model: DocumentFile, attributes: { exclude: ["file"] } },
+              Company,
+            ],
+          });
+        else {
+          return await PracticeAgreement.findAll({
+            where: { CompanyId: authObject.company },
+            include: [
+              Student,
+              { model: DocumentFile, attributes: { exclude: ["file"] } },
+              Company,
             ],
           });
         }
@@ -88,6 +124,45 @@ const practiceAgreementResolvers = {
 
       return practiceAgreement;
     },
+    createApplication: async (
+      _,
+      { CompanyId, to, from },
+      { models, authObject }
+    ) => {
+      const { Company, Student, PracticeAgreement } = models;
+      if (!authObject.student) throw new Error(lang.noPermission);
+      const student = await Student.findOne({
+        where: { id: authObject.student },
+      });
+      if (!student) throw new Error(lang.userNotFound);
+      const company = await Company.findOne({ where: { id: CompanyId } });
+      if (!company) throw new Error(lang.companyNotFound);
+      if (!id) throw new Error(lang.idNotFound);
+      let practiceAgreement = await PracticeAgreement.findOne({
+        where: {
+          PracticeAnnouncementId: id,
+          CompanyId: company.id,
+          StudentId: authObject.student,
+        },
+      });
+      if (practiceAgreement)
+        throw new UserInputError(lang.agreementAlreadyExists);
+
+      practiceAgreement = await PracticeAgreement.create({
+        city: capitalize(company.city),
+        address: capitalize(company.address),
+        to,
+        from,
+        phone: company.phone,
+        email: company.email,
+        company_name: capitalize(company.name),
+        StudentId: authObject.student,
+        accepted: false,
+        CompanyId: company.id,
+        PracticeAnnouncementId: id,
+      });
+      return practiceAgreement;
+    },
     deletePracticeAgreement: async (_, { id }, { models, authObject }) => {
       const { PracticeAgreement } = models;
       if (authObject && authObject.practiceSuperviser) {
@@ -104,6 +179,16 @@ const practiceAgreementResolvers = {
         });
         if (practiceAgreement) {
           practiceAgreement.accepted = true;
+          return await practiceAgreement.save();
+        } else {
+          throw new UserInputError(lang.objectNotFound);
+        }
+      } else if (authObject && authObject.company) {
+        const practiceAgreement = await PracticeAgreement.findOne({
+          where: { id, CompanyId: authObject.company },
+        });
+        if (practiceAgreement) {
+          practiceAgreement.company_accepted = true;
           return await practiceAgreement.save();
         } else {
           throw new UserInputError(lang.objectNotFound);
@@ -162,6 +247,24 @@ const practiceAgreementResolvers = {
         } else {
           throw new UserInputError(lang.objectNotFound);
         }
+      } else {
+        throw new AuthenticationError(lang.noPermission);
+      }
+    },
+    rejectCompanyAgreement: async (_, { id }, { models, authObject }) => {
+      const { PracticeAgreement, Company } = models;
+      if (authObject && authObject.company) {
+        const company = await Company.findOne({
+          where: { id: authObject.company },
+        });
+        if (!company) throw new Error(lang.noPermission);
+        const practiceAgreement = await PracticeAgreement.findOne({
+          where: { id, CompanyId: authObject.company },
+        });
+        if (!practiceAgreement) throw new Error(lang.objectNotFound);
+        practiceAgreement.company_accepted = false;
+        await practiceAgreement.save();
+        return practiceAgreement;
       } else {
         throw new AuthenticationError(lang.noPermission);
       }

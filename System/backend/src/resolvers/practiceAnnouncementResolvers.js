@@ -10,21 +10,22 @@ const practiceAnnouncementResolvers = {
       return "It is work!!";
     },
     practiceAnnouncements: async (_, args, { models, authObject }) => {
-      const { PracticeAnnouncement } = models;
+      const { PracticeAnnouncement, Company } = models;
       if (authObject && authObject.practiceSuperviser) {
-        return await PracticeAnnouncement.findAll();
+        return await PracticeAnnouncement.findAll({
+          include: [Company],
+        });
       } else if (authObject && authObject.company) {
         return await PracticeAnnouncement.findAll({
           where: {
-            [Op.or]: [
-              { accepted: true },
-              { accepted: false, CompanyId: authObject.company },
-            ],
+            [Op.or]: [{ accepted: true }, { CompanyId: authObject.company }],
           },
+          include: [Company],
         });
       }
       const announcements = await PracticeAnnouncement.findAll({
         where: { accepted: true },
+        include: [Company],
       });
       return announcements;
     },

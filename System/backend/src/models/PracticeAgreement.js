@@ -3,6 +3,7 @@ import db from "../database/db";
 
 const PracticeAgreement = db.define("PracticeAgreement", {
   accepted: Sequelize.BOOLEAN,
+  company_accepted: Sequelize.BOOLEAN,
   from: Sequelize.DATE,
   to: Sequelize.DATE,
   company_name: Sequelize.STRING,

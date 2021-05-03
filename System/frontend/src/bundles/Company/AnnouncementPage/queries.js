@@ -16,6 +16,12 @@ export const ANNOUNCEMENTS = gql`
       company_name
       CompanyId
       updatedAt
+      Company {
+        name
+        first_name
+        last_name
+        color
+      }
     }
   }
 `;

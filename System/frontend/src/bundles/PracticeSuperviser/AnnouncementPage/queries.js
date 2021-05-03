@@ -15,6 +15,12 @@ export const ANNOUNCEMENTS = gql`
       phone
       company_name
       updatedAt
+      Company {
+        name
+        first_name
+        last_name
+        color
+      }
     }
   }
 `;

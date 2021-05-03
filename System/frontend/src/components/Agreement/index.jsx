@@ -7,6 +7,7 @@ import clsx from "clsx";
 
 import css from "./Agreement.module.css";
 import Container from "@components/Container";
+import CompanyAvatar from "@components/CompanyAvatar";
 import ConfirmModal from "@components/ConfirmModal";
 import {
   CONFIRM_PRACTICE_AGREEMENT,
@@ -40,6 +41,8 @@ const Agreement = ({
   setAgreements,
   DocumentFiles,
   refetch,
+  company_accepted,
+  Company,
   className,
 }) => {
   const [confirmPracticeAgreement] = useMutation(CONFIRM_PRACTICE_AGREEMENT);
@@ -142,10 +145,23 @@ const Agreement = ({
           <span>
             <span>Email:</span> {Student.email}
           </span>
+          {Company && (
+            <span>
+              <span>Zgoda firmy: </span>
+              {company_accepted ? (
+                <IconAccept />
+              ) : company_accepted === false ? (
+                <IconDecline />
+              ) : (
+                "Brak"
+              )}
+            </span>
+          )}
           <span>
-            <span>Status dziennika:</span>{" "}
+            <span>Status dziennika: </span>
             {STATUS[InternshipJournal?.status]?.icon ?? "Brak"}
           </span>
+
           <div className={css.buttons}>
             {!accepted && (
               <button
@@ -153,6 +169,11 @@ const Agreement = ({
                   if (!PracticeAgreement || !PersonalDataAgreement) {
                     enqueueSnackbar(
                       "Nie możesz zatwierdzić umowy, brak dokumentów.",
+                      { variant: "warning" }
+                    );
+                  } else if (Company && !company_accepted) {
+                    enqueueSnackbar(
+                      "Umowa musi być najpierw zatwierdzona przez firmę.",
                       { variant: "warning" }
                     );
                   } else setOpenConfirmAgreementModal(true);
@@ -211,6 +232,12 @@ const Agreement = ({
         </div>
         <div className={css.block}>
           <h3>Dane firmy</h3>
+          {Company && (
+            <CompanyAvatar color={Company.color} className={css.companyAvatar}>
+              {Company.name.charAt(0)}-{Company.first_name.charAt(0)}
+              {Company.last_name.charAt(0)}
+            </CompanyAvatar>
+          )}
           <span>
             <span>Nazwa firmy: </span>
             {company_name}
@@ -241,63 +268,56 @@ const Agreement = ({
         <div className={css.block}>
           <h3>Dokumenty</h3>
           <div className={css.agreements}>
-            {InternshipJournal && (
-              <>
-                {PracticeAgreement && (
-                  <button
-                    onClick={() => {
-                      setIsLoading(true);
-                      return fetch(
-                        `${API_URL}/uploads/${PracticeAgreement.id}`,
-                        {
-                          headers: new Headers({
-                            Authorization: token,
-                          }),
-                        }
-                      )
-                        .then((response) => response.blob())
-                        .then((blob) => {
-                          const url = window.URL.createObjectURL(blob);
-                          window.open(url);
-                          setIsLoading(false);
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                          setIsLoading(false);
-                        });
-                    }}
-                  >
-                    Umowa o praktyki
-                  </button>
-                )}
-                {PersonalDataAgreement && (
-                  <button
-                    onClick={() => {
-                      setIsLoading(true);
-                      return fetch(
-                        `${API_URL}/uploads/${PersonalDataAgreement.id}`,
-                        {
-                          headers: new Headers({
-                            Authorization: token,
-                          }),
-                        }
-                      )
-                        .then((response) => response.blob())
-                        .then((blob) => {
-                          const url = window.URL.createObjectURL(blob);
-                          window.open(url);
-                          setIsLoading(false);
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                          setIsLoading(false);
-                        });
-                    }}
-                  >
-                    Umowa o danych osobowych
-                  </button>
-                )}
-              </>
+            {PracticeAgreement && (
+              <button
+                onClick={() => {
+                  setIsLoading(true);
+                  return fetch(`${API_URL}/uploads/${PracticeAgreement.id}`, {
+                    headers: new Headers({
+                      Authorization: token,
+                    }),
+                  })
+                    .then((response) => response.blob())
+                    .then((blob) => {
+                      const url = window.URL.createObjectURL(blob);
+                      window.open(url);
+                      setIsLoading(false);
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      setIsLoading(false);
+                    });
+                }}
+              >
+                Umowa o praktyki
+              </button>
+            )}
+            {PersonalDataAgreement && (
+              <button
+                onClick={() => {
+                  setIsLoading(true);
+                  return fetch(
+                    `${API_URL}/uploads/${PersonalDataAgreement.id}`,
+                    {
+                      headers: new Headers({
+                        Authorization: token,
+                      }),
+                    }
+                  )
+                    .then((response) => response.blob())
+                    .then((blob) => {
+                      const url = window.URL.createObjectURL(blob);
+                      window.open(url);
+                      setIsLoading(false);
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      setIsLoading(false);
+                    });
+                }}
+              >
+                Umowa o danych osobowych
+              </button>
             )}
           </div>
         </div>

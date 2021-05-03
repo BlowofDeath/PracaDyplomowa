@@ -27,10 +27,6 @@ export const AGREEMENTS = gql`
       }
       Company {
         id
-        name
-        first_name
-        last_name
-        color
       }
       company_accepted
     }

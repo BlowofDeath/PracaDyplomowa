@@ -23,3 +23,8 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.companyAvatar {
+  width: 70px;
+  margin-bottom: 8px;
+}

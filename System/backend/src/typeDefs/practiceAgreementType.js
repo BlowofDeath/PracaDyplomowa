@@ -19,6 +19,8 @@ const practiceAgreementType = gql`
     StudentId: ID!
     Student: Student
     DocumentFiles: [DocumentFile]
+    Company: Company
+    company_accepted: Boolean
   }
 
   type Mutation {
@@ -44,6 +46,13 @@ const practiceAgreementType = gql`
       city: String!
       address: String!
     ): PracticeAgreement
+    createApplication(
+      id: ID!
+      CompanyId: ID!
+      from: Date!
+      to: Date!
+    ): PracticeAgreement
+    rejectCompanyAgreement(id: ID!): PracticeAgreement
   }
 `;
 

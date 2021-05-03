@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
 import { useMutation } from "@apollo/client";
-import { useSnackbar } from "notistack";
 import { useRecoilState } from "recoil";
+import { useHistory } from "react-router-dom";
 
 import css from "./Announcement.module.css";
 import Container from "@components/Container";
@@ -10,9 +10,13 @@ import useAuth from "@hooks/useAuth";
 import USER_TYPES from "@config/userTypes";
 import ConfirmModal from "@components/ConfirmModal";
 import EditAnnouncementModal from "@components/EditAnnouncementModal";
+import CompanyAvatar from "@components/CompanyAvatar";
+import useSnackGraphql from "@hooks/useSnackGraphql";
+
 import {
   DELETE_PRACTICE_ANNOUNCEMENT,
   CONFIRM_PRACTICE_ANNOUNCEMENT,
+  CREATE_APPLICATION,
 } from "./queries";
 import { companyAtom } from "@config/userRecoilAtoms";
 import { IconAccept, IconDecline } from "@icons";
@@ -34,11 +38,16 @@ const Announcement = ({
   setAnnouncements,
   refetch,
   updatedAt,
+  Company,
 }) => {
   const { userType } = useAuth();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [company] = useRecoilState(companyAtom);
+  const [
+    openConfirmApplicationModal,
+    setOpenConfirmApplicationModal,
+  ] = useState(false);
   const [confirmPracticeAnnouncement] = useMutation(
     CONFIRM_PRACTICE_ANNOUNCEMENT
   );
@@ -46,7 +55,11 @@ const Announcement = ({
     DELETE_PRACTICE_ANNOUNCEMENT
   );
 
-  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
+
+  const [createApplication] = useMutation(CREATE_APPLICATION);
+
+  const [enqueueError, enqueueSnackbar] = useSnackGraphql();
 
   const handleDelete = async () => {
     const deleted = await deletePracticeAnnouncement({ variables: { id } });
@@ -62,18 +75,37 @@ const Announcement = ({
   };
 
   const handleConfirm = () => {
-    confirmPracticeAnnouncement({ variables: { id } }).then((data) => {
-      if (data) {
-        enqueueSnackbar("Zatwierdzono pomyślnie", { variant: "success" });
-        setAnnouncements(
-          announcements.map((announcement) => {
-            if (announcement.id === id)
-              return { ...announcement, accepted: true };
-            else return announcement;
-          })
-        );
-      }
-    });
+    confirmPracticeAnnouncement({ variables: { id } })
+      .then((data) => {
+        if (data) {
+          enqueueSnackbar("Zatwierdzono pomyślnie", { variant: "success" });
+          setAnnouncements(
+            announcements.map((announcement) => {
+              if (announcement.id === id)
+                return { ...announcement, accepted: true };
+              else return announcement;
+            })
+          );
+        }
+      })
+      .catch(enqueueError);
+  };
+
+  const handleApplication = () => {
+    createApplication({
+      variables: {
+        id,
+        CompanyId,
+        from,
+        to,
+      },
+    })
+      .then((res) => {
+        if (res) {
+          history.push("/mypractice");
+        }
+      })
+      .catch(enqueueError);
   };
 
   return (
@@ -81,11 +113,22 @@ const Announcement = ({
       <div className={css.header}>
         <h2>{header}</h2> <span>{dayjs(updatedAt).format("DD/MM/YYYY")}</span>
       </div>
-
       <span>
+        {Company && (
+          <CompanyAvatar color={Company.color} className={css.companyAvatar}>
+            {Company.name.charAt(0)}-{Company.first_name.charAt(0)}
+            {Company.last_name.charAt(0)}
+          </CompanyAvatar>
+        )}
         <span>Nazwa firmy: </span>
-        {company_name}
+        {company_name}{" "}
       </span>
+      {Company && (
+        <span>
+          <span>Przedstawiciel: </span>
+          {`${Company.first_name} ${Company.last_name}`}
+        </span>
+      )}
 
       <span>
         <span>Miejsca:</span> {slots}
@@ -117,7 +160,11 @@ const Announcement = ({
         )}
       <p>{description}</p>
       <div className={css.buttons}>
-        {/* {userType === USER_TYPES.student && <button>Złóż podanie</button>} */}
+        {userType === USER_TYPES.student && CompanyId && (
+          <button onClick={() => setOpenConfirmApplicationModal(true)}>
+            Złóż podanie
+          </button>
+        )}
         {userType === USER_TYPES.practiceSuperviser && accepted === false && (
           <button onClick={handleConfirm}>Zatwierdź</button>
         )}
@@ -144,6 +191,18 @@ const Announcement = ({
           onConfirm={handleDelete}
         >
           Czy na pewno chcesz usunąć te ogłoszenie?
+          <br />
+          Tej operacji nie da się cofnąć.
+        </ConfirmModal>
+      )}
+      {openConfirmApplicationModal && (
+        <ConfirmModal
+          open={openConfirmApplicationModal}
+          setOpenModal={setOpenConfirmApplicationModal}
+          onDecline={() => setOpenConfirmApplicationModal(false)}
+          onConfirm={handleApplication}
+        >
+          Czy na pewno chcesz złożyć podanie?
           <br />
           Tej operacji nie da się cofnąć.
         </ConfirmModal>

@@ -15,7 +15,10 @@ Company.hasMany(PracticeAgreement);
 Company.hasMany(PracticeAnnouncement);
 PracticeAnnouncement.belongsTo(Company);
 
-PracticeAgreement.hasMany(DocumentFile);
+PracticeAnnouncement.hasOne(PracticeAgreement);
+PracticeAgreement.belongsTo(PracticeAnnouncement);
+
+PracticeAgreement.hasMany(DocumentFile, { onDelete: "cascade" });
 DocumentFile.belongsTo(PracticeAgreement);
 
 export default {

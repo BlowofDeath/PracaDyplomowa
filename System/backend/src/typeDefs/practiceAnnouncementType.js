@@ -21,6 +21,7 @@ const practiceAnnouncementType = gql`
     CompanyId: ID
     updatedAt: Date
     createdAt: Date
+    Company: Company
   }
 
   type Mutation {

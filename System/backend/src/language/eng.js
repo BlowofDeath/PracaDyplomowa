@@ -34,6 +34,8 @@ const Errors = {
   practiceAgreementNotFound: "Practice agreement not found",
   cannotCreateDocumentWhenPracticeAgreementAccepted:
     "Cannot create document when practice agreement accepted",
+  idNotFound: "Id not found",
+  agreementAlreadyExists: "Practice agreement already exists",
 };
 
 export default Errors;

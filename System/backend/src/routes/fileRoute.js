@@ -49,6 +49,31 @@ const fileRoute = async (req, res, next) => {
 
         res.set("Content-Type", "application/pdf");
         res.send(documentFile.file);
+      } else if (authObject.company) {
+        if (
+          !(await models.Company.findOne({
+            where: { id: authObject.company },
+          }))
+        ) {
+          res
+            .status(400)
+            .send("403: You dont have permissions to view this file");
+          return;
+        }
+
+        const practiceAgreement = await models.PracticeAgreement.findOne({
+          where: {
+            id: documentFile.PracticeAgreementId,
+            CompanyId: authObject.company,
+          },
+        });
+        if (!practiceAgreement) {
+          res.status(404).send("Object not found");
+          return;
+        }
+
+        res.set("Content-Type", "application/pdf");
+        res.send(documentFile.file);
       } else if (authObject.practiceSuperviser) {
         if (
           !(await models.PracticeSuperviser.findOne({
