@@ -126,7 +126,7 @@ const practiceAgreementResolvers = {
     },
     createApplication: async (
       _,
-      { CompanyId, to, from },
+      { id, CompanyId, to, from },
       { models, authObject }
     ) => {
       const { Company, Student, PracticeAgreement } = models;
